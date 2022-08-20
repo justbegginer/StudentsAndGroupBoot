@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        input{
+            color: yellow;
+        }
+        input:hover{
+            color: orange;
+        }
+    </style>
+</head>
+<body>
+<form th:method="PATCH" th:action="@{/groups/{id}(id=${group.id})}" th:object="${group}">
+    <label for="tutorId" >Write new tutor ID</label>
+    <input type="text" id="tutorId" th:field="*{tutorId}"/>
+    <input type="submit" value="UPDATE">
+    <div style="color: darkred" th:if="${#fields.hasErrors('tutorId')}" th:errors="${group.tutorId}"></div>
+</form>
+</body>
+</html>

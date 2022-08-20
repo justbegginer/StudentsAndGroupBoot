@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        a{
+            background: greenyellow;
+        }
+        a:hover{
+            transform: scale(1.1);
+            background: green;
+        }
+    </style>
+</head>
+<body>
+<center>
+    <h1 th:text="'Group number -'+${completeGroup.group.id}"></h1>
+    <hr>
+    <h2>
+        <a th:href="@{/tutors/{id}(id=${completeGroup.getGroup().getTutorId()})}"
+           th:text="'Tutor :'+${completeGroup.getTutor().name}+' '+ ${completeGroup.getTutor().surname+' - '} +
+            ${completeGroup.getTutor().qualification}">Edit</a>
+    </h2>
+    <hr>
+    <h3>
+        <div th:each="student:${completeGroup.getStudentList()}">
+            <a th:href="@{/students/{id}(id = ${student.id})}"
+               th:text="${student.name} + ' ' + ${student.surname}"></a>
+        </div>
+    </h3>
+</center>
+</body>
+</html>

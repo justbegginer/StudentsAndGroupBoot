@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        input{
+            color: blue;
+        }
+        input:hover{
+            color: deepskyblue;
+        }
+    </style>
+</head>
+<body>
+<form th:method="POST" th:action="@{/groups}" th:object="${group}">
+    <label for="tutorId"> Write tutor ID</label>
+    <input type="text" id="tutorId" th:field="*{tutorId}"/>
+    <input type="submit" value="ADD">
+    <div style="color: darkred" th:if="${#fields.hasErrors('tutorId')}" th:errors="${group.tutorId}"></div>
+
+</form>
+</body>
+</html>

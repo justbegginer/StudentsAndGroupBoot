@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        input{
+            color: red;
+        }
+        input:hover{
+            color: darkred;
+        }
+    </style>
+</head>
+<body>
+<center>
+    <form th:method="DELETE" th:action="@{/groups/{id}(id=${group.id})}" th:object="${group}">
+
+        <h1 style="color:orangered"> Do you really want to delete this group?</h1>
+        <h2 th:text="'Group number '+${group.id}"></h2>
+        <h2 th:text="'Tutor of this group '+${group.tutorId}"></h2>
+        <input type="submit" value="DELETE">
+    </form>
+</center>
+</body>
+</html>
