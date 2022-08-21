@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        input{
+            color: blue;
+        }
+        input:hover{
+            color: deepskyblue;
+        }
+    </style>
+</head>
+<body>
+<form th:method="POST" th:action="@{/tutors}" th:object="${tutor}">
+    <label for="name"> Name</label>
+    <input type="text" id="name" th:field="*{name}"/>
+    <label for="surname"> Surname</label>
+    <input type="text" id="surname" th:field="*{surname}"/>
+    <label for="qualification"> Qualification</label>
+    <input type="text" id= "qualification" th:field="*{qualification}"/>
+    <input type="submit" value="ADD">
+    <div style="color: darkred" th:if="${#fields.hasErrors('name')}" th:errors="${tutor.name}"></div>
+    <div style="color: darkred" th:if="${#fields.hasErrors('surname')}" th:errors="${tutor.surname}"></div>
+    <div style="color: darkred" th:if="${#fields.hasErrors('qualification')}" th:errors="${tutor.qualification}"></div>
+</form>
+</body>
+</html>
