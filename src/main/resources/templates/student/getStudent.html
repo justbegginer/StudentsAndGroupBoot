@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        a{
+            background: greenyellow;
+        }
+        a:hover{
+            transform: scale(1.1);
+            background: green;
+        }
+    </style>
+</head>
+<body>
+<center>
+    <h2 th:text="${student.getName()}"></h2>
+    <h1 th:text="${student.getSurname()}"></h1>
+    <hr>
+    <a th:href="@{/groups/{id}(id=${student.getGroupNumber()})}" th:text="'Group number : '+ ${student.getGroupNumber()}">Edit</a>
+    <hr>
+    <form th:action="@{/students/{id}/delete(id=${student.id})}">
+        <input style="color:orangered" type="submit" value="DELETE">
+    </form>
+    <form th:action="@{/students/{id}/update(id=${student.getId()})}">
+        <input style="color:orange" type="submit" value="UPDATE">
+    </form>
+</center>
+</body>
+</html>
