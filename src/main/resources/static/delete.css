@@ -1,0 +1,6 @@
+input{
+    color: red;
+}
+input:hover{
+    color: darkred;
+}
