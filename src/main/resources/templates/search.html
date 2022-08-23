@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<center>
+
+    <h1>From groups</h1>
+    <div th:each="group : ${groups}">
+        <a th:href="@{/groups/{id}(id=${group.id})}" th:text="'Group number - ' + ${group.getId()}"></a>
+    </div>
+    <h1>From students</h1>
+    <div th:each="student : ${students}">
+        <a th:href="@{/students/{id}(id=${student.id})}" th:text="${student.name} +
+        ' '+ ${student.surname}"></a>
+    </div>
+    <h1>From tutors</h1>
+    <div th:each="tutor : ${tutors}">
+        <a th:href="@{/tutors/{id}(id=${tutor.getId()})}" th:text="${tutor.getName()} +
+        ' '+ ${tutor.getSurname()} +' - ' + ${tutor.getQualification()}">user</a>
+    </div>
+</center>
+</body>
+</html>
