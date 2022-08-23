@@ -5,14 +5,8 @@
     <title>Add new tutor</title>
     <link rel="icon"
         href="http://dou7.edumonch.ru/kartinki/dob.jpgц">
-    <style>
-        input{
-            color: blue;
-        }
-        input:hover{
-            color: deepskyblue;
-        }
-    </style>
+    <link rel="stylesheet"
+          href="/static/add.css">
 </head>
 <body>
 <form th:method="POST" th:action="@{/tutors}" th:object="${tutor}">

@@ -5,14 +5,8 @@
     <title th:text="'UPDATE ' + ${student.name} + ' ' + ${student.surname}"></title>
     <link rel="icon"
           href="https://e7.pngegg.com/pngimages/697/82/png-clipart-computer-software-computer-icons-windows-update-scalable-graphics-refresh-ico-angle-leaf.png">
-    <style>
-        input{
-            color: yellow;
-        }
-        input:hover{
-            color: orange;
-        }
-    </style>
+    <link rel="stylesheet"
+          href="/static/update.css">
 </head>
 <body>
 <form th:method="PATCH" th:action="@{/students/{id}(id=${student.id})}" th:object="${student}">
