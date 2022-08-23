@@ -6,16 +6,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.student.site.StudentsAndGroupBoot.models.CompleteGroup;
 import org.student.site.StudentsAndGroupBoot.models.Group;
 import org.student.site.StudentsAndGroupBoot.repo.GroupRepo;
+import org.student.site.StudentsAndGroupBoot.repo.StudentRepo;
+import org.student.site.StudentsAndGroupBoot.repo.TutorRepo;
 
 import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/groups")
 public class GroupController {
-    //@Autowired
-    //private GroupDao groupDao;
+    @Autowired
+    private StudentRepo studentRepo;
+
+    @Autowired
+    private TutorRepo tutorRepo;
 
     @Autowired
     private GroupRepo groupRepo;
@@ -35,7 +41,10 @@ public class GroupController {
             return "group/getGroup";
         }
         else{
-            //model.addAttribute("completeGroup", groupDao.getCompleteGroupById(id));
+            CompleteGroup completeGroup = new CompleteGroup(groupRepo.findById(id).get(),
+                    tutorRepo.findById(groupRepo.findById(id).get().getTutorId()).get(),
+                    studentRepo.findStudentByGroupNumber(id));
+            model.addAttribute("completeGroup", completeGroup);
             //TODO rebuild from old repositories
             return "group/getGroupWithAllInfo";
         }
