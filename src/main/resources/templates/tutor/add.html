@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Add new tutor</title>
     <link rel="icon"
-        href="http://dou7.edumonch.ru/kartinki/dob.jpgц">
+          href="http://dou7.edumonch.ru/kartinki/dob.jpgц">
     <link rel="stylesheet"
           href="/static/add.css">
 </head>
@@ -15,7 +15,7 @@
     <label for="surname"> Surname</label>
     <input type="text" id="surname" th:field="*{surname}"/>
     <label for="qualification"> Qualification</label>
-    <input type="text" id= "qualification" th:field="*{qualification}"/>
+    <input type="text" id="qualification" th:field="*{qualification}"/>
     <input type="submit" value="ADD">
     <div style="color: darkred" th:if="${#fields.hasErrors('name')}" th:errors="${tutor.name}"></div>
     <div style="color: darkred" th:if="${#fields.hasErrors('surname')}" th:errors="${tutor.surname}"></div>

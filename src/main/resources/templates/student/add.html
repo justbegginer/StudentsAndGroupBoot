@@ -17,9 +17,9 @@
     <label for="groupNumber"> Group Number</label>
     <input type="text" id="groupNumber" th:field="*{groupNumber}"/>
     <input type="submit" value="ADD">
-    <div style="color: darkred" th:if="${#fields.hasErrors('name')}" th:errors = "${student.name}"></div>
-    <div style="color: darkred" th:if="${#fields.hasErrors('surname')}" th:errors = "${student.surname}"></div>
-    <div style="color: darkred" th:if="${#fields.hasErrors('groupNumber')}" th:errors = "${student.groupNumber}"></div>
+    <div style="color: darkred" th:if="${#fields.hasErrors('name')}" th:errors="${student.name}"></div>
+    <div style="color: darkred" th:if="${#fields.hasErrors('surname')}" th:errors="${student.surname}"></div>
+    <div style="color: darkred" th:if="${#fields.hasErrors('groupNumber')}" th:errors="${student.groupNumber}"></div>
 </form>
 </body>
 </html>

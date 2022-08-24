@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <title th:text="'UPDATE Group №'+ ${group.id}"></title>
     <link rel="icon"
-        href="https://e7.pngegg.com/pngimages/697/82/png-clipart-computer-software-computer-icons-windows-update-scalable-graphics-refresh-ico-angle-leaf.png">
+          href="https://e7.pngegg.com/pngimages/697/82/png-clipart-computer-software-computer-icons-windows-update-scalable-graphics-refresh-ico-angle-leaf.png">
     <link rel="stylesheet"
           href="/static/update.css">
 </head>
 <body>
 <form th:method="PATCH" th:action="@{/groups/{id}(id=${group.id})}" th:object="${group}">
-    <label for="tutorId" >Write new tutor ID</label>
+    <label for="tutorId">Write new tutor ID</label>
     <input type="text" id="tutorId" th:field="*{tutorId}"/>
     <input type="submit" value="UPDATE">
     <div style="color: darkred" th:if="${#fields.hasErrors('tutorId')}" th:errors="${group.tutorId}"></div>
