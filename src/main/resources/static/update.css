@@ -1,5 +1,6 @@
 input{
     color: yellow;
+    background-color: black;
 }
 input:hover{
     color: orange;
