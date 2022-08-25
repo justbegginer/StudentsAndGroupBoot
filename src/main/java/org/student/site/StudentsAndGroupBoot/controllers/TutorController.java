@@ -36,6 +36,10 @@ public class TutorController {
     @GetMapping("/{id}")
     public String getTutorById(@PathVariable("id") int id, Model model,
                                @RequestParam(value = "withAllStudents", required = false) boolean fullInfo) {
+        if (tutorRepo.findById(id).isEmpty()){
+            model.addAttribute("message", "Tutor with id = "+ id + " not found");
+            return "error404";
+        }
         model.addAttribute("tutor", tutorRepo.findById(id).get());
         if (fullInfo){
             List<List<Student>> list = new ArrayList<>();
@@ -70,6 +74,10 @@ public class TutorController {
 
     @GetMapping("{id}/delete")
     public String pageToDelete(@PathVariable("id") int id, Model model) {
+        if (tutorRepo.findById(id).isEmpty()){
+            model.addAttribute("message", "Tutor with id = "+ id + " not found");
+            return "error404";
+        }
         model.addAttribute("tutor", tutorRepo.findById(id).get());
         return "tutor/delete";
     }
@@ -82,6 +90,10 @@ public class TutorController {
 
     @GetMapping("{id}/update")
     public String pageToUpdate(@PathVariable("id") int id, Model model) {
+        if (tutorRepo.findById(id).isEmpty()){
+            model.addAttribute("message", "Tutor with id = "+ id + " not found");
+            return "error404";
+        }
         model.addAttribute("tutor", tutorRepo.findById(id).get());
         return "tutor/update";
     }

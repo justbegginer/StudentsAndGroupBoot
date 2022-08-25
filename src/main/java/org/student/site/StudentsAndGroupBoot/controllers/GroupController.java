@@ -36,6 +36,10 @@ public class GroupController {
     @GetMapping("/{id}")
     public String getGroupById(@PathVariable("id") int id, Model model,
                                @RequestParam(value = "fullinfo", required = false) boolean fullInfo) {
+        if (groupRepo.findById(id).isEmpty()){
+            model.addAttribute("message", "Group with id = "+ id + " not found");
+            return "error404";
+        }
         if (!fullInfo) {
             model.addAttribute("group", groupRepo.findById(id).get());
             return "group/getGroup";
@@ -69,6 +73,10 @@ public class GroupController {
 
     @GetMapping("{id}/delete")
     public String pageToDelete(@PathVariable("id") int id, Model model) {
+        if (groupRepo.findById(id).isEmpty()){
+            model.addAttribute("message", "Group with id = "+ id + " not found");
+            return "error404";
+        }
         model.addAttribute("group", groupRepo.findById(id).get());
         return "group/delete";
     }
@@ -81,6 +89,10 @@ public class GroupController {
 
     @GetMapping("{id}/update")
     public String pageToUpdate(@PathVariable("id") int id, Model model) {
+        if (groupRepo.findById(id).isEmpty()){
+            model.addAttribute("message", "Group with id = "+ id + " not found");
+            return "error404";
+        }
         model.addAttribute("group", groupRepo.findById(id).get());
         return "group/update";
     }
