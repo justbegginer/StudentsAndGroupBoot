@@ -36,12 +36,12 @@ public class TutorController {
     @GetMapping("/{id}")
     public String getTutorById(@PathVariable("id") int id, Model model,
                                @RequestParam(value = "withAllStudents", required = false) boolean fullInfo) {
-        if (tutorRepo.findById(id).isEmpty()){
-            model.addAttribute("message", "Tutor with id = "+ id + " not found");
+        if (tutorRepo.findById(id).isEmpty()) {
+            model.addAttribute("message", "Tutor with id = " + id + " not found");
             return "error404";
         }
         model.addAttribute("tutor", tutorRepo.findById(id).get());
-        if (fullInfo){
+        if (fullInfo) {
             List<List<Student>> list = new ArrayList<>();
             int size = groupRepo.findGroupByTutorId(id).size();
             for (int i = 0; i < size; i++) {
@@ -50,8 +50,7 @@ public class TutorController {
             }
             model.addAttribute("students", list);
             return "/tutor/getTutorWithAllInfo";
-        }
-        else{
+        } else {
             return "tutor/getTutor";
         }
     }
@@ -65,7 +64,7 @@ public class TutorController {
     @PostMapping()
     public String addNewTutorToDB(@ModelAttribute("tutor") @Valid Tutor tutor,
                                   BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "tutor/add";
         }
         tutorRepo.save(tutor);
@@ -74,8 +73,8 @@ public class TutorController {
 
     @GetMapping("{id}/delete")
     public String pageToDelete(@PathVariable("id") int id, Model model) {
-        if (tutorRepo.findById(id).isEmpty()){
-            model.addAttribute("message", "Tutor with id = "+ id + " not found");
+        if (tutorRepo.findById(id).isEmpty()) {
+            model.addAttribute("message", "Tutor with id = " + id + " not found");
             return "error404";
         }
         model.addAttribute("tutor", tutorRepo.findById(id).get());
@@ -90,8 +89,8 @@ public class TutorController {
 
     @GetMapping("{id}/update")
     public String pageToUpdate(@PathVariable("id") int id, Model model) {
-        if (tutorRepo.findById(id).isEmpty()){
-            model.addAttribute("message", "Tutor with id = "+ id + " not found");
+        if (tutorRepo.findById(id).isEmpty()) {
+            model.addAttribute("message", "Tutor with id = " + id + " not found");
             return "error404";
         }
         model.addAttribute("tutor", tutorRepo.findById(id).get());
@@ -101,7 +100,7 @@ public class TutorController {
     @PatchMapping("{id}")
     public String updateGroup(@ModelAttribute("tutor") @Valid Tutor tutor,
                               BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "tutor/update";
         }
         tutorRepo.delete(tutorRepo.findById(tutor.getId()).get());

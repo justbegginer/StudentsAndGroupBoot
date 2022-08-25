@@ -2,7 +2,6 @@ package org.student.site.StudentsAndGroupBoot.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +27,6 @@ public class GroupController {
 
     @GetMapping
     public String getAllGroups(Model model) {
-        System.out.println(groupRepo.findAll().isEmpty());
         model.addAttribute("groups", groupRepo.findAll());
         return "group/all";
     }
@@ -36,15 +34,14 @@ public class GroupController {
     @GetMapping("/{id}")
     public String getGroupById(@PathVariable("id") int id, Model model,
                                @RequestParam(value = "fullinfo", required = false) boolean fullInfo) {
-        if (groupRepo.findById(id).isEmpty()){
-            model.addAttribute("message", "Group with id = "+ id + " not found");
+        if (groupRepo.findById(id).isEmpty()) {
+            model.addAttribute("message", "Group with id = " + id + " not found");
             return "error404";
         }
         if (!fullInfo) {
             model.addAttribute("group", groupRepo.findById(id).get());
             return "group/getGroup";
-        }
-        else{
+        } else {
             CompleteGroup completeGroup = new CompleteGroup(groupRepo.findById(id).get(),
                     tutorRepo.findById(groupRepo.findById(id).get().getTutorId()).get(),
                     studentRepo.findStudentByGroupNumber(id));
@@ -63,7 +60,7 @@ public class GroupController {
     @PostMapping()
     public String addNewGroupToDB(@ModelAttribute("group") @Valid Group group,
                                   BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "group/add";
         }
         groupRepo.save(group);
@@ -73,8 +70,8 @@ public class GroupController {
 
     @GetMapping("{id}/delete")
     public String pageToDelete(@PathVariable("id") int id, Model model) {
-        if (groupRepo.findById(id).isEmpty()){
-            model.addAttribute("message", "Group with id = "+ id + " not found");
+        if (groupRepo.findById(id).isEmpty()) {
+            model.addAttribute("message", "Group with id = " + id + " not found");
             return "error404";
         }
         model.addAttribute("group", groupRepo.findById(id).get());
@@ -89,8 +86,8 @@ public class GroupController {
 
     @GetMapping("{id}/update")
     public String pageToUpdate(@PathVariable("id") int id, Model model) {
-        if (groupRepo.findById(id).isEmpty()){
-            model.addAttribute("message", "Group with id = "+ id + " not found");
+        if (groupRepo.findById(id).isEmpty()) {
+            model.addAttribute("message", "Group with id = " + id + " not found");
             return "error404";
         }
         model.addAttribute("group", groupRepo.findById(id).get());
@@ -100,10 +97,10 @@ public class GroupController {
     @PatchMapping("{id}")
     public String updateGroup(@ModelAttribute("group") @Valid Group group,
                               BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "group/update";
         }
-        groupRepo.delete(groupRepo.findById( group.getId()).get());
+        groupRepo.delete(groupRepo.findById(group.getId()).get());
         groupRepo.save(group);
         model.addAttribute("groups", groupRepo.findAll());
         return "group/all";

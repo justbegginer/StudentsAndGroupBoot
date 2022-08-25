@@ -25,8 +25,8 @@ public class StudentController {
 
     @GetMapping("/{id}")
     public String getStudentById(@PathVariable("id") int id, Model model) {
-        if (studentRepo.findById(id).isEmpty()){
-            model.addAttribute("message", "Student with id = "+ id + " not found");
+        if (studentRepo.findById(id).isEmpty()) {
+            model.addAttribute("message", "Student with id = " + id + " not found");
             return "error404";
         }
         model.addAttribute("student", studentRepo.findById(id).get());
@@ -42,7 +42,7 @@ public class StudentController {
     @PostMapping()
     public String addNewStudentToDB(@ModelAttribute("student") @Valid Student student,
                                     BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "student/add";
         }
         studentRepo.save(student);
@@ -51,8 +51,8 @@ public class StudentController {
 
     @GetMapping("{id}/delete")
     public String pageToDelete(@PathVariable("id") int id, Model model) {
-        if (studentRepo.findById(id).isEmpty()){
-            model.addAttribute("message", "Student with id = "+ id + " not found");
+        if (studentRepo.findById(id).isEmpty()) {
+            model.addAttribute("message", "Student with id = " + id + " not found");
             return "error404";
         }
         model.addAttribute("student", studentRepo.findById(id).get());
@@ -67,8 +67,8 @@ public class StudentController {
 
     @GetMapping("{id}/update")
     public String pageToUpdate(@PathVariable("id") int id, Model model) {
-        if (studentRepo.findById(id).isEmpty()){
-            model.addAttribute("message", "Student with id = "+ id + " not found");
+        if (studentRepo.findById(id).isEmpty()) {
+            model.addAttribute("message", "Student with id = " + id + " not found");
             return "error404";
         }
         model.addAttribute("student", studentRepo.findById(id).get());
@@ -76,9 +76,9 @@ public class StudentController {
     }
 
     @PatchMapping("{id}")
-    public String updateGroup(@ModelAttribute("student")@Valid Student student,
-                              BindingResult bindingResult,Model model) {
-        if (bindingResult.hasErrors()){
+    public String updateGroup(@ModelAttribute("student") @Valid Student student,
+                              BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
             return "student/update";
         }
         studentRepo.delete(studentRepo.findById(student.getId()).get());
