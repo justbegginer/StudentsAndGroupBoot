@@ -5,12 +5,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.student.site.StudentsAndGroupBoot.models.Student;
 import org.student.site.StudentsAndGroupBoot.models.Tutor;
 import org.student.site.StudentsAndGroupBoot.repo.GroupRepo;
 import org.student.site.StudentsAndGroupBoot.repo.StudentRepo;
 import org.student.site.StudentsAndGroupBoot.repo.TutorRepo;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/tutors")
@@ -35,8 +38,13 @@ public class TutorController {
                                @RequestParam(value = "withAllStudents", required = false) boolean fullInfo) {
         model.addAttribute("tutor", tutorRepo.findById(id).get());
         if (fullInfo){
-            model.addAttribute("students", studentRepo.findStudentByGroupNumber(
-                    groupRepo.findGroupByTutorId(id).get(0).getId()));
+            List<List<Student>> list = new ArrayList<>();
+            int size = groupRepo.findGroupByTutorId(id).size();
+            for (int i = 0; i < size; i++) {
+                list.add(studentRepo.findStudentByGroupNumber(
+                        groupRepo.findGroupByTutorId(id).get(0).getId()));
+            }
+            model.addAttribute("students", list);
             return "/tutor/getTutorWithAllInfo";
         }
         else{
