@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${tutor.getName()}+ ' ' +${tutor.getSurname()}"></title>
+    <link rel="icon"
+          href="https://blog.netgloo.com/wp-content/themes/netgloo_blog/dist/images/categories/spring.png">
+    <link rel="stylesheet"
+          href="/static/link.css">
+</head>
+<body>
+<center>
+    <h1 th:text="'Tutor - '+${tutor.getName()}+ ' ' +${tutor.getSurname()}"></h1>
+    <hr>
+    <h3>
+        <div th:each="student1:${students}">
+            <div th:each="student:${student1}">
+                <a th:href="@{/students/{id}(id = ${student.id})}"
+                   th:text="${student.name} + ' ' + ${student.surname}"></a>
+            </div>
+        </div>
+    </h3>
+</center>
+</body>
+</html>
