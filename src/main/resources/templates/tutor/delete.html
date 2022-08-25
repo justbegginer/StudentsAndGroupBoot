@@ -7,16 +7,18 @@
           href="https://e7.pngegg.com/pngimages/379/773/png-clipart-rubbish-bins-waste-paper-baskets-computer-icons-recycling-wheelie-bin-packaging-icon-text-rectangle.png">
     <link rel="stylesheet"
           href="/static/delete.css">
+    <link rel="stylesheet"
+          href="/static/bodyForAll.css">
 </head>
 <body>
-<center>
-    <form th:method="DELETE" th:action="@{/tutors/{id}(id=${tutor.id})}" th:object="${tutor}">
-        <h1 style="color:orangered"> Do you really want to delete this tutor?</h1>
-        <h2 th:text="'Name - '+${tutor.name}"></h2>
-        <h2 th:text="'Surname - '+${tutor.surname}"></h2>
-        <h2 th:text="'Qualification - '+${tutor.qualification}"></h2>
-        <input type="submit" value="DELETE">
-    </form>
-</center>
+
+<form th:method="DELETE" th:action="@{/tutors/{id}(id=${tutor.id})}" th:object="${tutor}">
+    <h1 style="color:orangered"> Do you really want to delete this tutor?</h1>
+    <h2 th:text="'Name - '+${tutor.name}"></h2>
+    <h2 th:text="'Surname - '+${tutor.surname}"></h2>
+    <h2 th:text="'Qualification - '+${tutor.qualification}"></h2>
+    <input type="submit" value="DELETE">
+</form>
+
 </body>
 </html>

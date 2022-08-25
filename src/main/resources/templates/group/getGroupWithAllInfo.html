@@ -7,9 +7,10 @@
           href="https://blog.netgloo.com/wp-content/themes/netgloo_blog/dist/images/categories/spring.png">
     <link rel="stylesheet"
           href="/static/link.css">
+    <link rel="stylesheet"
+          href="/static/bodyForAll.css">
 </head>
 <body>
-<center>
     <h1 th:text="'Group number -'+${completeGroup.group.id}"></h1>
     <hr>
     <h2>
@@ -24,6 +25,5 @@
                th:text="${student.name} + ' ' + ${student.surname}"></a>
         </div>
     </h3>
-</center>
 </body>
 </html>

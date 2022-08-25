@@ -7,21 +7,21 @@
           href="https://blog.netgloo.com/wp-content/themes/netgloo_blog/dist/images/categories/spring.png">
     <link rel="stylesheet"
           href="/static/link.css">
+    <link rel="stylesheet"
+          href="/static/bodyForAll.css">
 </head>
 <body>
-<center>
-    <h2 th:text="${student.getName()}"></h2>
-    <h1 th:text="${student.getSurname()}"></h1>
-    <hr>
-    <a th:href="@{/groups/{id}(id=${student.getGroupNumber()})}"
-       th:text="'Group number : '+ ${student.getGroupNumber()}">Edit</a>
-    <hr>
-    <form th:action="@{/students/{id}/delete(id=${student.id})}">
-        <input style="color:orangered" type="submit" value="DELETE">
-    </form>
-    <form th:action="@{/students/{id}/update(id=${student.getId()})}">
-        <input style="color:orange" type="submit" value="UPDATE">
-    </form>
-</center>
+<h2 th:text="${student.getName()}"></h2>
+<h1 th:text="${student.getSurname()}"></h1>
+<hr>
+<a th:href="@{/groups/{id}(id=${student.getGroupNumber()})}"
+   th:text="'Group number : '+ ${student.getGroupNumber()}">Edit</a>
+<hr>
+<form th:action="@{/students/{id}/delete(id=${student.id})}">
+    <input style="color:orangered" type="submit" value="DELETE">
+</form>
+<form th:action="@{/students/{id}/update(id=${student.getId()})}">
+    <input style="color:orange" type="submit" value="UPDATE">
+</form>
 </body>
 </html>

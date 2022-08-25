@@ -7,18 +7,19 @@
           href="https://blog.netgloo.com/wp-content/themes/netgloo_blog/dist/images/categories/spring.png">
     <link rel="stylesheet"
           href="/static/link.css">
+    <link rel="stylesheet"
+          href="/static/bodyForAll.css">
 </head>
 <body>
-<center>
-    <h2 th:text="${tutor.getName()} + ' '+ ${tutor.getSurname()}"></h2>
-    <h1 th:text="${tutor.getQualification()}"></h1>
-    <hr>
-    <form th:action="@{/tutors/{id}/delete(id=${tutor.id})}">
-        <input style="color:orangered" type="submit" value="DELETE">
-    </form>
-    <form th:action="@{/tutors/{id}/update(id=${tutor.getId()})}">
-        <input style="color:orange" type="submit" value="UPDATE">
-    </form><a th:href="@{/tutors/{id}(id = ${tutor.getId()}, withAllStudents='true')}" th:text="'All student of this Tutor'"></a>
-</center>
+<h2 th:text="${tutor.getName()} + ' '+ ${tutor.getSurname()}"></h2>
+<h1 th:text="${tutor.getQualification()}"></h1>
+<hr>
+<form th:action="@{/tutors/{id}/delete(id=${tutor.id})}">
+    <input style="color:orangered" type="submit" value="DELETE">
+</form>
+<form th:action="@{/tutors/{id}/update(id=${tutor.getId()})}">
+    <input style="color:orange" type="submit" value="UPDATE">
+</form>
+<a th:href="@{/tutors/{id}(id = ${tutor.getId()}, withAllStudents='true')}" th:text="'All student of this Tutor'"></a>
 </body>
 </html>

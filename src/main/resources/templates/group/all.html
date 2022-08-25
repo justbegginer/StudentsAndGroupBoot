@@ -7,9 +7,11 @@
           href="https://blog.netgloo.com/wp-content/themes/netgloo_blog/dist/images/categories/spring.png">
     <link rel="stylesheet"
           href="/static/link.css">
+    <link rel="stylesheet"
+          href="/static/bodyForAll.css">
 </head>
 <body>
-<center>
+
     <div th:each="group : ${groups}">
         <a th:href="@{/groups/{id}(id=${group.getId()})}"
            th:text="'Group number - ' + ${group.getId()}">user</a>
@@ -25,6 +27,6 @@
     <form action="/groups/new">
         <input style="color:blue" type="submit" value="ADD">
     </form>
-</center>
+
 </body>
 </html>

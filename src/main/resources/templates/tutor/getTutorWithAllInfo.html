@@ -7,19 +7,19 @@
           href="https://blog.netgloo.com/wp-content/themes/netgloo_blog/dist/images/categories/spring.png">
     <link rel="stylesheet"
           href="/static/link.css">
+    <link rel="stylesheet"
+          href="/static/bodyForAll.css">
 </head>
 <body>
-<center>
-    <h1 th:text="'Tutor - '+${tutor.getName()}+ ' ' +${tutor.getSurname()}"></h1>
-    <hr>
-    <h3>
-        <div th:each="student1:${students}">
-            <div th:each="student:${student1}">
-                <a th:href="@{/students/{id}(id = ${student.id})}"
-                   th:text="${student.name} + ' ' + ${student.surname}"></a>
-            </div>
+<h1 th:text="'Tutor - '+${tutor.getName()}+ ' ' +${tutor.getSurname()}"></h1>
+<hr>
+<h3>
+    <div th:each="student1:${students}">
+        <div th:each="student:${student1}">
+            <a th:href="@{/students/{id}(id = ${student.id})}"
+               th:text="${student.name} + ' ' + ${student.surname}"></a>
         </div>
-    </h3>
-</center>
+    </div>
+</h3>
 </body>
 </html>
