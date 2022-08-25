@@ -100,7 +100,6 @@ public class GroupController {
         if (bindingResult.hasErrors()) {
             return "group/update";
         }
-        groupRepo.delete(groupRepo.findById(group.getId()).get());
         groupRepo.save(group);
         model.addAttribute("groups", groupRepo.findAll());
         return "group/all";

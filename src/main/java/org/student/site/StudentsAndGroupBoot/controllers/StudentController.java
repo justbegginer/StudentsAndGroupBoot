@@ -81,7 +81,6 @@ public class StudentController {
         if (bindingResult.hasErrors()) {
             return "student/update";
         }
-        studentRepo.delete(studentRepo.findById(student.getId()).get());
         studentRepo.save(student);
         model.addAttribute("students", studentRepo.findAll());
         return "student/all";

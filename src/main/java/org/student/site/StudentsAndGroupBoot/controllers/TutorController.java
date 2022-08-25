@@ -103,7 +103,6 @@ public class TutorController {
         if (bindingResult.hasErrors()) {
             return "tutor/update";
         }
-        tutorRepo.delete(tutorRepo.findById(tutor.getId()).get());
         tutorRepo.save(tutor);
         model.addAttribute("tutors", tutorRepo.findAll());
         return "tutor/all";
