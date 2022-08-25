@@ -46,7 +46,6 @@ public class GroupController {
                     tutorRepo.findById(groupRepo.findById(id).get().getTutorId()).get(),
                     studentRepo.findStudentByGroupNumber(id));
             model.addAttribute("completeGroup", completeGroup);
-            //TODO rebuild from old repositories
             return "group/getGroupWithAllInfo";
         }
     }

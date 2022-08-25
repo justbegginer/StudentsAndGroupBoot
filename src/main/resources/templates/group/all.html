@@ -11,22 +11,20 @@
           href="/static/bodyForAll.css">
 </head>
 <body>
-
-    <div th:each="group : ${groups}">
-        <a th:href="@{/groups/{id}(id=${group.getId()})}"
-           th:text="'Group number - ' + ${group.getId()}">user</a>
-        <form th:action="@{/groups/{id}/delete(id=${group.getId()})}">
-            <input style="color:orangered" type="submit" value="DELETE">
-        </form>
-        <form th:action="@{/groups/{id}/update(id=${group.getId()})}">
-            <input style="color:orange" type="submit" value="UPDATE">
-        </form>
-        <hr>
-    </div>
-    <br>
-    <form action="/groups/new">
-        <input style="color:blue" type="submit" value="ADD">
+<div th:each="group : ${groups}">
+    <a th:href="@{/groups/{id}(id=${group.getId()})}"
+       th:text="'Group number - ' + ${group.getId()}">user</a>
+    <form th:action="@{/groups/{id}/delete(id=${group.getId()})}">
+        <input style="color:orangered" type="submit" value="DELETE">
     </form>
-
+    <form th:action="@{/groups/{id}/update(id=${group.getId()})}">
+        <input style="color:orange" type="submit" value="UPDATE">
+    </form>
+    <hr>
+</div>
+<br>
+<form action="/groups/new">
+    <input style="color:blue" type="submit" value="ADD">
+</form>
 </body>
 </html>
