@@ -18,7 +18,7 @@
     </form>
     <form th:action="@{/tutors/{id}/update(id=${tutor.getId()})}">
         <input style="color:orange" type="submit" value="UPDATE">
-    </form>
+    </form><a th:href="@{/tutors/{id}(id = ${tutor.getId()}, withAllStudents='true')}" th:text="'All student of this Tutor'"></a>
 </center>
 </body>
 </html>

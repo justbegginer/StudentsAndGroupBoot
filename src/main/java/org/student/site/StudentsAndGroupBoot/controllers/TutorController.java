@@ -6,6 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.student.site.StudentsAndGroupBoot.models.Tutor;
+import org.student.site.StudentsAndGroupBoot.repo.GroupRepo;
+import org.student.site.StudentsAndGroupBoot.repo.StudentRepo;
 import org.student.site.StudentsAndGroupBoot.repo.TutorRepo;
 
 import javax.validation.Valid;
@@ -16,6 +18,12 @@ public class TutorController {
     @Autowired
     private TutorRepo tutorRepo;
 
+    @Autowired
+    private StudentRepo studentRepo;
+
+    @Autowired
+    private GroupRepo groupRepo;
+
     @GetMapping
     public String getAllTutors(Model model) {
         model.addAttribute("tutors", tutorRepo.findAll());
@@ -23,9 +31,17 @@ public class TutorController {
     }
 
     @GetMapping("/{id}")
-    public String getTutorById(@PathVariable("id") int id, Model model) {
+    public String getTutorById(@PathVariable("id") int id, Model model,
+                               @RequestParam(value = "withAllStudents", required = false) boolean fullInfo) {
         model.addAttribute("tutor", tutorRepo.findById(id).get());
-        return "tutor/getTutor";
+        if (fullInfo){
+            model.addAttribute("students", studentRepo.findStudentByGroupNumber(
+                    groupRepo.findGroupByTutorId(id).get(0).getId()));
+            return "/tutor/getTutorWithAllInfo";
+        }
+        else{
+            return "tutor/getTutor";
+        }
     }
 
     @GetMapping("/new")
