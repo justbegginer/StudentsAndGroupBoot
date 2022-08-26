@@ -12,6 +12,8 @@ import org.student.site.StudentsAndGroupBoot.repo.StudentRepo;
 import org.student.site.StudentsAndGroupBoot.repo.TutorRepo;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/groups")
@@ -26,9 +28,22 @@ public class GroupController {
     private GroupRepo groupRepo;
 
     @GetMapping
-    public String getAllGroups(Model model) {
-        model.addAttribute("groups", groupRepo.findAll());
-        return "group/all";
+    public String getAllGroups(Model model,
+                               @RequestParam(value = "fullInfo", required = false) boolean fullInfo) {
+        if (fullInfo) {
+            List<Group> groupList = groupRepo.findAll();
+            List<CompleteGroup> completeGroups = new ArrayList<>(groupList.size());
+            for (int i = 0; i < groupList.size(); i++) {
+                Group temp = groupList.get(i);
+                completeGroups.add(new CompleteGroup(temp,
+                        tutorRepo.findById(temp.getTutorId()).get(), studentRepo.findStudentByGroupNumber(temp.getId())));
+            }
+            model.addAttribute("completeGroupsList", completeGroups);
+            return "group/allFullInfo";
+        } else {
+            model.addAttribute("groups", groupRepo.findAll());
+            return "group/all";
+        }
     }
 
     @GetMapping("/{id}")

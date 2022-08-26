@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Groups</title>
+    <link rel="icon"
+          href="https://blog.netgloo.com/wp-content/themes/netgloo_blog/dist/images/categories/spring.png">
+    <link rel="stylesheet"
+          href="/static/link.css">
+    <link rel="stylesheet"
+          href="/static/bodyForAll.css">
+</head>
+<body>
+<div th:each="completeGroup:${completeGroupsList}">
+    <h1><a th:text="'Group '+${completeGroup.getGroup.getId()}"
+           th:href="@{/groups/{id}(id = ${completeGroup.getGroup().getId()})}"></a></h1>
+    <h2><a style="color: deepskyblue;"  th:text="'Tutor of group '+ ${completeGroup.getTutor().getName()}+' ' +${completeGroup.getTutor().getSurname()}"
+           th:href="@{/tutors/{id}(id = ${completeGroup.getTutor().getId()})}"></a></h2>
+    <h3>
+        <div th:each="student:${completeGroup.getStudentList()}">
+            <a style="color: red" th:text="${student.getName()} + ' ' + ${student.getSurname}"
+               th:href="@{/students/{id}(id = ${student.getId()})}"></a>
+        </div>
+    </h3>
+</div>
+
+</body>
+</html>
