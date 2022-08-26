@@ -15,6 +15,12 @@
         <input style="color:deepskyblue" type="submit" th:value="'ADD ' + ${student.getName()}+ ' ' + ${student.getSurname()}">
     </form>
 </div>
-
+<form th:action="@{/groups/addStudent/{id}(id = ${id})}" th:method="POST" th:object="${student1}">
+    <label for="name"> Name</label>
+    <input type="text" id="name" th:field="*{name}"/>
+    <label for="surname"> Surname</label>
+    <input type="text" id="surname" th:field="*{surname}"/>
+    <input type="submit" value="ADD">
+</form>
 </body>
 </html>
