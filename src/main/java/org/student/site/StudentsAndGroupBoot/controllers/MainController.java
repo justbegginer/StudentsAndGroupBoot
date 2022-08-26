@@ -29,16 +29,13 @@ public class MainController {
 
     @GetMapping("/search")
     public String search(Model model, @RequestParam(value = "word", required = false) String word) {
-        System.out.println("working");
         try {
-            System.out.println("id " + word + "?");
             int id = Integer.parseInt(word);
             model.addAttribute("groups", groupRepo.findById(id).get());
             model.addAttribute("students", studentRepo.findById(id).get());
             model.addAttribute("tutors", tutorRepo.findById(id).get());
             model.addAttribute("word", id);
         } catch (NumberFormatException exception) {
-            System.out.println("catching word");
             List<Student> studentList = studentRepo.findStudentByName(word);
             studentList.addAll(studentRepo.findStudentBySurname(word));
             model.addAttribute("students", studentList);
