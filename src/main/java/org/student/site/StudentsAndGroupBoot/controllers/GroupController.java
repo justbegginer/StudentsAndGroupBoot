@@ -128,6 +128,13 @@ public class GroupController {
         return "student/listToAddByClick";
     }
 
+    @PostMapping("/addStudent/{id}")
+    public String addStudentToGroup(@PathVariable("id") int id,
+                                    @ModelAttribute("student")Student student){
+        student.setGroupNumber(id);
+        studentRepo.save(student);
+        return "redirect:/groups/"+id+"?fullInfo=true";
+    }
 
     @PatchMapping("/addStudent/{groupId}/{studentId}")
     public String linkStudentToGroup(@PathVariable("groupId") int groupId,
