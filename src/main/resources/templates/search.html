@@ -11,6 +11,10 @@
           href="/static/bodyForAll.css">
 </head>
 <body>
+<form th:method="GET">
+    <input type="search" name="word">
+    <input type="submit" value="SEARCH">
+</form>
 <h1>From groups</h1>
 <div th:each="group : ${groups}">
     <a th:href="@{/groups/{id}(id=${group.id})}" th:text="'Group number - ' + ${group.getId()}"></a>
