@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.student.site.StudentsAndGroupBoot.models.CompleteGroup;
 import org.student.site.StudentsAndGroupBoot.models.Group;
+import org.student.site.StudentsAndGroupBoot.models.Student;
 import org.student.site.StudentsAndGroupBoot.repo.GroupRepo;
 import org.student.site.StudentsAndGroupBoot.repo.StudentRepo;
 import org.student.site.StudentsAndGroupBoot.repo.TutorRepo;
@@ -118,4 +119,23 @@ public class GroupController {
         model.addAttribute("groups", groupRepo.findAll());
         return "group/all";
     }
+
+    @GetMapping("/addStudent/{id}")
+    public String chooseStudentToAdd(@PathVariable("id") int id, Model model){
+        model.addAttribute("students", studentRepo.findAll());
+        model.addAttribute("id", id);
+        model.addAttribute("student1", new Student());
+        return "student/listToAddByClick";
+    }
+
+
+    @PatchMapping("/addStudent/{groupId}/{studentId}")
+    public String linkStudentToGroup(@PathVariable("groupId") int groupId,
+                                     @PathVariable("studentId") int studentId){
+        Student student =  studentRepo.findById(studentId).get();
+        student.setGroupNumber(groupId);
+        studentRepo.save(student);
+        return "redirect:/groups/"+groupId+"?fullInfo=true";
+    }
+
 }
