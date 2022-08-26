@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Choose to add</title>
+    <link rel="stylesheet"
+          href="/static/bodyForAll.css">
+    <link rel="stylesheet"
+          href="/static/link.css">
+</head>
+<body>
+<h1>Choose student</h1>
+<div th:each="student:${students}">
+    <form th:action="@{/groups/addStudent/{id}/{studentId}(id = ${id}, studentId = ${student.getId})}" th:method="PATCH">
+        <input style="color:deepskyblue" type="submit" th:value="'ADD ' + ${student.getName()}+ ' ' + ${student.getSurname()}">
+    </form>
+</div>
+
+</body>
+</html>
