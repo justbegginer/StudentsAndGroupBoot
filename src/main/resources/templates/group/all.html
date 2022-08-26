@@ -11,6 +11,7 @@
           href="/static/bodyForAll.css">
 </head>
 <body>
+<a th:href="@{/groups(fullInfo=true)}">Full info</a>
 <div th:each="group : ${groups}">
     <a th:href="@{/groups/{id}(id=${group.getId()})}"
        th:text="'Group number - ' + ${group.getId()}">user</a>
