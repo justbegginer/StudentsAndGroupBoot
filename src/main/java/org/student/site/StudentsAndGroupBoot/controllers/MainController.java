@@ -36,12 +36,12 @@ public class MainController {
             model.addAttribute("tutors", tutorRepo.findById(id).get());
             model.addAttribute("word", id);
         } catch (NumberFormatException exception) {
-            List<Student> studentList = studentRepo.findStudentByName(word);
-            studentList.addAll(studentRepo.findStudentBySurname(word));
+            List<Student> studentList = studentRepo.findStudentByIncludingInName(word);
+            studentList.addAll(studentRepo.findStudentByIncludingInSurname(word));
             model.addAttribute("students", studentList);
-            List<Tutor> tutorList = tutorRepo.findTutorByName(word);
-            tutorList.addAll(tutorRepo.findTutorBySurname(word));
-            tutorList.addAll(tutorRepo.findTutorByQualification(word));
+            List<Tutor> tutorList = tutorRepo.findTutorByIncludingInName(word);
+            tutorList.addAll(tutorRepo.findTutorByIncludingInSurname(word));
+            tutorList.addAll(tutorRepo.findTutorByIncludingInQualification(word));
             model.addAttribute("tutors", tutorList);
             model.addAttribute("word", word);
         }
