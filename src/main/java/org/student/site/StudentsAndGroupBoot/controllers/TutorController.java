@@ -46,7 +46,7 @@ public class TutorController {
             int size = groupRepo.findGroupByTutorId(id).size();
             for (int i = 0; i < size; i++) {
                 list.add(studentRepo.findStudentByGroupNumber(
-                        groupRepo.findGroupByTutorId(id).get(0).getId()));
+                        groupRepo.findGroupByTutorId(id).get(i).getId()));
             }
             model.addAttribute("students", list);
             return "/tutor/getTutorWithAllInfo";
