@@ -154,6 +154,17 @@ public class GroupController {
         return "tutor/listToAddByClick";
     }
 
+    @PostMapping("/addTutor/{id}")
+    public String addTutorToGroup(@PathVariable("id") int id,
+                                    @ModelAttribute("tutor")Tutor tutor){
+        tutor.setId(0);
+        Group group = groupRepo.findById(id).get();
+        group.setTutorId(tutor.getId());
+        groupRepo.save(group);
+        tutorRepo.save(tutor);
+        return "redirect:/groups/"+id+"?fullInfo=true";
+    }
+
     @PatchMapping("/addTutor/{groupId}/{studentId}")
     public String linkTutorToGroup(@PathVariable("groupId") int groupId,
                                      @PathVariable("studentId") int tutorId){
