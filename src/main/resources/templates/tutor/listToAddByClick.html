@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Choose to add</title>
+    <link rel="icon"
+          href="http://dou7.edumonch.ru/kartinki/dob.jpg">
+    <link rel="stylesheet"
+          href="/static/bodyForAll.css">
+    <link rel="stylesheet"
+          href="/static/link.css">
+</head>
+<body>
+<h1>Choose student</h1>
+<div th:each="tutor:${tutors}">
+    <form th:action="@{/groups/addTutor/{id}/{tutorId}(id = ${id}, tutorId = ${tutor.getId()})}"
+          th:method="PATCH">
+        <input style="color:deepskyblue" type="submit"
+               th:value="'ADD ' + ${tutor.getName()}+ ' ' + ${tutor.getSurname()}">
+    </form>
+</div>
+
+</body>
+</html>
