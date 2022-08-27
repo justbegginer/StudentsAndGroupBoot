@@ -131,7 +131,7 @@ public class GroupController {
 
     @PostMapping("/addStudent/{id}")
     public String addStudentToGroup(@PathVariable("id") int id,
-                                    @ModelAttribute("student")Student student){
+                                    @ModelAttribute("student") @Valid Student student){
         student.setGroupNumber(id);
         studentRepo.save(student);
         return "redirect:/groups/"+id+"?fullInfo=true";
@@ -156,7 +156,7 @@ public class GroupController {
 
     @PostMapping("/addTutor/{id}")
     public String addTutorToGroup(@PathVariable("id") int id,
-                                    @ModelAttribute("tutor")Tutor tutor){
+                                    @ModelAttribute("tutor")@Valid Tutor tutor){
         tutor.setId(0);
         Group group = groupRepo.findById(id).get();
         group.setTutorId(tutor.getId());
