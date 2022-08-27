@@ -19,6 +19,14 @@
                th:value="'ADD ' + ${tutor.getName()}+ ' ' + ${tutor.getSurname()}">
     </form>
 </div>
-
+<form th:action="@{/groups/addTutor/{id}(id = ${id})}" th:method="POST" th:object="${tutor1}">
+    <label for="name"> Name</label>
+    <input type="text" id="name" th:field="*{name}"/>
+    <label for="surname"> Surname</label>
+    <input type="text" id="surname" th:field="*{surname}"/>
+    <label for="qualification"> Qualification</label>
+    <input type="text" id="qualification" th:field="*{qualification}"/>
+    <input type="submit" value="ADD">
+</form>
 </body>
 </html>
