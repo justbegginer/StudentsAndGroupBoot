@@ -1,14 +1,13 @@
 package org.student.site.StudentsAndGroupBoot.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-import org.student.site.StudentsAndGroupBoot.models.CompleteGroup;
-import org.student.site.StudentsAndGroupBoot.models.Group;
-import org.student.site.StudentsAndGroupBoot.models.Student;
-import org.student.site.StudentsAndGroupBoot.models.Tutor;
+import org.student.site.StudentsAndGroupBoot.models.*;
 import org.student.site.StudentsAndGroupBoot.repo.GroupRepo;
 import org.student.site.StudentsAndGroupBoot.repo.StudentRepo;
 import org.student.site.StudentsAndGroupBoot.repo.TutorRepo;
@@ -122,7 +121,7 @@ public class GroupController {
     }
 
     @GetMapping("/addStudent/{id}")
-    public String chooseStudentToAdd(@PathVariable("id") int id, Model model){
+    public String chooseStudentToAdd(@PathVariable("id") int id, Model model) {
         model.addAttribute("students", studentRepo.findAll());
         model.addAttribute("id", id);
         model.addAttribute("student1", new Student());
@@ -131,23 +130,23 @@ public class GroupController {
 
     @PostMapping("/addStudent/{id}")
     public String addStudentToGroup(@PathVariable("id") int id,
-                                    @ModelAttribute("student") @Valid Student student){
+                                    @ModelAttribute("student") @Valid Student student) {
         student.setGroupNumber(id);
         studentRepo.save(student);
-        return "redirect:/groups/"+id+"?fullInfo=true";
+        return "redirect:/groups/" + id + "?fullInfo=true";
     }
 
     @PatchMapping("/addStudent/{groupId}/{studentId}")
     public String linkStudentToGroup(@PathVariable("groupId") int groupId,
-                                     @PathVariable("studentId") int studentId){
-        Student student =  studentRepo.findById(studentId).get();
+                                     @PathVariable("studentId") int studentId) {
+        Student student = studentRepo.findById(studentId).get();
         student.setGroupNumber(groupId);
         studentRepo.save(student);
-        return "redirect:/groups/"+groupId+"?fullInfo=true";
+        return "redirect:/groups/" + groupId + "?fullInfo=true";
     }
 
     @GetMapping("/addTutor/{id}")
-    public String chooseTutorToAdd(@PathVariable("id") int id, Model model){
+    public String chooseTutorToAdd(@PathVariable("id") int id, Model model) {
         model.addAttribute("tutors", tutorRepo.findAll());
         model.addAttribute("id", id);
         model.addAttribute("tutor1", new Tutor());
@@ -156,22 +155,22 @@ public class GroupController {
 
     @PostMapping("/addTutor/{id}")
     public String addTutorToGroup(@PathVariable("id") int id,
-                                    @ModelAttribute("tutor")@Valid Tutor tutor){
+                                  @ModelAttribute("tutor") @Valid Tutor tutor) {
         tutor.setId(0);
         Group group = groupRepo.findById(id).get();
         group.setTutorId(tutor.getId());
         groupRepo.save(group);
         tutorRepo.save(tutor);
-        return "redirect:/groups/"+id+"?fullInfo=true";
+        return "redirect:/groups/" + id + "?fullInfo=true";
     }
 
     @PatchMapping("/addTutor/{groupId}/{studentId}")
     public String linkTutorToGroup(@PathVariable("groupId") int groupId,
-                                     @PathVariable("studentId") int tutorId){
+                                   @PathVariable("studentId") int tutorId) {
         Group group = groupRepo.findById(groupId).get();
         group.setTutorId(tutorId);
         groupRepo.save(group);
-        return "redirect:/groups/"+groupId+"?fullInfo=true";
+        return "redirect:/groups/" + groupId + "?fullInfo=true";
     }
 
 }
