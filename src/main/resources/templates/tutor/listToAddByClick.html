@@ -27,6 +27,9 @@
     <label for="qualification"> Qualification</label>
     <input type="text" id="qualification" th:field="*{qualification}"/>
     <input type="submit" value="ADD">
+    <div style="color: darkred" th:if="${#fields.hasErrors('name')}" th:errors="${tutor1.name}"></div>
+    <div style="color: darkred" th:if="${#fields.hasErrors('surname')}" th:errors="${tutor1.surname}"></div>
+    <div style="color: darkred" th:if="${#fields.hasErrors('qualification')}" th:errors="${tutor1.qualification}"></div>
 </form>
 </body>
 </html>

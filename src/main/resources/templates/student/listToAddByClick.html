@@ -23,6 +23,8 @@
     <label for="surname"> Surname</label>
     <input type="text" id="surname" th:field="*{surname}"/>
     <input type="submit" value="ADD">
+    <div style="color: darkred" th:if="${#fields.hasErrors('name')}" th:errors="${student1.name}"></div>
+    <div style="color: darkred" th:if="${#fields.hasErrors('surname')}" th:errors="${student1.surname}"></div>
 </form>
 </body>
 </html>
