@@ -14,13 +14,13 @@
     <h1 th:text="'Group number -'+${completeGroup.group.id}"></h1>
     <hr>
     <h2>
-        <a th:href="@{/tutors/{id}(id=${completeGroup.getGroup().getTutorId()})}"
+        <a style="color: purple" th:href="@{/tutors/{id}(id=${completeGroup.getGroup().getTutorId()})}"
            th:text="'Tutor :'+${completeGroup.getTutor().name}+' '+ ${completeGroup.getTutor().surname+' - '} +
             ${completeGroup.getTutor().qualification}">Edit</a>
     </h2>
     <hr>
     <h3>
-        <div th:each="student:${completeGroup.getStudentList()}">
+        <div style="color: green" th:each="student:${completeGroup.getStudentList()}">
             <a th:href="@{/students/{id}(id = ${student.id})}"
                th:text="${student.name} + ' ' + ${student.surname}"></a>
         </div>
