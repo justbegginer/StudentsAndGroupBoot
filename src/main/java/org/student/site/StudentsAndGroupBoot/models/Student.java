@@ -1,6 +1,7 @@
 package org.student.site.StudentsAndGroupBoot.models;
 
 import lombok.*;
+import org.student.site.StudentsAndGroupBoot.validation.annotation.GroupExists;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -27,6 +28,7 @@ public class Student {
     private String surname;
     @NotNull(message = "student groupNumber should not be empty")
     @Min(value = 1, message = "student groupNumber should be greater than zero")
+    @GroupExists()
     @Column(name = "groupnumber")
     private int groupNumber;
 }
