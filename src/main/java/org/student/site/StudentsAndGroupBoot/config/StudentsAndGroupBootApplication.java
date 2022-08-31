@@ -1,4 +1,4 @@
-package org.student.site.StudentsAndGroupBoot;
+package org.student.site.StudentsAndGroupBoot.config;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package org.student.site.StudentsAndGroupBoot;
+package org.student.site.StudentsAndGroupBoot.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
