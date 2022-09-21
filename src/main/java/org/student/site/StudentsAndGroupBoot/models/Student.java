@@ -28,7 +28,7 @@ public class Student {
     private String surname;
     @NotNull(message = "student groupNumber should not be empty")
     @Min(value = 1, message = "student groupNumber should be greater than zero")
-    @GroupExists()
+    //@GroupExists()
     @Column(name = "groupnumber")
     private int groupNumber;
 }

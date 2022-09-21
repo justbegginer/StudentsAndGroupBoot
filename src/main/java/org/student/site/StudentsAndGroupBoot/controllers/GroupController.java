@@ -52,7 +52,7 @@ public class GroupController {
                                @RequestParam(value = "fullinfo", required = false) boolean fullInfo) {
         if (groupRepo.findById(id).isEmpty()) {
             model.addAttribute("message", "Group with id = " + id + " not found");
-            return "error404";
+            return "errors/error404";
         }
         if (!fullInfo) {
             model.addAttribute("group", groupRepo.findById(id).get());

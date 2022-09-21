@@ -29,8 +29,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/groups/**").hasRole(Role.ADMIN.name())
                 .antMatchers(HttpMethod.DELETE, "/groups/**").hasRole(Role.ADMIN.name())
                 .antMatchers(HttpMethod.PATCH, "/groups/**").hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.GET, "/students/**").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
+                .antMatchers(HttpMethod.POST, "/students/**").hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.DELETE, "/students/**").hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.PATCH, "/students/**").hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.GET, "/tutors/**").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
+                .antMatchers(HttpMethod.POST, "/tutors/**").hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.DELETE, "/tutors/**").hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.PATCH, "/tutors/**").hasRole(Role.ADMIN.name())
                 .and()
-                .httpBasic();
+                .formLogin();
     }
 
     @Bean

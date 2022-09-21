@@ -38,7 +38,7 @@ public class TutorController {
                                @RequestParam(value = "withAllStudents", required = false) boolean fullInfo) {
         if (tutorRepo.findById(id).isEmpty()) {
             model.addAttribute("message", "Tutor with id = " + id + " not found");
-            return "error404";
+            return "errors/error404";
         }
         model.addAttribute("tutor", tutorRepo.findById(id).get());
         if (fullInfo) {

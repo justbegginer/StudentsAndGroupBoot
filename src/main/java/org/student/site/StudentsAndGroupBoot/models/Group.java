@@ -20,7 +20,7 @@ public class Group {
     private int id;
     @NotNull(message = "tutorId should not be empty")
     @Min(value = 1, message = "tutorId should not be more than 1")
-    @TutorExists()
+    //@TutorExists()
     @Column(name = "tutorid")
     private int tutorId;
 }
