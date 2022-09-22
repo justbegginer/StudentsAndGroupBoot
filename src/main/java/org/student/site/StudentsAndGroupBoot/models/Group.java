@@ -6,6 +6,7 @@ import org.student.site.StudentsAndGroupBoot.validation.annotation.TutorExists;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Entity
 @Table(name = "groups")
@@ -23,4 +24,17 @@ public class Group {
     //@TutorExists()
     @Column(name = "tutorid")
     private int tutorId;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Group group = (Group) o;
+        return id == group.id && tutorId == group.tutorId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, tutorId);
+    }
 }
