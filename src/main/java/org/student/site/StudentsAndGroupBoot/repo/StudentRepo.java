@@ -19,4 +19,13 @@ public interface StudentRepo extends JpaRepository<Student, Integer> {
 
     @Query("select student from Student student where student.surname like concat('%', ?1, '%')")
     List<Student> findStudentByIncludingInSurname(String searchWorld);
+
+    @Query("select student from Student student " +
+            "where (student.name = ?1 and student.surname = ?2) or (student.name = ?2 and student.surname = ?1)")
+    List<Student> findStudentByIncludingInNameAndSurname(String searchWord1, String searchWord2);
+
+    @Query("select student from Student student " +
+            "where (student.name like concat('%', ?1, '%') and student.surname like concat('%', ?2, '%')) " +
+            "or (student.name like concat('%', ?2, '%') and student.surname like concat('%', ?1, '%'))")
+    List<Student> findStudentByPartlyIncludingInNameAndSurname(String searchWorld1, String searchWorld2);
 }
