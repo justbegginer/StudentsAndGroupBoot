@@ -84,7 +84,6 @@ public class MainController {
         if (words.length == 3){
             List<Tutor> tutorList = tutorRepo.findTutorByIncludingInNameSurnameAndQualification(words[0], words[1], words[2]);
             Collections.sort(tutorList, compareTutor());
-            System.out.println(tutorList.size());
             return tutorList;
         }
         else if (words.length == 1){
@@ -92,7 +91,9 @@ public class MainController {
             tutorList.addAll(tutorRepo.findTutorByIncludingInSurname(request));
             tutorList.addAll(tutorRepo.findTutorByIncludingInQualification(request));
             Collections.sort(tutorList, compareTutor());
-            return tutorList;
+            return tutorList.stream()
+                    .distinct()
+                    .collect(Collectors.toList());
         }
         else {
             return new ArrayList<>();
