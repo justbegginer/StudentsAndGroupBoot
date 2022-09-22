@@ -14,7 +14,11 @@ import org.student.site.StudentsAndGroupBoot.repo.GroupRepo;
 import org.student.site.StudentsAndGroupBoot.repo.StudentRepo;
 import org.student.site.StudentsAndGroupBoot.repo.TutorRepo;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class MainController {
@@ -42,9 +46,9 @@ public class MainController {
                 model.addAttribute("tutors", tutorRepo.findById(id).get());
             model.addAttribute("word", id);
         } catch (NumberFormatException exception) {
-            List<Student> studentList = studentRepo.findStudentByIncludingInName(word);
-            studentList.addAll(studentRepo.findStudentByIncludingInSurname(word));
-            model.addAttribute("students", studentList);
+            if (word != null) {
+                model.addAttribute("students", resultOfSearch(word));
+            }
             List<Tutor> tutorList = tutorRepo.findTutorByIncludingInName(word);
             tutorList.addAll(tutorRepo.findTutorByIncludingInSurname(word));
             tutorList.addAll(tutorRepo.findTutorByIncludingInQualification(word));
@@ -52,5 +56,60 @@ public class MainController {
             model.addAttribute("word", word);
         }
         return "search";
+    }
+
+    private List<Student> resultOfSearch(String request) {
+        String[] words = request.split(" ");
+
+        if (words.length == 2) {
+            System.out.println(request);
+            List<Student> studentList = studentRepo.findStudentByIncludingInNameAndSurname(words[0], words[1]);
+            Collections.sort(studentList, compareStudents());
+            studentList.addAll(studentRepo.findStudentByPartlyIncludingInNameAndSurname(words[0], words[1]));
+            Collections.sort(studentList, compareStudents());
+            return studentList.stream()
+                    .distinct()
+                    .collect(Collectors.toList());
+        } else if (words.length == 1) {
+            List<Student> studentList = studentRepo.findStudentByIncludingInName(request);
+            studentList.addAll(studentRepo.findStudentByIncludingInSurname(request));
+            Collections.sort(studentList, compareStudents());
+            return studentList;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    private Comparator<Student> compareStudents() {
+        return (lhs, rhs) -> {
+            String rightName = rhs.getName(), rightSurname = rhs.getSurname();
+            String leftName = lhs.getName(), leftSurname = lhs.getSurname();
+            for (int i = 0; i < rightName.length() && i < leftName.length(); i++) {
+                if (rightName.charAt(i) < leftName.charAt(i)) {
+                    return 1;
+                } else if (rightName.charAt(i) > leftName.charAt(i)) {
+                    return -1;
+                }
+            }
+            if (rightName.length() > leftName.length()) {
+                return -1;
+            } else if (rightName.length() < leftName.length()) {
+                return 1;
+            }
+            for (int i = 0; i < rightSurname.length() && i < leftSurname.length(); i++) {
+                if (rightSurname.charAt(i) < leftSurname.charAt(i)) {
+                    return 1;
+                } else if (rightSurname.charAt(i) > leftSurname.charAt(i)) {
+                    return -1;
+                }
+            }
+            if (rightSurname.length() > leftSurname.length()) {
+                return -1;
+            } else if (rightSurname.length() < leftSurname.length()) {
+                return 1;
+            } else {
+                return 0;
+            }
+        };
     }
 }
