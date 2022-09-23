@@ -1,38 +1,38 @@
-const countable = document.querySelectorAll("input");
-for (let i = 0; i < countable.length - 1; i++) {
+const effectsForBottomList = document.querySelectorAll("input");
+for (let i = 0; i < effectsForBottomList.length; i++) {
     if (i % 2 === 0) {
-        countable.item(i).style.color = 'orangered';
-        countable.item(i).style.backgroundColor = 'white';
-        countable.item(i).onmouseleave = () => {
-            countable.item(i).style.color = 'orangered';
-            countable.item(i).style.backgroundColor = 'white'
+        effectsForBottomList.item(i).style.color = 'orangered';
+        effectsForBottomList.item(i).style.backgroundColor = 'white';
+        effectsForBottomList.item(i).onmouseleave = () => {
+            effectsForBottomList.item(i).style.color = 'orangered';
+            effectsForBottomList.item(i).style.backgroundColor = 'white'
         };
-        countable.item(i).onmouseover = () => {
-            countable.item(i).style.color = 'white';
-            countable.item(i).style.backgroundColor = 'orangered'
+        effectsForBottomList.item(i).onmouseover = () => {
+            effectsForBottomList.item(i).style.color = 'white';
+            effectsForBottomList.item(i).style.backgroundColor = 'orangered'
         };
     } else {
-        countable.item(i).style.color = 'orange';
-        countable.item(i).style.backgroundColor = 'white';
-        countable.item(i).onmouseleave = () => {
-            countable.item(i).style.color = 'orange';
-            countable.item(i).style.backgroundColor = 'white'
+        effectsForBottomList.item(i).style.color = 'orange';
+        effectsForBottomList.item(i).style.backgroundColor = 'white';
+        effectsForBottomList.item(i).onmouseleave = () => {
+            effectsForBottomList.item(i).style.color = 'orange';
+            effectsForBottomList.item(i).style.backgroundColor = 'white'
         };
-        countable.item(i).onmouseover = () => {
-            countable.item(i).style.color = 'white';
-            countable.item(i).style.backgroundColor = 'orange'
+        effectsForBottomList.item(i).onmouseover = () => {
+            effectsForBottomList.item(i).style.color = 'white';
+            effectsForBottomList.item(i).style.backgroundColor = 'orange'
         };
 
     }
 }
 
-countable.item(countable.length - 1).style.color = 'blue';
-countable.item(countable.length - 1).style.backgroundColor = 'white';
-countable.item(countable.length - 1).onmouseleave = () => {
-    countable.item(countable.length - 1).style.color = 'blue';
-    countable.item(countable.length - 1).style.backgroundColor = 'white'
+effectsForBottomList.item(effectsForBottomList.length).style.color = 'blue';
+effectsForBottomList.item(effectsForBottomList.length).style.backgroundColor = 'white';
+effectsForBottomList.item(effectsForBottomList.length).onmouseleave = () => {
+    effectsForBottomList.item(effectsForBottomList.length).style.color = 'blue';
+    effectsForBottomList.item(effectsForBottomList.length).style.backgroundColor = 'white'
 };
-countable.item(countable.length - 1).onmouseover = () => {
-    countable.item(countable.length - 1).style.color = 'white';
-    countable.item(countable.length - 1).style.backgroundColor = 'blue'
+effectsForBottomList.item(effectsForBottomList.length).onmouseover = () => {
+    effectsForBottomList.item(effectsForBottomList.length).style.color = 'white';
+    effectsForBottomList.item(effectsForBottomList.length).style.backgroundColor = 'blue'
 };
