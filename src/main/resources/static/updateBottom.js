@@ -1,11 +1,13 @@
 let updateBottomList = document.querySelectorAll("input");
-updateBottomList.item(updateBottomList.length - 1).style.color = 'orange';
-updateBottomList.item(updateBottomList.length - 1).style.backgroundColor = 'white';
-updateBottomList.item(updateBottomList.length - 1).onmouseleave = () => {
-    updateBottomList.item(updateBottomList.length - 1).style.color = 'orange';
-    updateBottomList.item(updateBottomList.length - 1).style.backgroundColor = 'white'
-};
-updateBottomList.item(updateBottomList.length - 1).onmouseover = () => {
-    updateBottomList.item(updateBottomList.length - 1).style.color = 'white';
-    updateBottomList.item(updateBottomList.length - 1).style.backgroundColor = 'orange'
-};
+for (let i = 0; i < updateBottomList.length; i++) {
+    updateBottomList.item(i).style.color = 'orange';
+    updateBottomList.item(i).style.backgroundColor = 'white';
+    updateBottomList.item(i).onmouseleave = () => {
+        updateBottomList.item(i).style.color = 'orange';
+        updateBottomList.item(i).style.backgroundColor = 'white'
+    };
+    updateBottomList.item(i).onmouseover = () => {
+        updateBottomList.item(i).style.color = 'white';
+        updateBottomList.item(i).style.backgroundColor = 'orange'
+    };
+}
