@@ -1,16 +1,14 @@
 package org.student.site.StudentsAndGroupBoot.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.student.site.StudentsAndGroupBoot.models.*;
-import org.student.site.StudentsAndGroupBoot.repo.GroupRepo;
-import org.student.site.StudentsAndGroupBoot.repo.StudentRepo;
-import org.student.site.StudentsAndGroupBoot.repo.TutorRepo;
+import org.student.site.StudentsAndGroupBoot.services.impl.GroupServiceImpl;
+import org.student.site.StudentsAndGroupBoot.services.impl.StudentServiceImpl;
+import org.student.site.StudentsAndGroupBoot.services.impl.TutorServiceImpl;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -20,29 +18,29 @@ import java.util.List;
 @RequestMapping("/groups")
 public class GroupController {
     @Autowired
-    private StudentRepo studentRepo;
+    private StudentServiceImpl studentService;
 
     @Autowired
-    private TutorRepo tutorRepo;
+    private TutorServiceImpl tutorService;
 
     @Autowired
-    private GroupRepo groupRepo;
+    private GroupServiceImpl groupService;
 
     @GetMapping
     public String getAllGroups(Model model,
                                @RequestParam(value = "fullInfo", required = false) boolean fullInfo) {
         if (fullInfo) {
-            List<Group> groupList = groupRepo.findAll();
+            List<Group> groupList = groupService.findAll();
             List<CompleteGroup> completeGroups = new ArrayList<>(groupList.size());
             for (int i = 0; i < groupList.size(); i++) {
                 Group temp = groupList.get(i);
                 completeGroups.add(new CompleteGroup(temp,
-                        tutorRepo.findById(temp.getTutorId()).get(), studentRepo.findStudentByGroupNumber(temp.getId())));
+                        tutorService.findById(temp.getTutorId()).get(), studentService.findStudentByGroupNumber(temp.getId())));
             }
             model.addAttribute("completeGroupsList", completeGroups);
             return "group/allFullInfo";
         } else {
-            model.addAttribute("groups", groupRepo.findAll());
+            model.addAttribute("groups", groupService.findAll());
             return "group/all";
         }
     }
@@ -50,17 +48,17 @@ public class GroupController {
     @GetMapping("/{id}")
     public String getGroupById(@PathVariable("id") int id, Model model,
                                @RequestParam(value = "fullinfo", required = false) boolean fullInfo) {
-        if (groupRepo.findById(id).isEmpty()) {
+        if (groupService.findById(id).isEmpty()) {
             model.addAttribute("message", "Group with id = " + id + " not found");
             return "errors/error404";
         }
         if (!fullInfo) {
-            model.addAttribute("group", groupRepo.findById(id).get());
+            model.addAttribute("group", groupService.findById(id).get());
             return "group/getGroup";
         } else {
-            CompleteGroup completeGroup = new CompleteGroup(groupRepo.findById(id).get(),
-                    tutorRepo.findById(groupRepo.findById(id).get().getTutorId()).get(),
-                    studentRepo.findStudentByGroupNumber(id));
+            CompleteGroup completeGroup = new CompleteGroup(groupService.findById(id).get(),
+                    tutorService.findById(groupService.findById(id).get().getTutorId()).get(),
+                    studentService.findStudentByGroupNumber(id));
             model.addAttribute("completeGroup", completeGroup);
             return "group/getGroupWithAllInfo";
         }
@@ -78,34 +76,34 @@ public class GroupController {
         if (bindingResult.hasErrors()) {
             return "group/add";
         }
-        groupRepo.save(group);
+        groupService.save(group);
         //groupRepo.save(group);
         return "redirect:/groups";
     }
 
     @GetMapping("{id}/delete")
     public String pageToDelete(@PathVariable("id") int id, Model model) {
-        if (groupRepo.findById(id).isEmpty()) {
+        if (groupService.findById(id).isEmpty()) {
             model.addAttribute("message", "Group with id = " + id + " not found");
             return "error404";
         }
-        model.addAttribute("group", groupRepo.findById(id).get());
+        model.addAttribute("group", groupService.findById(id).get());
         return "group/delete";
     }
 
     @DeleteMapping("{id}")
     public String deleteGroupFromDB(@PathVariable("id") int id) {
-        groupRepo.delete(groupRepo.findById(id).get());
+        groupService.delete(groupService.findById(id).get());
         return "redirect:/groups";
     }
 
     @GetMapping("{id}/update")
     public String pageToUpdate(@PathVariable("id") int id, Model model) {
-        if (groupRepo.findById(id).isEmpty()) {
+        if (groupService.findById(id).isEmpty()) {
             model.addAttribute("message", "Group with id = " + id + " not found");
             return "error404";
         }
-        model.addAttribute("group", groupRepo.findById(id).get());
+        model.addAttribute("group", groupService.findById(id).get());
         return "group/update";
     }
 
@@ -115,14 +113,14 @@ public class GroupController {
         if (bindingResult.hasErrors()) {
             return "group/update";
         }
-        groupRepo.save(group);
-        model.addAttribute("groups", groupRepo.findAll());
+        groupService.save(group);
+        model.addAttribute("groups", groupService.findAll());
         return "group/all";
     }
 
     @GetMapping("/addStudent/{id}")
     public String chooseStudentToAdd(@PathVariable("id") int id, Model model) {
-        model.addAttribute("students", studentRepo.findAll());
+        model.addAttribute("students", studentService.findAll());
         model.addAttribute("id", id);
         model.addAttribute("student1", new Student());
         return "student/listToAddByClick";
@@ -132,22 +130,22 @@ public class GroupController {
     public String addStudentToGroup(@PathVariable("id") int id,
                                     @ModelAttribute("student") @Valid Student student) {
         student.setGroupNumber(id);
-        studentRepo.save(student);
+        studentService.save(student);
         return "redirect:/groups/" + id + "?fullInfo=true";
     }
 
     @PatchMapping("/addStudent/{groupId}/{studentId}")
     public String linkStudentToGroup(@PathVariable("groupId") int groupId,
                                      @PathVariable("studentId") int studentId) {
-        Student student = studentRepo.findById(studentId).get();
+        Student student = studentService.findById(studentId).get();
         student.setGroupNumber(groupId);
-        studentRepo.save(student);
+        studentService.save(student);
         return "redirect:/groups/" + groupId + "?fullInfo=true";
     }
 
     @GetMapping("/addTutor/{id}")
     public String chooseTutorToAdd(@PathVariable("id") int id, Model model) {
-        model.addAttribute("tutors", tutorRepo.findAll());
+        model.addAttribute("tutors", tutorService.findAll());
         model.addAttribute("id", id);
         model.addAttribute("tutor1", new Tutor());
         return "tutor/listToAddByClick";
@@ -157,19 +155,19 @@ public class GroupController {
     public String addTutorToGroup(@PathVariable("id") int id,
                                   @ModelAttribute("tutor") @Valid Tutor tutor) {
         tutor.setId(0);
-        Group group = groupRepo.findById(id).get();
+        Group group = groupService.findById(id).get();
         group.setTutorId(tutor.getId());
-        groupRepo.save(group);
-        tutorRepo.save(tutor);
+        groupService.save(group);
+        tutorService.save(tutor);
         return "redirect:/groups/" + id + "?fullInfo=true";
     }
 
     @PatchMapping("/addTutor/{groupId}/{studentId}")
     public String linkTutorToGroup(@PathVariable("groupId") int groupId,
                                    @PathVariable("studentId") int tutorId) {
-        Group group = groupRepo.findById(groupId).get();
+        Group group = groupService.findById(groupId).get();
         group.setTutorId(tutorId);
-        groupRepo.save(group);
+        groupService.save(group);
         return "redirect:/groups/" + groupId + "?fullInfo=true";
     }
 

@@ -1,18 +1,15 @@
 package org.student.site.StudentsAndGroupBoot.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.student.site.StudentsAndGroupBoot.models.Student;
 import org.student.site.StudentsAndGroupBoot.models.Tutor;
-import org.student.site.StudentsAndGroupBoot.repo.GroupRepo;
-import org.student.site.StudentsAndGroupBoot.repo.StudentRepo;
-import org.student.site.StudentsAndGroupBoot.repo.TutorRepo;
+import org.student.site.StudentsAndGroupBoot.services.impl.GroupServiceImpl;
+import org.student.site.StudentsAndGroupBoot.services.impl.StudentServiceImpl;
+import org.student.site.StudentsAndGroupBoot.services.impl.TutorServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,11 +20,12 @@ import java.util.stream.Collectors;
 @Controller
 public class MainController {
     @Autowired
-    private GroupRepo groupRepo;
+    private GroupServiceImpl groupService;
     @Autowired
-    private StudentRepo studentRepo;
+    private StudentServiceImpl studentService;
+
     @Autowired
-    private TutorRepo tutorRepo;
+    private TutorServiceImpl tutorService;
 
     @GetMapping("/")
     public String mainPage() {
@@ -38,12 +36,12 @@ public class MainController {
     public String search(Model model, @RequestParam(value = "word", required = false) String word) {
         try {
             int id = Integer.parseInt(word);
-            if (groupRepo.findById(id).isPresent())
-                model.addAttribute("groups", groupRepo.findById(id).get());
-            if (studentRepo.findById(id).isPresent())
-                model.addAttribute("students", studentRepo.findById(id).get());
-            if (tutorRepo.findById(id).isPresent())
-                model.addAttribute("tutors", tutorRepo.findById(id).get());
+            if (groupService.findById(id).isPresent())
+                model.addAttribute("groups", groupService.findById(id).get());
+            if (studentService.findById(id).isPresent())
+                model.addAttribute("students", studentService.findById(id).get());
+            if (tutorService.findById(id).isPresent())
+                model.addAttribute("tutors", tutorService.findById(id).get());
             model.addAttribute("word", id);
         } catch (NumberFormatException exception) {
             if (word != null) {
@@ -62,16 +60,16 @@ public class MainController {
 
         if (words.length == 2) {
             System.out.println(request);
-            List<Student> studentList = studentRepo.findStudentByIncludingInNameAndSurname(words[0], words[1]);
+            List<Student> studentList = studentService.findStudentByIncludingInNameAndSurname(words[0], words[1]);
             Collections.sort(studentList, compareStudents());
-            studentList.addAll(studentRepo.findStudentByPartlyIncludingInNameAndSurname(words[0], words[1]));
+            studentList.addAll(studentService.findStudentByPartlyIncludingInNameAndSurname(words[0], words[1]));
             Collections.sort(studentList, compareStudents());
             return studentList.stream()
                     .distinct()
                     .collect(Collectors.toList());
         } else if (words.length == 1) {
-            List<Student> studentList = studentRepo.findStudentByIncludingInName(request);
-            studentList.addAll(studentRepo.findStudentByIncludingInSurname(request));
+            List<Student> studentList = studentService.findStudentByIncludingInName(request);
+            studentList.addAll(studentService.findStudentByIncludingInSurname(request));
             Collections.sort(studentList, compareStudents());
             return studentList;
         } else {
@@ -82,14 +80,14 @@ public class MainController {
     private List<Tutor> resultOfTutorSearch(String request){
         String[] words = request.split(" ");
         if (words.length == 3){
-            List<Tutor> tutorList = tutorRepo.findTutorByIncludingInNameSurnameAndQualification(words[0], words[1], words[2]);
+            List<Tutor> tutorList = tutorService.findTutorByIncludingInNameSurnameAndQualification(words[0], words[1], words[2]);
             Collections.sort(tutorList, compareTutor());
             return tutorList;
         }
         else if (words.length == 1){
-            List<Tutor> tutorList = tutorRepo.findTutorByIncludingInName(request);
-            tutorList.addAll(tutorRepo.findTutorByIncludingInSurname(request));
-            tutorList.addAll(tutorRepo.findTutorByIncludingInQualification(request));
+            List<Tutor> tutorList = tutorService.findTutorByIncludingInName(request);
+            tutorList.addAll(tutorService.findTutorByIncludingInSurname(request));
+            tutorList.addAll(tutorService.findTutorByIncludingInQualification(request));
             Collections.sort(tutorList, compareTutor());
             return tutorList.stream()
                     .distinct()

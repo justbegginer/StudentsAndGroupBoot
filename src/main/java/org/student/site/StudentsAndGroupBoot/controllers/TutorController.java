@@ -7,9 +7,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.student.site.StudentsAndGroupBoot.models.Student;
 import org.student.site.StudentsAndGroupBoot.models.Tutor;
-import org.student.site.StudentsAndGroupBoot.repo.GroupRepo;
-import org.student.site.StudentsAndGroupBoot.repo.StudentRepo;
-import org.student.site.StudentsAndGroupBoot.repo.TutorRepo;
+import org.student.site.StudentsAndGroupBoot.services.impl.GroupServiceImpl;
+import org.student.site.StudentsAndGroupBoot.services.impl.StudentServiceImpl;
+import org.student.site.StudentsAndGroupBoot.services.impl.TutorServiceImpl;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -19,34 +19,34 @@ import java.util.List;
 @RequestMapping("/tutors")
 public class TutorController {
     @Autowired
-    private TutorRepo tutorRepo;
+    private TutorServiceImpl tutorService;
 
     @Autowired
-    private StudentRepo studentRepo;
+    private StudentServiceImpl studentService;
 
     @Autowired
-    private GroupRepo groupRepo;
+    private GroupServiceImpl groupService;
 
     @GetMapping
     public String getAllTutors(Model model) {
-        model.addAttribute("tutors", tutorRepo.findAll());
+        model.addAttribute("tutors", tutorService.findAll());
         return "/tutor/all";
     }
 
     @GetMapping("/{id}")
     public String getTutorById(@PathVariable("id") int id, Model model,
                                @RequestParam(value = "withAllStudents", required = false) boolean fullInfo) {
-        if (tutorRepo.findById(id).isEmpty()) {
+        if (tutorService.findById(id).isEmpty()) {
             model.addAttribute("message", "Tutor with id = " + id + " not found");
             return "errors/error404";
         }
-        model.addAttribute("tutor", tutorRepo.findById(id).get());
+        model.addAttribute("tutor", tutorService.findById(id).get());
         if (fullInfo) {
             List<List<Student>> list = new ArrayList<>();
-            int size = groupRepo.findGroupByTutorId(id).size();
+            int size = groupService.findGroupByTutorId(id).size();
             for (int i = 0; i < size; i++) {
-                list.add(studentRepo.findStudentByGroupNumber(
-                        groupRepo.findGroupByTutorId(id).get(i).getId()));
+                list.add(studentService.findStudentByGroupNumber(
+                        groupService.findGroupByTutorId(id).get(i).getId()));
             }
             model.addAttribute("students", list);
             return "/tutor/getTutorWithAllInfo";
@@ -67,33 +67,33 @@ public class TutorController {
         if (bindingResult.hasErrors()) {
             return "tutor/add";
         }
-        tutorRepo.save(tutor);
+        tutorService.save(tutor);
         return "redirect:/tutors";
     }
 
     @GetMapping("{id}/delete")
     public String pageToDelete(@PathVariable("id") int id, Model model) {
-        if (tutorRepo.findById(id).isEmpty()) {
+        if (tutorService.findById(id).isEmpty()) {
             model.addAttribute("message", "Tutor with id = " + id + " not found");
             return "error404";
         }
-        model.addAttribute("tutor", tutorRepo.findById(id).get());
+        model.addAttribute("tutor", tutorService.findById(id).get());
         return "tutor/delete";
     }
 
     @DeleteMapping("{id}")
     public String deleteTutorFromDB(@PathVariable("id") int id) {
-        tutorRepo.delete(tutorRepo.findById(id).get());
+        tutorService.delete(tutorService.findById(id).get());
         return "redirect:/tutors";
     }
 
     @GetMapping("{id}/update")
     public String pageToUpdate(@PathVariable("id") int id, Model model) {
-        if (tutorRepo.findById(id).isEmpty()) {
+        if (tutorService.findById(id).isEmpty()) {
             model.addAttribute("message", "Tutor with id = " + id + " not found");
             return "error404";
         }
-        model.addAttribute("tutor", tutorRepo.findById(id).get());
+        model.addAttribute("tutor", tutorService.findById(id).get());
         return "tutor/update";
     }
 
@@ -103,8 +103,8 @@ public class TutorController {
         if (bindingResult.hasErrors()) {
             return "tutor/update";
         }
-        tutorRepo.save(tutor);
-        model.addAttribute("tutors", tutorRepo.findAll());
+        tutorService.save(tutor);
+        model.addAttribute("tutors", tutorService.findAll());
         return "tutor/all";
     }
 }

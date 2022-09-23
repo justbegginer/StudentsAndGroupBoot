@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.student.site.StudentsAndGroupBoot.models.Student;
-import org.student.site.StudentsAndGroupBoot.repo.StudentRepo;
+import org.student.site.StudentsAndGroupBoot.services.impl.StudentServiceImpl;
 
 import javax.validation.Valid;
 
@@ -15,21 +15,21 @@ import javax.validation.Valid;
 @RequestMapping("/students")
 public class StudentController {
     @Autowired
-    private StudentRepo studentRepo;
+    private StudentServiceImpl studentService;
 
     @GetMapping
     public String getAllStudents(Model model) {
-        model.addAttribute("students", studentRepo.findAll());
+        model.addAttribute("students", studentService.findAll());
         return "student/all";
     }
 
     @GetMapping("/{id}")
     public String getStudentById(@PathVariable("id") int id, Model model) {
-        if (studentRepo.findById(id).isEmpty()) {
+        if (studentService.findById(id).isEmpty()) {
             model.addAttribute("message", "Student with id = " + id + " not found");
             return "errors/error404";
         }
-        model.addAttribute("student", studentRepo.findById(id).get());
+        model.addAttribute("student", studentService.findById(id).get());
         return "student/getStudent";
     }
 
@@ -45,33 +45,33 @@ public class StudentController {
         if (bindingResult.hasErrors()) {
             return "student/add";
         }
-        studentRepo.save(student);
+        studentService.save(student);
         return "redirect:/students";
     }
 
     @GetMapping("{id}/delete")
     public String pageToDelete(@PathVariable("id") int id, Model model) {
-        if (studentRepo.findById(id).isEmpty()) {
+        if (studentService.findById(id).isEmpty()) {
             model.addAttribute("message", "Student with id = " + id + " not found");
             return "error404";
         }
-        model.addAttribute("student", studentRepo.findById(id).get());
+        model.addAttribute("student", studentService.findById(id).get());
         return "student/delete";
     }
 
     @DeleteMapping("{id}")
     public String deleteStudentFromDB(@PathVariable("id") int id) {
-        studentRepo.delete(studentRepo.findById(id).get());
+        studentService.delete(studentService.findById(id).get());
         return "redirect:/students";
     }
 
     @GetMapping("{id}/update")
     public String pageToUpdate(@PathVariable("id") int id, Model model) {
-        if (studentRepo.findById(id).isEmpty()) {
+        if (studentService.findById(id).isEmpty()) {
             model.addAttribute("message", "Student with id = " + id + " not found");
             return "error404";
         }
-        model.addAttribute("student", studentRepo.findById(id).get());
+        model.addAttribute("student", studentService.findById(id).get());
         return "student/update";
     }
 
@@ -81,8 +81,8 @@ public class StudentController {
         if (bindingResult.hasErrors()) {
             return "student/update";
         }
-        studentRepo.save(student);
-        model.addAttribute("students", studentRepo.findAll());
+        studentService.save(student);
+        model.addAttribute("students", studentService.findAll());
         return "student/all";
     }
 }
