@@ -6,9 +6,9 @@
     <link rel="icon"
           href="https://blog.netgloo.com/wp-content/themes/netgloo_blog/dist/images/categories/spring.png">
     <link rel="stylesheet"
-          href="/static/link.css">
+          href="/static/stylesheets/link.css">
     <link rel="stylesheet"
-          href="/static/bodyForAll.css">
+          href="/static/stylesheets/bodyForAll.css">
 </head>
 <body>
 <h2 th:text="${tutor.getName()} + ' '+ ${tutor.getSurname()}"></h2>
@@ -22,5 +22,5 @@
 </form>
 <a th:href="@{/tutors/{id}(id = ${tutor.getId()}, withAllStudents='true')}" th:text="'All student of this Tutor'"></a>
 </body>
-<script src="/static/getPerson.js"></script>
+<script src="/static/scripts/getPerson.js"></script>
 </html>

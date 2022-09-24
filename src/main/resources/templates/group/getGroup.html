@@ -6,9 +6,9 @@
     <link rel="icon"
           href="https://blog.netgloo.com/wp-content/themes/netgloo_blog/dist/images/categories/spring.png">
     <link rel="stylesheet"
-          href="/static/link.css">
+          href="/static/stylesheets/link.css">
     <link rel="stylesheet"
-          href="/static/bodyForAll.css">
+          href="/static/stylesheets/bodyForAll.css">
 </head>
 <body>
 <h1 th:text="'Group number -'+${group.getId()}"></h1>
@@ -30,6 +30,6 @@
     <input style="color:purple" type="submit" value="ADD TUTOR">
 </form>
 <a th:href="@{/groups/{id}(id = ${group.getId()}, fullinfo='true')}" th:text="'Full info about Group'"></a>
-<script src="/static/getPersonForGroup.js"></script>
+<script src="/static/scripts/getPersonForGroup.js"></script>
 </body>
 </html>

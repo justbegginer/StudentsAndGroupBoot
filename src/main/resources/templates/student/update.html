@@ -6,7 +6,7 @@
     <link rel="icon"
           href="https://e7.pngegg.com/pngimages/697/82/png-clipart-computer-software-computer-icons-windows-update-scalable-graphics-refresh-ico-angle-leaf.png">
     <link rel="stylesheet"
-          href="/static/bodyForAll.css">
+          href="/static/stylesheets/bodyForAll.css">
 </head>
 <body>
 <form th:method="PATCH" th:action="@{/students/{id}(id=${student.id})}" th:object="${student}">
@@ -21,6 +21,6 @@
     <div style="color: darkred" th:if="${#fields.hasErrors('surname')}" th:errors="${student.surname}"></div>
     <div style="color: darkred" th:if="${#fields.hasErrors('groupNumber')}" th:errors="${student.groupNumber}"></div>
 </form>
-<script src="/static/updateBottom.js"></script>
+<script src="/static/scripts/updateBottom.js"></script>
 </body>
 </html>
