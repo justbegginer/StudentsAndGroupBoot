@@ -1,66 +1,29 @@
 const countable = document.querySelectorAll("input");
-console.log(countable.length)
 for (let i = 0; i < countable.length - 1; i++) {
+    let color;
     if (i % 5 === 0) {
-        countable.item(i).style.color = 'orangered';
-        countable.item(i).style.backgroundColor = 'white';
-        countable.item(i).onmouseleave = () => {
-            countable.item(i).style.color = 'orangered';
-            countable.item(i).style.backgroundColor = 'white'
-        };
-        countable.item(i).onmouseover = () => {
-            countable.item(i).style.color = 'white';
-            countable.item(i).style.backgroundColor = 'orangered'
-        };
+        color = 'orangered';
     } else if (i % 5 === 1) {
-        countable.item(i).style.color = 'orange';
-        countable.item(i).style.backgroundColor = 'white';
-        countable.item(i).onmouseleave = () => {
-            countable.item(i).style.color = 'orange';
-            countable.item(i).style.backgroundColor = 'white'
-        };
-        countable.item(i).onmouseover = () => {
-            countable.item(i).style.color = 'white';
-            countable.item(i).style.backgroundColor = 'orange'
-        };
+        color = 'orange';
     } else if (i % 5 === 2) {
-
-        countable.item(i).style.color = 'green';
-        countable.item(i).style.backgroundColor = 'white';
-        countable.item(i).onmouseleave = () => {
-            countable.item(i).style.color = 'green';
-            countable.item(i).style.backgroundColor = 'white'
-        };
-        countable.item(i).onmouseover = () => {
-            countable.item(i).style.color = 'white';
-            countable.item(i).style.backgroundColor = 'green'
-        };
+        color = 'green';
     }
     else if (i % 5 === 3){
-        countable.item(i).style.color = 'crimson';
-        countable.item(i).style.backgroundColor = 'white';
-        countable.item(i).onmouseleave = () => {
-            countable.item(i).style.color = 'crimson';
-            countable.item(i).style.backgroundColor = 'white'
-        };
-        countable.item(i).onmouseover = () => {
-            countable.item(i).style.color = 'white';
-            countable.item(i).style.backgroundColor = 'crimson'
-        };
+        color = 'crimson';
     }
     else {
-        countable.item(i).style.color = 'purple';
-        countable.item(i).style.backgroundColor = 'white';
-        countable.item(i).onmouseleave = () => {
-            countable.item(i).style.color = 'purple';
-            countable.item(i).style.backgroundColor = 'white'
-        };
-        countable.item(i).onmouseover = () => {
-            countable.item(i).style.color = 'white';
-            countable.item(i).style.backgroundColor = 'purple'
-        };
-
+        color = 'purple';
     }
+    countable.item(i).style.color = color;
+    countable.item(i).style.backgroundColor = 'white';
+    countable.item(i).onmouseleave = () => {
+        countable.item(i).style.color = color;
+        countable.item(i).style.backgroundColor = 'white'
+    };
+    countable.item(i).onmouseover = () => {
+        countable.item(i).style.color = 'white';
+        countable.item(i).style.backgroundColor = color;
+    };
 }
 
 countable.item(countable.length - 1).style.color = 'blue';
