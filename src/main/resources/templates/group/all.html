@@ -24,6 +24,9 @@
     <form th:action="@{/groups/addStudent/{id}(id=${group.getId()})}">
         <input style="color:green" type="submit" value="ADD STUDENT">
     </form>
+    <form th:action="@{/groups/removeStudent/{id}(id=${group.getId()})}">
+        <input style="color:crimson" type="submit" value="REMOVE STUDENT">
+    </form>
     <form th:action="@{/groups/addTutor/{id}(id=${group.getId()})}">
         <input style="color:purple" type="submit" value="ADD TUTOR">
     </form>
