@@ -67,4 +67,9 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> findStudentByPartlyIncludingInNameAndSurname(String searchWorld1, String searchWorld2) {
         return studentRepo.findStudentByPartlyIncludingInNameAndSurname(searchWorld1, searchWorld2);
     }
+
+    @Override
+    public List<Student> findStudentWhichNotInGroup(Integer id) {
+        return studentRepo.findStudentWhichNotInGroup(id);
+    }
 }

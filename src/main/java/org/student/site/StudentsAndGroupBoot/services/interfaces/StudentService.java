@@ -29,4 +29,6 @@ public interface StudentService {
     List<Student> findStudentByIncludingInNameAndSurname(String searchWord1, String searchWord2);
 
     List<Student> findStudentByPartlyIncludingInNameAndSurname(String searchWorld1, String searchWorld2);
+
+    List<Student> findStudentWhichNotInGroup(Integer id);
 }

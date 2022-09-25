@@ -28,4 +28,8 @@ public interface StudentRepo extends JpaRepository<Student, Integer> {
             "where (student.name like concat('%', ?1, '%') and student.surname like concat('%', ?2, '%')) " +
             "or (student.name like concat('%', ?2, '%') and student.surname like concat('%', ?1, '%'))")
     List<Student> findStudentByPartlyIncludingInNameAndSurname(String searchWorld1, String searchWorld2);
+
+    @Query("select student from Student student " +
+            "where not student.groupNumber = ?1")
+    List<Student> findStudentWhichNotInGroup(Integer id);
 }
