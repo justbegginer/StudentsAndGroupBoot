@@ -1,7 +1,7 @@
 const countable = document.querySelectorAll("input");
 console.log(countable.length)
 for (let i = 0; i < countable.length - 1; i++) {
-    if (i % 4 === 0) {
+    if (i % 5 === 0) {
         countable.item(i).style.color = 'orangered';
         countable.item(i).style.backgroundColor = 'white';
         countable.item(i).onmouseleave = () => {
@@ -12,7 +12,7 @@ for (let i = 0; i < countable.length - 1; i++) {
             countable.item(i).style.color = 'white';
             countable.item(i).style.backgroundColor = 'orangered'
         };
-    } else if (i % 4 === 1) {
+    } else if (i % 5 === 1) {
         countable.item(i).style.color = 'orange';
         countable.item(i).style.backgroundColor = 'white';
         countable.item(i).onmouseleave = () => {
@@ -23,7 +23,8 @@ for (let i = 0; i < countable.length - 1; i++) {
             countable.item(i).style.color = 'white';
             countable.item(i).style.backgroundColor = 'orange'
         };
-    } else if (i % 4 === 2) {
+    } else if (i % 5 === 2) {
+
         countable.item(i).style.color = 'green';
         countable.item(i).style.backgroundColor = 'white';
         countable.item(i).onmouseleave = () => {
@@ -34,7 +35,20 @@ for (let i = 0; i < countable.length - 1; i++) {
             countable.item(i).style.color = 'white';
             countable.item(i).style.backgroundColor = 'green'
         };
-    } else {
+    }
+    else if (i % 5 === 3){
+        countable.item(i).style.color = 'crimson';
+        countable.item(i).style.backgroundColor = 'white';
+        countable.item(i).onmouseleave = () => {
+            countable.item(i).style.color = 'crimson';
+            countable.item(i).style.backgroundColor = 'white'
+        };
+        countable.item(i).onmouseover = () => {
+            countable.item(i).style.color = 'white';
+            countable.item(i).style.backgroundColor = 'crimson'
+        };
+    }
+    else {
         countable.item(i).style.color = 'purple';
         countable.item(i).style.backgroundColor = 'white';
         countable.item(i).onmouseleave = () => {

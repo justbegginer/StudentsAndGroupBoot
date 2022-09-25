@@ -40,3 +40,14 @@ allBottomsInGroup.item(3).onmouseover = () => {
     allBottomsInGroup.item(3).style.color = 'white';
     allBottomsInGroup.item(3).style.backgroundColor = 'purple'
 };
+
+allBottomsInGroup.item(4).style.color = 'crimson';
+allBottomsInGroup.item(4).style.backgroundColor = 'white';
+allBottomsInGroup.item(4).onmouseleave = () => {
+    allBottomsInGroup.item(4).style.color = 'crimson';
+    allBottomsInGroup.item(4).style.backgroundColor = 'white'
+};
+allBottomsInGroup.item(4).onmouseover = () => {
+    allBottomsInGroup.item(4).style.color = 'white';
+    allBottomsInGroup.item(4).style.backgroundColor = 'purple'
+};
