@@ -1,7 +1,6 @@
 package org.student.site.StudentsAndGroupBoot.models;
 
 import lombok.*;
-import org.student.site.StudentsAndGroupBoot.validation.annotation.GroupExists;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
