@@ -1,5 +1,6 @@
 package org.student.site.StudentsAndGroupBoot.controllers;
 
+import com.fasterxml.jackson.databind.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -120,7 +121,7 @@ public class GroupController {
 
     @GetMapping("/addStudent/{id}")
     public String chooseStudentToAdd(@PathVariable("id") int id, Model model) {
-        model.addAttribute("students", studentService.findAll());
+        model.addAttribute("students", studentService.findStudentWhichNotInGroup(id));
         model.addAttribute("id", id);
         model.addAttribute("student1", new Student());
         return "student/listToAddByClick";
@@ -132,6 +133,21 @@ public class GroupController {
         student.setGroupNumber(id);
         studentService.save(student);
         return "redirect:/groups/" + id + "?fullInfo=true";
+    }
+
+    @GetMapping("/removeStudent/{id}")
+    public String chooseStudentToRemove(@PathVariable("id") int id, Model model){
+        model.addAttribute("students", studentService.findStudentByGroupNumber(id));
+        model.addAttribute("id", id);
+        return "student/listToRemoveByClick";
+    }
+    @PatchMapping("/removeStudent/{id}/{studentId}")
+    public String removeStudentFromGroup(@PathVariable("id") int id,
+                                         @PathVariable("studentId") int studentId){
+        Student student = studentService.findById(studentId).get();
+        student.setGroupNumber(100); // TODO FIX number
+        studentService.save(student);
+        return "redirect:/groups/"+id+"?fullInfo=true";
     }
 
     @PatchMapping("/addStudent/{groupId}/{studentId}")
