@@ -1,5 +1,6 @@
 package org.student.site.StudentsAndGroupBoot.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -25,18 +26,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/groups")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/groups/**").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
-                .antMatchers(HttpMethod.POST, "/groups/**").hasRole(Role.ADMIN.name())
-                .antMatchers(HttpMethod.DELETE, "/groups/**").hasRole(Role.ADMIN.name())
-                .antMatchers(HttpMethod.PATCH, "/groups/**").hasRole(Role.ADMIN.name())
-                .antMatchers(HttpMethod.GET, "/students/**").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
-                .antMatchers(HttpMethod.POST, "/students/**").hasRole(Role.ADMIN.name())
-                .antMatchers(HttpMethod.DELETE, "/students/**").hasRole(Role.ADMIN.name())
-                .antMatchers(HttpMethod.PATCH, "/students/**").hasRole(Role.ADMIN.name())
-                .antMatchers(HttpMethod.GET, "/tutors/**").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
-                .antMatchers(HttpMethod.POST, "/tutors/**").hasRole(Role.ADMIN.name())
-                .antMatchers(HttpMethod.DELETE, "/tutors/**").hasRole(Role.ADMIN.name())
-                .antMatchers(HttpMethod.PATCH, "/tutors/**").hasRole(Role.ADMIN.name())
+                .antMatchers("/students")
+                .permitAll()
+                .antMatchers("/tutors")
+                .permitAll()
+                .antMatchers(HttpMethod.GET, "/groups/**", "/students/**", "/tutors/**").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
+                .antMatchers(HttpMethod.POST, "/groups/**", "/students/**", "/tutors/**").hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.DELETE, "/groups/**", "/students/**", "/tutors/**").hasRole(Role.ADMIN.name())
+                .antMatchers(HttpMethod.PATCH, "/groups/**", "/students/**", "/tutors/**").hasRole(Role.ADMIN.name())
                 .and()
                 .formLogin();
     }
