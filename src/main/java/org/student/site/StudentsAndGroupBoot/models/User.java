@@ -25,7 +25,7 @@ public class User {
     @NotEmpty(message = "user's type shouldn't be empty")
     @Size(min = 2, max = 30, message = "user's type should be between 2 and 30")
     @Pattern(regexp = "^[a-z]*$",message = "user's type should contains only letters")
-    private String type;
+    private String login;
 
     @Email
     @NotEmpty(message = "user's email shouldn't be empty")
