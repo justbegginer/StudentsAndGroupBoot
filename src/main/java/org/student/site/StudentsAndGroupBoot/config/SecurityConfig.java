@@ -24,9 +24,33 @@ import java.util.List;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserServiceImpl userService;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
+        List<org.student.site.StudentsAndGroupBoot.models.User> studentUsers = userService.findAllByRole("student");
+        for (org.student.site.StudentsAndGroupBoot.models.User studentUser : studentUsers) {
+            http
+                    .csrf().disable()
+                    .authorizeRequests()
+                    .antMatchers("/students/" + studentUser.getUserId() + "/**")
+                    .hasRole(studentUser.getRole() + studentUser.getUserId());
+        }
+        List<org.student.site.StudentsAndGroupBoot.models.User> tutorUsers = userService.findAllByRole("tutor");
+        for (org.student.site.StudentsAndGroupBoot.models.User tutorUser : tutorUsers) {
+            http
+                    .csrf().disable()
+                    .authorizeRequests()
+                    .antMatchers("/tutors/" + tutorUser.getUserId() + "**")
+                    .hasRole(tutorUser.getRole() + tutorUser.getUserId());
+        }
+        List<org.student.site.StudentsAndGroupBoot.models.User> groupUsers = userService.findAllByRole("group");
+        for (org.student.site.StudentsAndGroupBoot.models.User groupUser : groupUsers) {
+            http
+                    .csrf().disable()
+                    .authorizeRequests()
+                    .antMatchers("/groups/" + groupUser.getUserId() + "/**")
+                    .hasRole(groupUser.getRole() + groupUser.getUserId());
+        }
         http
                 .csrf().disable()
                 .authorizeRequests()
@@ -49,7 +73,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             springSecurityUserList.add(User.builder()
                     .username(userList.get(i).getEmail())
                     .password(passwordEncoder().encode(userList.get(i).getPassword()))
-                    .roles(userList.get(i).getRole() + userList.get(i).getId())
+                    .roles(userList.get(i).getRole() + userList.get(i).getUserId())
                     .build());
         }
         springSecurityUserList.add(User.builder()
@@ -66,8 +90,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 springSecurityUserList
         );
     }
+
     @Bean
-    protected PasswordEncoder passwordEncoder(){
+    protected PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
 }
