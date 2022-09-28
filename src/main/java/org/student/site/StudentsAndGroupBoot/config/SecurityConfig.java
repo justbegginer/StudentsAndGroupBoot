@@ -40,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             http
                     .csrf().disable()
                     .authorizeRequests()
-                    .antMatchers("/tutors/" + tutorUser.getUserId() + "**")
+                    .antMatchers("/tutors/" + tutorUser.getUserId() + "/**")
                     .hasRole(tutorUser.getRole() + tutorUser.getUserId());
         }
         List<org.student.site.StudentsAndGroupBoot.models.User> groupUsers = userService.findAllByRole("group");
@@ -57,7 +57,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/groups", "/students", "/tutors")
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/groups/**", "/students/**", "/tutors/**").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
-                .antMatchers(HttpMethod.POST, "/groups/**", "/students/**", "/tutors/**").hasRole(Role.ADMIN.name())
                 .antMatchers(HttpMethod.DELETE, "/groups/**", "/students/**", "/tutors/**").hasRole(Role.ADMIN.name())
                 .antMatchers(HttpMethod.PATCH, "/groups/**", "/students/**", "/tutors/**").hasRole(Role.ADMIN.name())
                 .and()
