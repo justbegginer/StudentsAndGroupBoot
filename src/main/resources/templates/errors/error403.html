@@ -6,13 +6,28 @@
     <link rel="icon"
           href="https://w7.pngwing.com/pngs/351/333/png-transparent-http-404-error-message-desktop-design-angle-text-trademark.png">
     <link rel="stylesheet"
-          href="/static/bodyForAll.css">
+          href="/static/stylesheets/bodyForAll.css">
 </head>
 <body>
 
 <h1 style="color: red;"> Error 403</h1>
 <h2 style="color: red;"> You don't have same rights</h2>
 <h2 style="color: red;"> Permission Denied</h2>
-<h3 style="color: maroon;" th:text="${message}"></h3>
+<form action="/logout">
+    <input type="submit" value="logout">
+</form>
+<script>
+    let deleteBottomList = document.querySelector("input");
+    deleteBottomList.style.color = 'red';
+    deleteBottomList.style.backgroundColor = 'white';
+    deleteBottomList.onmouseleave = () => {
+        deleteBottomList.style.color = 'red';
+        deleteBottomList.style.backgroundColor = 'white'
+    };
+    deleteBottomList.onmouseover = () => {
+        deleteBottomList.style.color = 'white';
+        deleteBottomList.style.backgroundColor = 'red'
+    };
+</script>
 </body>
 </html>
