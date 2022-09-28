@@ -8,4 +8,8 @@ public interface UserService {
     List<User> findAll();
 
     List<User> findAllByRole(String role);
+
+    void save(User user);
+
+    void delete(User user);
 }

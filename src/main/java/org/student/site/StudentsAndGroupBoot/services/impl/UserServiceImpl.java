@@ -21,4 +21,14 @@ public class UserServiceImpl implements UserService {
     public List<User> findAllByRole(String role) {
         return userRepo.findAllByRole(role);
     }
+
+    @Override
+    public void save(User user) {
+        userRepo.save(user);
+    }
+
+    @Override
+    public void delete(User user) {
+        userRepo.delete(user);
+    }
 }
