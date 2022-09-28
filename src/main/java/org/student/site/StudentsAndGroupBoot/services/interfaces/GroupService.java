@@ -16,4 +16,6 @@ public interface GroupService {
     void delete(Group group);
 
     List<Group> findGroupByTutorId(Integer id);
+
+    Group findTopByOrderByIdDesc();
 }

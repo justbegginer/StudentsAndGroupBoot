@@ -38,4 +38,9 @@ public class GroupServiceImpl implements GroupService {
     public List<Group> findGroupByTutorId(Integer id) {
         return groupRepo.findGroupByTutorId(id);
     }
+
+    @Override
+    public Group findTopByOrderByIdDesc() {
+        return groupRepo.findTopByOrderByIdDesc();
+    }
 }

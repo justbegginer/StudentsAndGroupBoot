@@ -72,4 +72,9 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> findStudentWhichNotInGroup(Integer id) {
         return studentRepo.findStudentWhichNotInGroup(id);
     }
+
+    @Override
+    public Student findTopByOrderByIdDesc() {
+        return studentRepo.findTopByOrderByIdDesc();
+    }
 }

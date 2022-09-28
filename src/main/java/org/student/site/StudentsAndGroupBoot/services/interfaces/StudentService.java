@@ -31,4 +31,6 @@ public interface StudentService {
     List<Student> findStudentByPartlyIncludingInNameAndSurname(String searchWorld1, String searchWorld2);
 
     List<Student> findStudentWhichNotInGroup(Integer id);
+
+    Student findTopByOrderByIdDesc();
 }

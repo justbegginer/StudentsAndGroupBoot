@@ -68,4 +68,9 @@ public class TutorServiceImpl implements TutorService {
     public List<Tutor> findTutorByIncludingInNameSurnameAndQualification(String searchWorld1, String searchWorld2, String searchWorld3) {
         return tutorRepo.findTutorByIncludingInNameSurnameAndQualification(searchWorld1, searchWorld2, searchWorld3);
     }
+
+    @Override
+    public Tutor findTopByOrderByIdDesc() {
+        return tutorRepo.findTopByOrderByIdDesc();
+    }
 }

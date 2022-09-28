@@ -1,6 +1,7 @@
 package org.student.site.StudentsAndGroupBoot.services.interfaces;
 
 import org.springframework.data.jpa.repository.Query;
+import org.student.site.StudentsAndGroupBoot.models.Student;
 import org.student.site.StudentsAndGroupBoot.models.Tutor;
 
 import java.util.List;
@@ -29,4 +30,6 @@ public interface TutorService {
     List<Tutor> findTutorByIncludingInQualification(String searchWorld);
 
     List<Tutor> findTutorByIncludingInNameSurnameAndQualification(String searchWorld1, String searchWorld2, String searchWorld3);
+
+    Tutor findTopByOrderByIdDesc();
 }
