@@ -32,4 +32,6 @@ public interface TutorRepo extends JpaRepository<Tutor, Integer> {
             "or (tutor.name like concat('%', ?3, '%') and  tutor.surname like concat('%', ?1, '%') and tutor.qualification like concat('%', ?2, '%')) " +
             "or (tutor.name like concat('%', ?3, '%') and  tutor.surname like concat('%', ?2, '%') and tutor.qualification like concat('%', ?1, '%'))")
     List<Tutor> findTutorByIncludingInNameSurnameAndQualification(String searchWorld1, String searchWorld2, String searchWorld3);
+
+    Tutor findTopByOrderByIdDesc();
 }

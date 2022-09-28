@@ -32,4 +32,6 @@ public interface StudentRepo extends JpaRepository<Student, Integer> {
     @Query("select student from Student student " +
             "where not student.groupNumber = ?1")
     List<Student> findStudentWhichNotInGroup(Integer id);
+
+    Student findTopByOrderByIdDesc();
 }
