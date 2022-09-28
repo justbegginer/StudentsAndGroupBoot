@@ -10,6 +10,7 @@ import org.student.site.StudentsAndGroupBoot.models.*;
 import org.student.site.StudentsAndGroupBoot.services.impl.GroupServiceImpl;
 import org.student.site.StudentsAndGroupBoot.services.impl.StudentServiceImpl;
 import org.student.site.StudentsAndGroupBoot.services.impl.TutorServiceImpl;
+import org.student.site.StudentsAndGroupBoot.services.impl.UserServiceImpl;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/groups")
 public class GroupController {
+    @Autowired
+    private UserServiceImpl userService;
     @Autowired
     private StudentServiceImpl studentService;
 
@@ -68,17 +71,22 @@ public class GroupController {
     @GetMapping("/new")
     public String newGroup(Model model) {
         model.addAttribute("group", new Group());
+        model.addAttribute("user", new User());
         return "group/add";
     }
 
     @PostMapping()
     public String addNewGroupToDB(@ModelAttribute("group") @Valid Group group,
-                                  BindingResult bindingResult) {
+                                  BindingResult bindingResult,
+                                  @ModelAttribute("user") User user) {
         if (bindingResult.hasErrors()) {
             return "group/add";
         }
         groupService.save(group);
-        //groupRepo.save(group);
+        user.setRole("group");
+        user.setUserId(groupService.findTopByOrderByIdDesc().getId());
+        user.setLoginBasedOnEmail();
+        userService.save(user);
         return "redirect:/groups";
     }
 

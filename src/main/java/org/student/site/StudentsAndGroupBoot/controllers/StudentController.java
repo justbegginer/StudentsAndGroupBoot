@@ -6,7 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.student.site.StudentsAndGroupBoot.models.Student;
+import org.student.site.StudentsAndGroupBoot.models.User;
 import org.student.site.StudentsAndGroupBoot.services.impl.StudentServiceImpl;
+import org.student.site.StudentsAndGroupBoot.services.impl.UserServiceImpl;
 
 import javax.validation.Valid;
 
@@ -16,6 +18,9 @@ import javax.validation.Valid;
 public class StudentController {
     @Autowired
     private StudentServiceImpl studentService;
+
+    @Autowired
+    private UserServiceImpl userService;
 
     @GetMapping
     public String getAllStudents(Model model) {
@@ -36,16 +41,22 @@ public class StudentController {
     @GetMapping("/new")
     public String newStudent(Model model) {
         model.addAttribute("student", new Student());
+        model.addAttribute("user", new User());
         return "student/add";
     }
 
     @PostMapping()
     public String addNewStudentToDB(@ModelAttribute("student") @Valid Student student,
-                                    BindingResult bindingResult) {
+                                    BindingResult bindingResult,
+                                    @ModelAttribute("user") User user) {
         if (bindingResult.hasErrors()) {
             return "student/add";
         }
         studentService.save(student);
+        user.setRole("student");
+        user.setUserId(studentService.findTopByOrderByIdDesc().getId());
+        user.setLoginBasedOnEmail();
+        userService.save(user);
         return "redirect:/students";
     }
 

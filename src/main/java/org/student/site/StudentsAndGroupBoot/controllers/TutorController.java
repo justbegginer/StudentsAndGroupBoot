@@ -7,9 +7,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.student.site.StudentsAndGroupBoot.models.Student;
 import org.student.site.StudentsAndGroupBoot.models.Tutor;
+import org.student.site.StudentsAndGroupBoot.models.User;
 import org.student.site.StudentsAndGroupBoot.services.impl.GroupServiceImpl;
 import org.student.site.StudentsAndGroupBoot.services.impl.StudentServiceImpl;
 import org.student.site.StudentsAndGroupBoot.services.impl.TutorServiceImpl;
+import org.student.site.StudentsAndGroupBoot.services.impl.UserServiceImpl;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -26,6 +28,9 @@ public class TutorController {
 
     @Autowired
     private GroupServiceImpl groupService;
+
+    @Autowired
+    private UserServiceImpl userService;
 
     @GetMapping
     public String getAllTutors(Model model) {
@@ -58,16 +63,23 @@ public class TutorController {
     @GetMapping("/new")
     public String newTutor(Model model) {
         model.addAttribute("tutor", new Tutor());
+        model.addAttribute("user", new User());
         return "tutor/add";
     }
 
     @PostMapping()
     public String addNewTutorToDB(@ModelAttribute("tutor") @Valid Tutor tutor,
-                                  BindingResult bindingResult) {
+                                  BindingResult bindingResult,
+                                  @ModelAttribute("user") User user) {
         if (bindingResult.hasErrors()) {
             return "tutor/add";
         }
         tutorService.save(tutor);
+        user.setRole("tutor");
+        user.setUserId(tutorService.findTopByOrderByIdDesc().getId());
+        user.setLoginBasedOnEmail();
+        System.out.println(user);
+        userService.save(user);
         return "redirect:/tutors";
     }
 
