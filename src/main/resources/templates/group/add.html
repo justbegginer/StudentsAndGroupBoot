@@ -11,12 +11,13 @@
           href="/static/stylesheets/bodyForAll.css">
 </head>
 <body>
-<form th:method="POST" th:action="@{/groups}" th:object="${group}">
+<form th:method="POST" th:action="@{/groups}">
     <label for="tutorId"> Write tutor ID</label>
-    <input type="text" id="tutorId" th:field="*{tutorId}"/>
+    <input type="text" id="tutorId" th:field="${group.tutorId}"/>
+    <input type="text" id="email" th:field="${user.email}">
+    <input type="text" id="password" th:field="*{user.password}">
     <input type="submit" value="ADD">
-    <div style="color: darkred" th:if="${#fields.hasErrors('tutorId')}" th:errors="${group.tutorId}"></div>
-
+    <div style="color: darkred" th:if="${#fields.hasErrors('group.tutorId')}" th:errors="${group.tutorId}"></div>
 </form>
 </body>
 </html>

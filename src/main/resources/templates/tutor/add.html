@@ -11,17 +11,19 @@
           href="/static/stylesheets/bodyForAll.css">
 </head>
 <body>
-<form th:method="POST" th:action="@{/tutors}" th:object="${tutor}">
+<form th:method="POST" th:action="@{/tutors}" >
     <label for="name"> Name</label>
-    <input type="text" id="name" th:field="*{name}"/>
+    <input type="text" id="name" th:field="${tutor.name}"/>
     <label for="surname"> Surname</label>
-    <input type="text" id="surname" th:field="*{surname}"/>
+    <input type="text" id="surname" th:field="${tutor.surname}"/>
     <label for="qualification"> Qualification</label>
-    <input type="text" id="qualification" th:field="*{qualification}"/>
+    <input type="text" id="qualification" th:field="${tutor.qualification}"/>
+    <input type="text" id="email" th:field="${user.email}">
+    <input type="text" id="password" th:field="${user.password}">
     <input type="submit" value="ADD">
-    <div style="color: darkred" th:if="${#fields.hasErrors('name')}" th:errors="${tutor.name}"></div>
-    <div style="color: darkred" th:if="${#fields.hasErrors('surname')}" th:errors="${tutor.surname}"></div>
-    <div style="color: darkred" th:if="${#fields.hasErrors('qualification')}" th:errors="${tutor.qualification}"></div>
+    <div style="color: darkred" th:if="${#fields.hasErrors('tutor.name')}" th:errors="${tutor.name}"></div>
+    <div style="color: darkred" th:if="${#fields.hasErrors('tutor.surname')}" th:errors="${tutor.surname}"></div>
+    <div style="color: darkred" th:if="${#fields.hasErrors('tutor.qualification')}" th:errors="${tutor.qualification}"></div>
 </form>
 </body>
 </html>
