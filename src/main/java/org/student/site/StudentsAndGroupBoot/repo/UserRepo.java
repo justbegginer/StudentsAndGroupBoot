@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface UserRepo extends JpaRepository<User, Integer> {
     List<User> findAllByRole(String role);
+    User findTopByRoleAndUserId(String role, Integer userId);
 }

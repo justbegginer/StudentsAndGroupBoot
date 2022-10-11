@@ -12,4 +12,6 @@ public interface UserService {
     void save(User user);
 
     void delete(User user);
+
+    User findTopByRoleAndUserId(String role, Integer userId);
 }
