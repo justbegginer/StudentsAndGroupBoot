@@ -73,6 +73,7 @@ public class StudentController {
     @DeleteMapping("{id}")
     public String deleteStudentFromDB(@PathVariable("id") int id) {
         studentService.delete(studentService.findById(id).get());
+        userService.delete(userService.findTopByRoleAndUserId("student", id));
         return "redirect:/students";
     }
 

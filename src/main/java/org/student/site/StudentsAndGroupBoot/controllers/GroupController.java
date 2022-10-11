@@ -103,6 +103,7 @@ public class GroupController {
     @DeleteMapping("{id}")
     public String deleteGroupFromDB(@PathVariable("id") int id) {
         groupService.delete(groupService.findById(id).get());
+        userService.delete(userService.findTopByRoleAndUserId("group", id));
         return "redirect:/groups";
     }
 

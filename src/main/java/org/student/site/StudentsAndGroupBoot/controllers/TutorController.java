@@ -78,7 +78,6 @@ public class TutorController {
         user.setRole("tutor");
         user.setUserId(tutorService.findTopByOrderByIdDesc().getId());
         user.setLoginBasedOnEmail();
-        System.out.println(user);
         userService.save(user);
         return "redirect:/tutors";
     }
@@ -96,6 +95,7 @@ public class TutorController {
     @DeleteMapping("{id}")
     public String deleteTutorFromDB(@PathVariable("id") int id) {
         tutorService.delete(tutorService.findById(id).get());
+        userService.delete(userService.findTopByRoleAndUserId("tutor", id));
         return "redirect:/tutors";
     }
 
