@@ -1,6 +1,5 @@
 package org.student.site.StudentsAndGroupBoot.controllers;
 
-import com.fasterxml.jackson.databind.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +11,7 @@ import org.student.site.StudentsAndGroupBoot.services.impl.StudentServiceImpl;
 import org.student.site.StudentsAndGroupBoot.services.impl.TutorServiceImpl;
 import org.student.site.StudentsAndGroupBoot.services.impl.UserServiceImpl;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +76,7 @@ public class GroupController {
     }
 
     @PostMapping()
+    @Transactional
     public String addNewGroupToDB(@ModelAttribute("group") @Valid Group group,
                                   BindingResult bindingResult,
                                   @ModelAttribute("user") User user) {
@@ -101,6 +102,7 @@ public class GroupController {
     }
 
     @DeleteMapping("{id}")
+    @Transactional
     public String deleteGroupFromDB(@PathVariable("id") int id) {
         groupService.delete(groupService.findById(id).get());
         userService.delete(userService.findTopByRoleAndUserId("group", id));
@@ -177,6 +179,7 @@ public class GroupController {
     }
 
     @PostMapping("/addTutor/{id}")
+    @Transactional
     public String addTutorToGroup(@PathVariable("id") int id,
                                   @ModelAttribute("tutor") @Valid Tutor tutor) {
         tutor.setId(0);

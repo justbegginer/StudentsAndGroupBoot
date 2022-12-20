@@ -13,6 +13,7 @@ import org.student.site.StudentsAndGroupBoot.services.impl.StudentServiceImpl;
 import org.student.site.StudentsAndGroupBoot.services.impl.TutorServiceImpl;
 import org.student.site.StudentsAndGroupBoot.services.impl.UserServiceImpl;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +69,7 @@ public class TutorController {
     }
 
     @PostMapping()
+    @Transactional
     public String addNewTutorToDB(@ModelAttribute("tutor") @Valid Tutor tutor,
                                   BindingResult bindingResult,
                                   @ModelAttribute("user") User user) {
@@ -93,6 +95,7 @@ public class TutorController {
     }
 
     @DeleteMapping("{id}")
+    @Transactional
     public String deleteTutorFromDB(@PathVariable("id") int id) {
         tutorService.delete(tutorService.findById(id).get());
         userService.delete(userService.findTopByRoleAndUserId("tutor", id));

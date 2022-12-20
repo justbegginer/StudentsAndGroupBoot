@@ -10,6 +10,7 @@ import org.student.site.StudentsAndGroupBoot.models.User;
 import org.student.site.StudentsAndGroupBoot.services.impl.StudentServiceImpl;
 import org.student.site.StudentsAndGroupBoot.services.impl.UserServiceImpl;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 
@@ -71,6 +72,7 @@ public class StudentController {
     }
 
     @DeleteMapping("{id}")
+    @Transactional
     public String deleteStudentFromDB(@PathVariable("id") int id) {
         studentService.delete(studentService.findById(id).get());
         userService.delete(userService.findTopByRoleAndUserId("student", id));
