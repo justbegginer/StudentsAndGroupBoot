@@ -21,6 +21,9 @@
     <div style="color: darkred" th:if="${#fields.hasErrors('surname')}" th:errors="${student.surname}"></div>
     <div style="color: darkred" th:if="${#fields.hasErrors('groupNumber')}" th:errors="${student.groupNumber}"></div>
 </form>
+<form th:method="GET" th:action="@{/users/student/{id}(id = ${student.id})}">
+    <input type="submit" value="CHANGE PASSWORD">
+</form>
 <script src="/static/scripts/updateBottom.js"></script>
 </body>
 </html>
