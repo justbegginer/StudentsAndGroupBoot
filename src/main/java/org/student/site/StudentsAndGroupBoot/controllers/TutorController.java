@@ -71,8 +71,8 @@ public class TutorController {
     @PostMapping()
     @Transactional
     public String addNewTutorToDB(@ModelAttribute("tutor") @Valid Tutor tutor,
-                                  BindingResult bindingResult,
-                                  @ModelAttribute("user") User user) {
+                                  @ModelAttribute("user") @Valid User user,
+                                  BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "tutor/add";
         }

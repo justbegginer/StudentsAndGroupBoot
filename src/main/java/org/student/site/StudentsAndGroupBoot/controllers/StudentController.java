@@ -47,9 +47,10 @@ public class StudentController {
     }
 
     @PostMapping()
+    @Transactional()
     public String addNewStudentToDB(@ModelAttribute("student") @Valid Student student,
-                                    BindingResult bindingResult,
-                                    @ModelAttribute("user") User user) {
+                                    @ModelAttribute("user") @Valid User user,
+                                    BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "student/add";
         }

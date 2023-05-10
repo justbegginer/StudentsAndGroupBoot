@@ -78,8 +78,8 @@ public class GroupController {
     @PostMapping()
     @Transactional
     public String addNewGroupToDB(@ModelAttribute("group") @Valid Group group,
-                                  BindingResult bindingResult,
-                                  @ModelAttribute("user") User user) {
+                                  @ModelAttribute("user") @Valid User user,
+                                  BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "group/add";
         }
@@ -140,7 +140,7 @@ public class GroupController {
 
     @PostMapping("/addStudent/{id}")
     public String addStudentToGroup(@PathVariable("id") int id,
-                                    @ModelAttribute("student") @Valid Student student) {
+                                    @ModelAttribute("student") @Valid Student student) {//TODO FIX bug report
         student.setGroupNumber(id);
         studentService.save(student);
         return "redirect:/groups/" + id + "?fullInfo=true";
@@ -181,7 +181,7 @@ public class GroupController {
     @PostMapping("/addTutor/{id}")
     @Transactional
     public String addTutorToGroup(@PathVariable("id") int id,
-                                  @ModelAttribute("tutor") @Valid Tutor tutor) {
+                                  @ModelAttribute("tutor") @Valid Tutor tutor) { //TODO FIX bug report
         tutor.setId(0);
         Group group = groupService.findById(id).get();
         group.setTutorId(tutor.getId());
