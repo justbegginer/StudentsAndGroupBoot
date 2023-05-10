@@ -2,6 +2,7 @@ package org.student.site.StudentsAndGroupBoot.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.student.site.StudentsAndGroupBoot.models.Student;
@@ -27,6 +28,8 @@ public class StudentServiceImpl implements StudentService {
         return studentRepo.findAll();
     }
 
+    @CachePut
+    @Override
     public List<Student> update(){
         return studentRepo.findAll();
     }

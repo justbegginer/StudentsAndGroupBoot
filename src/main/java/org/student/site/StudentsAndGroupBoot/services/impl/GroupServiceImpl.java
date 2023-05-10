@@ -31,6 +31,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @CachePut
+    @Override
     public List<Group> update() {
         return groupRepo.findAll();
     }
