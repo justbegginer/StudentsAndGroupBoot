@@ -1,6 +1,9 @@
 package org.student.site.StudentsAndGroupBoot.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.student.site.StudentsAndGroupBoot.models.Tutor;
 import org.student.site.StudentsAndGroupBoot.repo.TutorRepo;
@@ -10,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@CacheConfig(cacheNames = {"allTutors"})
 public class TutorServiceImpl implements TutorService {
     @Autowired
     private TutorRepo tutorRepo;
@@ -20,18 +24,26 @@ public class TutorServiceImpl implements TutorService {
     }
 
     @Override
+    @Cacheable
     public List<Tutor> findAll() {
+        return tutorRepo.findAll();
+    }
+
+    @CachePut
+    public List<Tutor> update() {
         return tutorRepo.findAll();
     }
 
     @Override
     public void save(Tutor tutor) {
         tutorRepo.save(tutor);
+        update();
     }
 
     @Override
     public void delete(Tutor tutor) {
         tutorRepo.delete(tutor);
+        update();
     }
 
     @Override
