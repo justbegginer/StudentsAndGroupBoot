@@ -24,6 +24,8 @@
     <div style="color: darkred" th:if="${#fields.hasErrors('tutor.name')}" th:errors="${tutor.name}"></div>
     <div style="color: darkred" th:if="${#fields.hasErrors('tutor.surname')}" th:errors="${tutor.surname}"></div>
     <div style="color: darkred" th:if="${#fields.hasErrors('tutor.qualification')}" th:errors="${tutor.qualification}"></div>
+    <div style="color: darkred" th:if="${#fields.hasErrors('user.email')}" th:errors="${user.email}"></div>
+    <div style="color: darkred" th:if="${#fields.hasErrors('user.password')}" th:errors="${user.password}"></div>
 </form>
 </body>
 </html>

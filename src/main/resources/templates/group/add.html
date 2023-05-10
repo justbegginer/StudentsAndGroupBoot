@@ -19,6 +19,7 @@
     <input type="submit" value="ADD">
     <div style="color: darkred" th:if="${#fields.hasErrors('group.tutorId')}" th:errors="${group.tutorId}"></div>
     <div style="color: darkred" th:if="${#fields.hasErrors('user.email')}" th:errors="${user.email}"></div>
+    <div style="color: darkred" th:if="${#fields.hasErrors('user.password')}" th:errors="${user.password}"></div>
 </form>
 </body>
 </html>
