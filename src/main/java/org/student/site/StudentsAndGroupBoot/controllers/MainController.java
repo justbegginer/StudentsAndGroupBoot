@@ -19,13 +19,20 @@ import java.util.stream.Collectors;
 
 @Controller
 public class MainController {
-    @Autowired
+
     private GroupServiceImpl groupService;
-    @Autowired
+
     private StudentServiceImpl studentService;
 
-    @Autowired
     private TutorServiceImpl tutorService;
+
+    public MainController(@Autowired GroupServiceImpl groupService,
+                          @Autowired StudentServiceImpl studentService,
+                          @Autowired TutorServiceImpl tutorService){
+        this.groupService = groupService;
+        this.studentService = studentService;
+        this.tutorService = tutorService;
+    }
 
     @GetMapping("/")
     public String mainPage() {

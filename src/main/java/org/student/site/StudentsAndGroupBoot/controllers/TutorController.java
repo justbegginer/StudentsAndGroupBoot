@@ -21,17 +21,24 @@ import java.util.List;
 @Controller
 @RequestMapping("/tutors")
 public class TutorController {
-    @Autowired
+
     private TutorServiceImpl tutorService;
 
-    @Autowired
     private StudentServiceImpl studentService;
 
-    @Autowired
     private GroupServiceImpl groupService;
 
-    @Autowired
     private UserServiceImpl userService;
+
+    public TutorController(@Autowired TutorServiceImpl tutorService,
+                           @Autowired StudentServiceImpl studentService,
+                           @Autowired GroupServiceImpl groupService,
+                           @Autowired UserServiceImpl userService) {
+        this.tutorService = tutorService;
+        this.studentService = studentService;
+        this.groupService = groupService;
+        this.userService = userService;
+    }
 
     @GetMapping
     public String getAllTutors(Model model) {

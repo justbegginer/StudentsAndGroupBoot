@@ -19,16 +19,24 @@ import java.util.List;
 @Controller
 @RequestMapping("/groups")
 public class GroupController {
-    @Autowired
+
     private UserServiceImpl userService;
-    @Autowired
+
     private StudentServiceImpl studentService;
 
-    @Autowired
     private TutorServiceImpl tutorService;
 
-    @Autowired
     private GroupServiceImpl groupService;
+
+    public GroupController(@Autowired UserServiceImpl userService,
+                           @Autowired StudentServiceImpl studentService,
+                           @Autowired TutorServiceImpl tutorService,
+                           @Autowired GroupServiceImpl groupService) {
+        this.userService = userService;
+        this.studentService = studentService;
+        this.tutorService = tutorService;
+        this.groupService = groupService;
+    }
 
     @GetMapping
     public String getAllGroups(Model model,
@@ -147,18 +155,19 @@ public class GroupController {
     }
 
     @GetMapping("/removeStudent/{id}")
-    public String chooseStudentToRemove(@PathVariable("id") int id, Model model){
+    public String chooseStudentToRemove(@PathVariable("id") int id, Model model) {
         model.addAttribute("students", studentService.findStudentByGroupNumber(id));
         model.addAttribute("id", id);
         return "student/listToRemoveByClick";
     }
+
     @PatchMapping("/removeStudent/{id}/{studentId}")
     public String removeStudentFromGroup(@PathVariable("id") int id,
-                                         @PathVariable("studentId") int studentId){
+                                         @PathVariable("studentId") int studentId) {
         Student student = studentService.findById(studentId).get();
         student.setGroupNumber(100); // TODO FIX number
         studentService.save(student);
-        return "redirect:/groups/"+id+"?fullInfo=true";
+        return "redirect:/groups/" + id + "?fullInfo=true";
     }
 
     @PatchMapping("/addStudent/{groupId}/{studentId}")

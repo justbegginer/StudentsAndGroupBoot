@@ -17,11 +17,15 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/students")
 public class StudentController {
-    @Autowired
     private StudentServiceImpl studentService;
 
-    @Autowired
     private UserServiceImpl userService;
+
+    public StudentController(@Autowired StudentServiceImpl studentService,
+                             @Autowired UserServiceImpl userService){
+        this.studentService = studentService;
+        this.userService = userService;
+    }
 
     @GetMapping
     public String getAllStudents(Model model) {
