@@ -15,8 +15,13 @@ import java.util.Optional;
 @Service
 @CacheConfig(cacheNames = {"allStudents"})
 public class StudentServiceImpl implements StudentService {
-    @Autowired
+
     private StudentRepo studentRepo;
+
+    public StudentServiceImpl(@Autowired StudentRepo studentRepo) {
+        this.studentRepo = studentRepo;
+    }
+
     @Override
     public Optional<Student> findById(Integer id) {
         return studentRepo.findById(id);
@@ -30,7 +35,7 @@ public class StudentServiceImpl implements StudentService {
 
     @CachePut
     @Override
-    public List<Student> update(){
+    public List<Student> update() {
         return studentRepo.findAll();
     }
 

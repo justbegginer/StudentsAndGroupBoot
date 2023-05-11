@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 import org.student.site.StudentsAndGroupBoot.models.Group;
 import org.student.site.StudentsAndGroupBoot.repo.GroupRepo;
@@ -16,8 +15,12 @@ import java.util.Optional;
 @Service
 @CacheConfig(cacheNames = {"allGroups"})
 public class GroupServiceImpl implements GroupService {
-    @Autowired
+
     private GroupRepo groupRepo;
+
+    public GroupServiceImpl(@Autowired GroupRepo groupRepo) {
+        this.groupRepo = groupRepo;
+    }
 
     @Override
     public Optional<Group> findById(Integer id) {

@@ -28,7 +28,7 @@ public class MainController {
 
     public MainController(@Autowired GroupServiceImpl groupService,
                           @Autowired StudentServiceImpl studentService,
-                          @Autowired TutorServiceImpl tutorService){
+                          @Autowired TutorServiceImpl tutorService) {
         this.groupService = groupService;
         this.studentService = studentService;
         this.tutorService = tutorService;
@@ -84,14 +84,13 @@ public class MainController {
         }
     }
 
-    private List<Tutor> resultOfTutorSearch(String request){
+    private List<Tutor> resultOfTutorSearch(String request) {
         String[] words = request.split(" ");
-        if (words.length == 3){
+        if (words.length == 3) {
             List<Tutor> tutorList = tutorService.findTutorByIncludingInNameSurnameAndQualification(words[0], words[1], words[2]);
             Collections.sort(tutorList, compareTutor());
             return tutorList;
-        }
-        else if (words.length == 1){
+        } else if (words.length == 1) {
             List<Tutor> tutorList = tutorService.findTutorByIncludingInName(request);
             tutorList.addAll(tutorService.findTutorByIncludingInSurname(request));
             tutorList.addAll(tutorService.findTutorByIncludingInQualification(request));
@@ -99,13 +98,12 @@ public class MainController {
             return tutorList.stream()
                     .distinct()
                     .collect(Collectors.toList());
-        }
-        else {
+        } else {
             return new ArrayList<>();
         }
     }
 
-    private Comparator<Tutor> compareTutor(){
+    private Comparator<Tutor> compareTutor() {
         return (lhs, rhs) -> {
             String rightName = rhs.getName(), rightSurname = rhs.getSurname();
             String leftName = lhs.getName(), leftSurname = lhs.getSurname();
@@ -137,6 +135,7 @@ public class MainController {
             }
         };
     }
+
     private Comparator<Student> compareStudents() {
         return (lhs, rhs) -> {
             String rightName = rhs.getName(), rightSurname = rhs.getSurname();

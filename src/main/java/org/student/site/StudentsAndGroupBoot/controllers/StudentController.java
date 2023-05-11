@@ -22,7 +22,7 @@ public class StudentController {
     private UserServiceImpl userService;
 
     public StudentController(@Autowired StudentServiceImpl studentService,
-                             @Autowired UserServiceImpl userService){
+                             @Autowired UserServiceImpl userService) {
         this.studentService = studentService;
         this.userService = userService;
     }

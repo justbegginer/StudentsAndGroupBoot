@@ -22,8 +22,12 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
+
     private UserServiceImpl userService;
+
+    public SecurityConfig(@Autowired UserServiceImpl userService) {
+        this.userService = userService;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

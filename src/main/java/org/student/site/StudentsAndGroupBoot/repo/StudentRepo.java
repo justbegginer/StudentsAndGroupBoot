@@ -9,11 +9,13 @@ import java.util.List;
 
 @Repository
 public interface StudentRepo extends JpaRepository<Student, Integer> {
+
     List<Student> findStudentByName(String searchWord);
 
     List<Student> findStudentBySurname(String searchWorld);
 
     List<Student> findStudentByGroupNumber(Integer id);
+
     @Query("select student from Student student where student.name like concat('%', ?1, '%')")
     List<Student> findStudentByIncludingInName(String searchWorld);
 

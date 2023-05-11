@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface TutorRepo extends JpaRepository<Tutor, Integer> {
+
     List<Tutor> findTutorByName(String searchWord);
 
     List<Tutor> findTutorBySurname(String searchWorld);

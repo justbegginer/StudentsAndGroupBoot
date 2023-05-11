@@ -15,8 +15,12 @@ import java.util.Optional;
 @Service
 @CacheConfig(cacheNames = {"allTutors"})
 public class TutorServiceImpl implements TutorService {
-    @Autowired
+
     private TutorRepo tutorRepo;
+
+    public TutorServiceImpl(@Autowired TutorRepo tutorRepo) {
+        this.tutorRepo = tutorRepo;
+    }
 
     @Override
     public Optional<Tutor> findById(Integer id) {
