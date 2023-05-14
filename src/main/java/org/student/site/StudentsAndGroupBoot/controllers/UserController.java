@@ -20,5 +20,28 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/{type}/{id}")
+    public String pageToChangePassword(Model model,
+                                       @PathVariable("type") String type,
+                                       @PathVariable("id") int id) {
+        model.addAttribute("type", type);
+        model.addAttribute("id", id);
+        User newPasswords = new User();
+        model.addAttribute("newPassword", newPasswords);
+        model.addAttribute("oldPassword", newPasswords);
+        return "/user/changePassword";
+    }
 
+    @PatchMapping("/{type}/{id}")
+    public String changePassword(@ModelAttribute("oldPassword") User passwords,
+                                 @PathVariable("type") String type,
+                                 @PathVariable("id") int id) {
+        if (!Objects.equals(userService.findTopByRoleAndUserId(type, id).getPassword(), passwords.getPassword().split(",")[0])) {
+            return "redirect:/users/" + type + "/" + id;
+        }
+        User user = userService.findTopByRoleAndUserId(type, id);
+        user.setPassword(passwords.getPassword().split(",")[1]);
+        userService.save(user);
+        return "redirect:/" + type + "/" + id;
+    }
 }
