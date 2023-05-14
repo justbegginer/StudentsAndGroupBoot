@@ -11,6 +11,7 @@ public interface StudentService {
     Optional<Student> findById(Integer id);
 
     List<Student> findAll();
+
     List<Student> update();
 
     void save(Student student);

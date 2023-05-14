@@ -8,10 +8,9 @@ import org.springframework.cache.annotation.EnableCaching;
 @EnableCaching
 public class StudentsAndGroupBootApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(StudentsAndGroupBootApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(StudentsAndGroupBootApplication.class, args);
+    }
 
 
 }
