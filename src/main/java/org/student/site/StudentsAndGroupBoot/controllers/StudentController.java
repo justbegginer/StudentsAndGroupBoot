@@ -17,9 +17,9 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/students")
 public class StudentController {
-    private StudentServiceImpl studentService;
+    private final StudentServiceImpl studentService;
 
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
 
     public StudentController(@Autowired StudentServiceImpl studentService,
                              @Autowired UserServiceImpl userService) {

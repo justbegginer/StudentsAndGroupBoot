@@ -20,11 +20,11 @@ import java.util.stream.Collectors;
 @Controller
 public class MainController {
 
-    private GroupServiceImpl groupService;
+    private final GroupServiceImpl groupService;
 
-    private StudentServiceImpl studentService;
+    private final StudentServiceImpl studentService;
 
-    private TutorServiceImpl tutorService;
+    private final TutorServiceImpl tutorService;
 
     public MainController(@Autowired GroupServiceImpl groupService,
                           @Autowired StudentServiceImpl studentService,

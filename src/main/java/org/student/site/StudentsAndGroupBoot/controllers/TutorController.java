@@ -22,13 +22,13 @@ import java.util.List;
 @RequestMapping("/tutors")
 public class TutorController {
 
-    private TutorServiceImpl tutorService;
+    private final TutorServiceImpl tutorService;
 
-    private StudentServiceImpl studentService;
+    private final StudentServiceImpl studentService;
 
-    private GroupServiceImpl groupService;
+    private final GroupServiceImpl groupService;
 
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
 
     public TutorController(@Autowired TutorServiceImpl tutorService,
                            @Autowired StudentServiceImpl studentService,

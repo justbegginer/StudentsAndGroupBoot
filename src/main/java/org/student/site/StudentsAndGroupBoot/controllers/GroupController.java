@@ -20,13 +20,13 @@ import java.util.List;
 @RequestMapping("/groups")
 public class GroupController {
 
-    private UserServiceImpl userService;
+    private final UserServiceImpl userService;
 
-    private StudentServiceImpl studentService;
+    private final StudentServiceImpl studentService;
 
-    private TutorServiceImpl tutorService;
+    private final TutorServiceImpl tutorService;
 
-    private GroupServiceImpl groupService;
+    private final GroupServiceImpl groupService;
 
     public GroupController(@Autowired UserServiceImpl userService,
                            @Autowired StudentServiceImpl studentService,
