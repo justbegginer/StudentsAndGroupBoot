@@ -16,7 +16,7 @@ import java.util.Optional;
 @CacheConfig(cacheNames = {"allStudents"})
 public class StudentServiceImpl implements StudentService {
 
-    private StudentRepo studentRepo;
+    private final StudentRepo studentRepo;
 
     public StudentServiceImpl(@Autowired StudentRepo studentRepo) {
         this.studentRepo = studentRepo;

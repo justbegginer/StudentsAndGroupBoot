@@ -16,7 +16,7 @@ import java.util.Optional;
 @CacheConfig(cacheNames = {"allGroups"})
 public class GroupServiceImpl implements GroupService {
 
-    private GroupRepo groupRepo;
+    private final GroupRepo groupRepo;
 
     public GroupServiceImpl(@Autowired GroupRepo groupRepo) {
         this.groupRepo = groupRepo;

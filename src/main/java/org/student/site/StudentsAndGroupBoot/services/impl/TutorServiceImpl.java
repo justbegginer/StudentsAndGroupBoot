@@ -16,7 +16,7 @@ import java.util.Optional;
 @CacheConfig(cacheNames = {"allTutors"})
 public class TutorServiceImpl implements TutorService {
 
-    private TutorRepo tutorRepo;
+    private final TutorRepo tutorRepo;
 
     public TutorServiceImpl(@Autowired TutorRepo tutorRepo) {
         this.tutorRepo = tutorRepo;
