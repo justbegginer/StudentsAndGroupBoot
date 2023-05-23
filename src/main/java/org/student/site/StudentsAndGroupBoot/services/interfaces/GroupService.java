@@ -11,8 +11,6 @@ public interface GroupService {
 
     List<Group> findAll();
 
-    List<Group> update();
-
     void save(Group group);
 
     void delete(Group group);

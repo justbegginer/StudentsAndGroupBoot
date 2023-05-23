@@ -13,8 +13,6 @@ public interface TutorService {
 
     List<Tutor> findAll();
 
-    List<Tutor> update();
-
     void save(Tutor tutor);
 
     void delete(Tutor tutor);
