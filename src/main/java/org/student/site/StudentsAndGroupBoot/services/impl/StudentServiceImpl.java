@@ -7,6 +7,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.student.site.StudentsAndGroupBoot.models.Student;
 import org.student.site.StudentsAndGroupBoot.repo.StudentRepo;
+import org.student.site.StudentsAndGroupBoot.services.cache.updaters.StudentCacheUpdate;
 import org.student.site.StudentsAndGroupBoot.services.interfaces.StudentService;
 
 import java.util.List;
@@ -18,8 +19,11 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepo studentRepo;
 
-    public StudentServiceImpl(@Autowired StudentRepo studentRepo) {
+    private final StudentCacheUpdate studentCacheUpdate;
+
+    public StudentServiceImpl(@Autowired StudentRepo studentRepo, @Autowired StudentCacheUpdate studentCacheUpdate) {
         this.studentRepo = studentRepo;
+        this.studentCacheUpdate= studentCacheUpdate;
     }
 
     @Override
@@ -33,22 +37,16 @@ public class StudentServiceImpl implements StudentService {
         return studentRepo.findAll();
     }
 
-    @CachePut
-    @Override
-    public List<Student> update() {
-        return studentRepo.findAll();
-    }
-
     @Override
     public void save(Student student) {
         studentRepo.save(student);
-        update();
+        studentCacheUpdate.update();
     }
 
     @Override
     public void delete(Student student) {
         studentRepo.delete(student);
-        update();
+        studentCacheUpdate.update();
     }
 
     @Override
