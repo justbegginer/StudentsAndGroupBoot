@@ -23,7 +23,7 @@ public class Group {
     @Min(value = 1, message = "tutorId should not be more than 1")
     //@TutorExists()
     @Column(name = "tutorid")
-    private int tutorId;
+    private Integer tutorId;
 
     @Override
     public boolean equals(Object o) {
