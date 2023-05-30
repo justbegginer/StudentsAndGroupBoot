@@ -9,15 +9,17 @@ import org.student.site.StudentsAndGroupBoot.repo.StudentRepo;
 import java.util.List;
 
 @Component
-public class StudentCacheUpdate {
+public class StudentCacheUpdate extends CacheUpdater<Student> {
 
     private final StudentRepo studentRepo;
 
     public StudentCacheUpdate(@Autowired StudentRepo studentRepo){
+        super();
         this.studentRepo = studentRepo;
     }
 
     @CachePut(cacheNames = "allStudents")
+    @Override
     public List<Student> update(){
         return studentRepo.findAll();
     }
