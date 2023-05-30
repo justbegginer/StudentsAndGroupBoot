@@ -34,19 +34,23 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Cacheable
     public List<Student> findAll() {
+        if (studentCacheUpdate.isNeedToBeUpdate()){
+            studentCacheUpdate.update();
+            studentCacheUpdate.setNeedToBeUpdate(false);
+        }
         return studentRepo.findAll();
     }
 
     @Override
     public void save(Student student) {
         studentRepo.save(student);
-        studentCacheUpdate.update();
+        studentCacheUpdate.setNeedToBeUpdate(true);
     }
 
     @Override
     public void delete(Student student) {
         studentRepo.delete(student);
-        studentCacheUpdate.update();
+        studentCacheUpdate.setNeedToBeUpdate(true);
     }
 
     @Override

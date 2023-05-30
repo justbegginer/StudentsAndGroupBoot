@@ -34,19 +34,23 @@ public class TutorServiceImpl implements TutorService {
     @Override
     @Cacheable
     public List<Tutor> findAll() {
+        if (tutorCacheUpdate.isNeedToBeUpdate()){
+            tutorCacheUpdate.update();
+            tutorCacheUpdate.setNeedToBeUpdate(false);
+        }
         return tutorRepo.findAll();
     }
 
     @Override
     public void save(Tutor tutor) {
         tutorRepo.save(tutor);
-        tutorCacheUpdate.update();
+        tutorCacheUpdate.setNeedToBeUpdate(true);
     }
 
     @Override
     public void delete(Tutor tutor) {
         tutorRepo.delete(tutor);
-        tutorCacheUpdate.update();
+        tutorCacheUpdate.setNeedToBeUpdate(true);
     }
 
     @Override

@@ -33,19 +33,23 @@ public class GroupServiceImpl implements GroupService {
     @Cacheable
     @Override
     public List<Group> findAll() {
+        if (groupCacheUpdate.isNeedToBeUpdate()){
+            groupCacheUpdate.update();
+            groupCacheUpdate.setNeedToBeUpdate(false);
+        }
         return groupRepo.findAll();
     }
 
     @Override
     public void save(Group group) {
         groupRepo.save(group);
-        groupCacheUpdate.update();
+        groupCacheUpdate.setNeedToBeUpdate(true);
     }
 
     @Override
     public void delete(Group group) {
         groupRepo.delete(group);
-        groupCacheUpdate.update();
+        groupCacheUpdate.setNeedToBeUpdate(true);
     }
 
     @Override
