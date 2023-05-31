@@ -5,9 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.student.site.StudentsAndGroupBoot.models.Student;
-import org.student.site.StudentsAndGroupBoot.models.Tutor;
-import org.student.site.StudentsAndGroupBoot.models.User;
+import org.student.site.StudentsAndGroupBoot.models.*;
 import org.student.site.StudentsAndGroupBoot.services.impl.GroupServiceImpl;
 import org.student.site.StudentsAndGroupBoot.services.impl.StudentServiceImpl;
 import org.student.site.StudentsAndGroupBoot.services.impl.TutorServiceImpl;
@@ -17,6 +15,8 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/rest/tutors")
@@ -24,109 +24,73 @@ public class TutorRestController {
 
     private final TutorServiceImpl tutorService;
 
-    private final StudentServiceImpl studentService;
-
-    private final GroupServiceImpl groupService;
-
     private final UserServiceImpl userService;
 
     public TutorRestController(@Autowired TutorServiceImpl tutorService,
-                           @Autowired StudentServiceImpl studentService,
-                           @Autowired GroupServiceImpl groupService,
                            @Autowired UserServiceImpl userService) {
         this.tutorService = tutorService;
-        this.studentService = studentService;
-        this.groupService = groupService;
         this.userService = userService;
     }
 
     @GetMapping
-    public String getAllTutors(Model model) {
-        model.addAttribute("tutors", tutorService.findAll());
-        return "/tutor/all";
+    public List<Tutor> getAllTutors() {
+        return tutorService.findAll();
     }
 
     @GetMapping("/{id}")
-    public String getTutorById(@PathVariable("id") int id, Model model,
-                               @RequestParam(value = "withAllStudents", required = false) boolean fullInfo) {
-        if (tutorService.findById(id).isEmpty()) {
-            model.addAttribute("message", "Tutor with id = " + id + " not found");
-            return "errors/error404";
+    public Tutor getTutorById(@PathVariable("id") int id) {
+        Optional<Tutor> optionalTutor = tutorService.findById(id);
+        if (optionalTutor.isEmpty()) {
+            // TODO error 404
         }
-        model.addAttribute("tutor", tutorService.findById(id).get());
-        if (fullInfo) {
-            List<List<Student>> list = new ArrayList<>();
-            int size = groupService.findGroupByTutorId(id).size();
-            for (int i = 0; i < size; i++) {
-                list.add(studentService.findStudentByGroupNumber(
-                        groupService.findGroupByTutorId(id).get(i).getId()));
-            }
-            model.addAttribute("students", list);
-            return "/tutor/getTutorWithAllInfo";
-        } else {
-            return "tutor/getTutor";
-        }
-    }
-
-    @GetMapping("/new")
-    public String newTutor(Model model) {
-        model.addAttribute("tutor", new Tutor());
-        model.addAttribute("user", new User());
-        return "tutor/add";
+        return optionalTutor.get();
     }
 
     @PostMapping()
     @Transactional
-    public String addNewTutorToDB(@ModelAttribute("tutor") @Valid Tutor tutor,
-                                  @ModelAttribute("user") @Valid User user,
-                                  BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "tutor/add";
-        }
+    public Status addNewTutorToDB(@RequestBody Map<String, Map<String, String>> request) {
+        Tutor tutor = new Tutor();
+        tutor.setName(request.get("tutor").get("name"));
+        tutor.setSurname(request.get("tutor").get("surname"));
+        tutor.setQualification(request.get("tutor").get("qualification"));
         tutorService.save(tutor);
+        User user = new User();
+        user.setEmail(request.get("user").get("email"));
+        user.setPassword(request.get("user").get("password"));
         user.setRole("tutor");
         user.setUserId(tutorService.findTopByOrderByIdDesc().getId());
         user.setLoginBasedOnEmail();
         userService.save(user);
-        return "redirect:/tutors";
-    }
-
-    @GetMapping("{id}/delete")
-    public String pageToDelete(@PathVariable("id") int id, Model model) {
-        if (tutorService.findById(id).isEmpty()) {
-            model.addAttribute("message", "Tutor with id = " + id + " not found");
-            return "error404";
-        }
-        model.addAttribute("tutor", tutorService.findById(id).get());
-        return "tutor/delete";
+        return new Status(true, StatusPattern.SUCCESS, null);
     }
 
     @DeleteMapping("{id}")
     @Transactional
-    public String deleteTutorFromDB(@PathVariable("id") int id) {
-        tutorService.delete(tutorService.findById(id).get());
-        userService.delete(userService.findTopByRoleAndUserId("tutor", id));
-        return "redirect:/tutors";
-    }
-
-    @GetMapping("{id}/update")
-    public String pageToUpdate(@PathVariable("id") int id, Model model) {
-        if (tutorService.findById(id).isEmpty()) {
-            model.addAttribute("message", "Tutor with id = " + id + " not found");
-            return "error404";
+    public Status deleteTutorFromDB(@PathVariable("id") int id) {
+        Optional<Tutor> optionalTutor = tutorService.findById(id);
+        if (optionalTutor.isEmpty()){
+            return new Status(false, StatusPattern.NOT_FOUND,
+                    "Tutor with id " + id + " does not exist");
         }
-        model.addAttribute("tutor", tutorService.findById(id).get());
-        return "tutor/update";
+        tutorService.delete(optionalTutor.get());
+        userService.delete(userService.findTopByRoleAndUserId("tutor", id));
+        return new Status(true, StatusPattern.SUCCESS, null);
     }
 
     @PatchMapping("{id}")
-    public String updateGroup(@ModelAttribute("tutor") @Valid Tutor tutor,
-                              BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            return "tutor/update";
+    public Status updateGroup(@RequestBody @Valid Tutor tutor, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            StringBuilder errorMessage = new StringBuilder("Error in fields ");
+            for (String suppressedField : bindingResult.getSuppressedFields()) {
+                errorMessage.append(suppressedField);
+            }
+            return new Status(false, StatusPattern.INVALID,errorMessage.toString());
+        }
+        if (tutorService.findById(tutor.getId()).isEmpty()){
+            return new Status(false, StatusPattern.NOT_FOUND,
+                    "Tutor with id = " + tutor.getId() + " doesn't exist'");
         }
         tutorService.save(tutor);
-        model.addAttribute("tutors", tutorService.findAll());
-        return "tutor/all";
+        return new Status(true, StatusPattern.SUCCESS, null);
     }
 }
