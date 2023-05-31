@@ -12,8 +12,6 @@ public interface StudentService {
 
     List<Student> findAll();
 
-    List<Student> update();
-
     void save(Student student);
 
     void delete(Student student);

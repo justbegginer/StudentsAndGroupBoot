@@ -30,7 +30,7 @@ public class Student {
     @Min(value = 1, message = "student groupNumber should be greater than zero")
     //@GroupExists()
     @Column(name = "groupnumber")
-    private int groupNumber;
+    private Integer groupNumber;
 
     @Override
     public boolean equals(Object o) {
