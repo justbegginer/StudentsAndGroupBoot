@@ -2,6 +2,7 @@ package org.student.site.StudentsAndGroupBoot.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.student.site.StudentsAndGroupBoot.models.*;
 import org.student.site.StudentsAndGroupBoot.services.impl.GroupServiceImpl;
@@ -76,8 +77,19 @@ public class GroupRestController {
         }
     }
 
-    @PatchMapping("{id}")
-    public Status updateGroup(@RequestBody Group group) {
+    @PatchMapping
+    public Status updateGroup(@RequestBody @Valid Group group,
+                              BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            StringBuilder errorMessage = new StringBuilder("Errors: ");
+            for (ObjectError suppressedField : bindingResult.getAllErrors()) {
+                errorMessage
+                        .append(suppressedField.getDefaultMessage())
+                        .append(",");
+            }
+            errorMessage.deleteCharAt(errorMessage.length() -1);
+            return new Status(false, StatusPattern.INVALID,errorMessage.toString());
+        }
         groupService.save(group);
         return new Status(true, StatusPattern.SUCCESS, null);
     }
