@@ -1,9 +1,9 @@
 package org.student.site.StudentsAndGroupBoot.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.student.site.StudentsAndGroupBoot.Utils;
 import org.student.site.StudentsAndGroupBoot.models.Status;
 import org.student.site.StudentsAndGroupBoot.models.StatusPattern;
 import org.student.site.StudentsAndGroupBoot.models.Student;
@@ -30,7 +30,7 @@ public class StudentRestController {
     }
 
     @GetMapping
-    public List<Student> getAllStudents(Model model) {
+    public List<Student> getAllStudents() {
         return studentService.findAll();
     }
 
@@ -80,11 +80,7 @@ public class StudentRestController {
     @PatchMapping("{id}")
     public Status updateGroup(@RequestBody @Valid Student student, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            StringBuilder errorMessage = new StringBuilder("Error in fields ");
-            for (String suppressedField : bindingResult.getSuppressedFields()) {
-                errorMessage.append(suppressedField);
-            }
-            return new Status(false, StatusPattern.INVALID,errorMessage.toString());
+            return Utils.getErrorStatusFromBindingResult(bindingResult);
         }
         if (studentService.findById(student.getId()).isEmpty()){
             return new Status(false, StatusPattern.NOT_FOUND, null);

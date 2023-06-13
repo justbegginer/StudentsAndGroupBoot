@@ -2,8 +2,8 @@ package org.student.site.StudentsAndGroupBoot.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
+import org.student.site.StudentsAndGroupBoot.Utils;
 import org.student.site.StudentsAndGroupBoot.models.*;
 import org.student.site.StudentsAndGroupBoot.services.impl.GroupServiceImpl;
 import org.student.site.StudentsAndGroupBoot.services.impl.StudentServiceImpl;
@@ -81,14 +81,7 @@ public class GroupRestController {
     public Status updateGroup(@RequestBody @Valid Group group,
                               BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
-            StringBuilder errorMessage = new StringBuilder("Errors: ");
-            for (ObjectError suppressedField : bindingResult.getAllErrors()) {
-                errorMessage
-                        .append(suppressedField.getDefaultMessage())
-                        .append(",");
-            }
-            errorMessage.deleteCharAt(errorMessage.length() -1);
-            return new Status(false, StatusPattern.INVALID,errorMessage.toString());
+            return Utils.getErrorStatusFromBindingResult(bindingResult);
         }
         groupService.save(group);
         return new Status(true, StatusPattern.SUCCESS, null);
@@ -99,11 +92,7 @@ public class GroupRestController {
     public Status addStudentToGroup(@PathVariable("id") int id,
                                     @RequestBody @Valid Student student, BindingResult bindingResult) {
         if (bindingResult.hasErrors()){
-            StringBuilder errorMessage = new StringBuilder("Error in fields ");
-            for (String suppressedField : bindingResult.getSuppressedFields()) {
-                errorMessage.append(suppressedField);
-            }
-            return new Status(false, StatusPattern.INVALID,errorMessage.toString());
+            return Utils.getErrorStatusFromBindingResult(bindingResult);
         }
         if (groupService.findById(id).isEmpty()) {
             return new Status(false, StatusPattern.NOT_FOUND, "There is no student with id = " + id);
@@ -147,11 +136,7 @@ public class GroupRestController {
                                   @RequestBody @Valid Tutor tutor, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()){
-            StringBuilder errorMessage = new StringBuilder("Error in fields ");
-            for (String suppressedField : bindingResult.getSuppressedFields()) {
-                errorMessage.append(suppressedField);
-            }
-            return new Status(false, StatusPattern.INVALID,errorMessage.toString());
+            return Utils.getErrorStatusFromBindingResult(bindingResult);
         }
         tutor.setId(0); // TODO why
         Optional<Group> group = groupService.findById(id);
