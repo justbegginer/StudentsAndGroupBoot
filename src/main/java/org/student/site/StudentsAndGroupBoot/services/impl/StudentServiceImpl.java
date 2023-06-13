@@ -2,7 +2,6 @@ package org.student.site.StudentsAndGroupBoot.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.student.site.StudentsAndGroupBoot.models.Student;
@@ -34,23 +33,19 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Cacheable
     public List<Student> findAll() {
-        if (studentCacheUpdate.isNeedToBeUpdate()){
-            studentCacheUpdate.update();
-            studentCacheUpdate.setNeedToBeUpdate(false);
-        }
         return studentRepo.findAll();
     }
 
     @Override
     public void save(Student student) {
         studentRepo.save(student);
-        studentCacheUpdate.setNeedToBeUpdate(true);
+        studentCacheUpdate.update();
     }
 
     @Override
     public void delete(Student student) {
         studentRepo.delete(student);
-        studentCacheUpdate.setNeedToBeUpdate(true);
+        studentCacheUpdate.update();
     }
 
     @Override

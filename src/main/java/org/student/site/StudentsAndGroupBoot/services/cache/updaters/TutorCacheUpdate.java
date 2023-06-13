@@ -10,7 +10,7 @@ import org.student.site.StudentsAndGroupBoot.repo.TutorRepo;
 import java.util.List;
 
 @Component
-public class TutorCacheUpdate extends CacheUpdater<Tutor>{
+public class TutorCacheUpdate implements CacheUpdater<Tutor>{
 
     private final TutorRepo tutorRepo;
     public TutorCacheUpdate(@Autowired TutorRepo tutorRepo){

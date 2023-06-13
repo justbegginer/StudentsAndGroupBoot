@@ -20,7 +20,7 @@ public class GroupServiceImpl implements GroupService {
 
     private final GroupCacheUpdate groupCacheUpdate;
 
-    public GroupServiceImpl(@Autowired GroupRepo groupRepo, @Autowired GroupCacheUpdate group, GroupCacheUpdate groupCacheUpdate) {
+    public GroupServiceImpl(@Autowired GroupRepo groupRepo, @Autowired GroupCacheUpdate groupCacheUpdate) {
         this.groupRepo = groupRepo;
         this.groupCacheUpdate = groupCacheUpdate;
     }
@@ -33,23 +33,19 @@ public class GroupServiceImpl implements GroupService {
     @Cacheable
     @Override
     public List<Group> findAll() {
-        if (groupCacheUpdate.isNeedToBeUpdate()){
-            groupCacheUpdate.update();
-            groupCacheUpdate.setNeedToBeUpdate(false);
-        }
         return groupRepo.findAll();
     }
 
     @Override
     public void save(Group group) {
         groupRepo.save(group);
-        groupCacheUpdate.setNeedToBeUpdate(true);
+        groupCacheUpdate.update();
     }
 
     @Override
     public void delete(Group group) {
         groupRepo.delete(group);
-        groupCacheUpdate.setNeedToBeUpdate(true);
+        groupCacheUpdate.update();
     }
 
     @Override

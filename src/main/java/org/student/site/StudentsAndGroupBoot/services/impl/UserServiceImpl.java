@@ -7,6 +7,7 @@ import org.student.site.StudentsAndGroupBoot.repo.UserRepo;
 import org.student.site.StudentsAndGroupBoot.services.interfaces.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -20,6 +21,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() {
         return userRepo.findAll();
+    }
+
+    @Override
+    public Optional<User> findById(Integer id) {
+        return userRepo.findById(id);
     }
 
     @Override

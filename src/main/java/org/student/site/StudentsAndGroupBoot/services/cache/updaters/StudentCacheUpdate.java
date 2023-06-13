@@ -9,12 +9,11 @@ import org.student.site.StudentsAndGroupBoot.repo.StudentRepo;
 import java.util.List;
 
 @Component
-public class StudentCacheUpdate extends CacheUpdater<Student> {
+public class StudentCacheUpdate implements CacheUpdater<Student> {
 
     private final StudentRepo studentRepo;
 
     public StudentCacheUpdate(@Autowired StudentRepo studentRepo){
-        super();
         this.studentRepo = studentRepo;
     }
 

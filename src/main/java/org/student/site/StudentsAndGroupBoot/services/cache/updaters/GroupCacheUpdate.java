@@ -10,11 +10,11 @@ import org.student.site.StudentsAndGroupBoot.services.impl.GroupServiceImpl;
 import java.util.List;
 
 @Component
-public class GroupCacheUpdate extends CacheUpdater<Group>{
-    private final GroupRepo groupRepo;
+public class GroupCacheUpdate implements CacheUpdater<Group> {
+
+    private GroupRepo groupRepo;
 
     public GroupCacheUpdate(@Autowired GroupRepo groupRepo){
-        super();
         this.groupRepo = groupRepo;
     }
     @CachePut(cacheNames = "allGroups")
