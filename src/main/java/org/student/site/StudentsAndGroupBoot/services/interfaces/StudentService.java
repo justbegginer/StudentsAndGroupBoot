@@ -1,8 +1,6 @@
 package org.student.site.StudentsAndGroupBoot.services.interfaces;
 
-import org.springframework.data.jpa.repository.Query;
 import org.student.site.StudentsAndGroupBoot.models.Student;
-import org.student.site.StudentsAndGroupBoot.models.Tutor;
 
 import java.util.List;
 import java.util.Optional;
