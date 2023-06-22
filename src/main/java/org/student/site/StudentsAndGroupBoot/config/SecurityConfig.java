@@ -31,30 +31,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        List<org.student.site.StudentsAndGroupBoot.models.User> studentUsers = userService.findAllByRole("student");
-        for (org.student.site.StudentsAndGroupBoot.models.User studentUser : studentUsers) {
-            http
-                    .csrf().disable()
-                    .authorizeRequests()
-                    .antMatchers("/students/" + studentUser.getUserId() + "/**")
-                    .hasRole(studentUser.getRole() + studentUser.getUserId());
-        }
-        List<org.student.site.StudentsAndGroupBoot.models.User> tutorUsers = userService.findAllByRole("tutor");
-        for (org.student.site.StudentsAndGroupBoot.models.User tutorUser : tutorUsers) {
-            http
-                    .csrf().disable()
-                    .authorizeRequests()
-                    .antMatchers("/tutors/" + tutorUser.getUserId() + "/**")
-                    .hasRole(tutorUser.getRole() + tutorUser.getUserId());
-        }
-        List<org.student.site.StudentsAndGroupBoot.models.User> groupUsers = userService.findAllByRole("group");
-        for (org.student.site.StudentsAndGroupBoot.models.User groupUser : groupUsers) {
-            http
-                    .csrf().disable()
-                    .authorizeRequests()
-                    .antMatchers("/groups/" + groupUser.getUserId() + "/**")
-                    .hasRole(groupUser.getRole() + groupUser.getUserId());
-        }
         http
                 .csrf().disable()
                 .httpBasic()
@@ -72,15 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     protected UserDetailsService userDetailsService() {
-        List<org.student.site.StudentsAndGroupBoot.models.User> userList = userService.findAll();
-        List<UserDetails> springSecurityUserList = new ArrayList<>(userList.size());
-        for (int i = 0; i < userList.size(); i++) {
-            springSecurityUserList.add(User.builder()
-                    .username(userList.get(i).getEmail())
-                    .password(passwordEncoder().encode(userList.get(i).getPassword()))
-                    .roles(userList.get(i).getRole() + userList.get(i).getUserId())
-                    .build());
-        }
+        List<UserDetails> springSecurityUserList = new ArrayList<>();
         springSecurityUserList.add(User.builder()
                 .username("admin")
                 .password(passwordEncoder().encode("admin"))
