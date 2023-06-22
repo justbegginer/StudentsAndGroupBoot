@@ -86,7 +86,6 @@ public class TutorController {
         tutorService.save(tutor);
         user.setRole("tutor");
         user.setUserId(tutorService.findTopByOrderByIdDesc().getId());
-        user.setLoginBasedOnEmail();
         userService.save(user);
         return "redirect:/tutors";
     }
