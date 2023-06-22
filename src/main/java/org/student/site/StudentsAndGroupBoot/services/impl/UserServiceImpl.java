@@ -2,20 +2,30 @@ package org.student.site.StudentsAndGroupBoot.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.student.site.StudentsAndGroupBoot.Utils;
+import org.student.site.StudentsAndGroupBoot.exceptions.IncorrectDataException;
 import org.student.site.StudentsAndGroupBoot.models.User;
 import org.student.site.StudentsAndGroupBoot.repo.UserRepo;
 import org.student.site.StudentsAndGroupBoot.services.interfaces.UserService;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepo userRepo;
 
-    public UserServiceImpl(@Autowired UserRepo userRepo) {
+    private final Validator validator;
+
+    @Autowired
+    public UserServiceImpl(UserRepo userRepo,
+                           Validator validator) {
         this.userRepo = userRepo;
+        this.validator = validator;
     }
 
     @Override
@@ -35,6 +45,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(User user) {
+        Set<ConstraintViolation<User>> violationSet = validator.validate(user);
+        if (!violationSet.isEmpty()) {
+            throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(violationSet));
+        }
         userRepo.save(user);
     }
 
