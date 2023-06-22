@@ -54,7 +54,6 @@ public class TutorRestController {
         User user = tutorUserDto.getUser();
         user.setRole("tutor");
         user.setUserId(tutorService.findTopByOrderByIdDesc().getId());
-        user.setLoginBasedOnEmail();
         userService.save(user);
         return new Status(true, StatusPattern.SUCCESS, null);
     }

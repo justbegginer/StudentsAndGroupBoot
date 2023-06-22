@@ -67,7 +67,6 @@ public class GroupRestController {
         User user = groupUserDto.getUser();
         user.setRole("group");
         user.setUserId(groupService.findTopByOrderByIdDesc().getId());
-        user.setLoginBasedOnEmail();
         userService.save(user);
         return new Status(true, StatusPattern.SUCCESS, null);
     }

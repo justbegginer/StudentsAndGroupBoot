@@ -94,7 +94,6 @@ public class GroupController {
         groupService.save(group);
         user.setRole("group");
         user.setUserId(groupService.findTopByOrderByIdDesc().getId());
-        user.setLoginBasedOnEmail();
         userService.save(user);
         return "redirect:/groups";
     }

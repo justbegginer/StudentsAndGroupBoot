@@ -61,7 +61,6 @@ public class StudentController {
         studentService.save(student);
         user.setRole("student");
         user.setUserId(studentService.findTopByOrderByIdDesc().getId());
-        user.setLoginBasedOnEmail();
         userService.save(user);
         return "redirect:/students";
     }
