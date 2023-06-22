@@ -1,4 +1,4 @@
-package org.student.site.StudentsAndGroupBoot.controllers;
+package org.student.site.StudentsAndGroupBoot.rest.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -71,11 +71,8 @@ public class TutorRestController {
         return new Status(true, StatusPattern.SUCCESS, null);
     }
 
-    @PatchMapping("{id}")
-    public Status updateGroup(@RequestBody @Valid Tutor tutor, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(bindingResult));
-        }
+    @PatchMapping
+    public Status updateGroup(@RequestBody Tutor tutor) {
         if (tutorService.findById(tutor.getId()).isEmpty()) {
             throw new NotFoundException("Tutor with id = " + tutor.getId() + " doesn't exist'");
         }

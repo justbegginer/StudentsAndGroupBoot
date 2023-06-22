@@ -1,4 +1,4 @@
-package org.student.site.StudentsAndGroupBoot.controllers;
+package org.student.site.StudentsAndGroupBoot.rest.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -86,10 +86,9 @@ public class GroupRestController {
     }
 
     @PatchMapping
-    public Status updateGroup(@RequestBody @Valid Group group,
-                              BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(bindingResult));
+    public Status updateGroup(@RequestBody Group group) {
+        if (groupService.findById(group.getId()).isEmpty()){
+            throw new NotFoundException("There is no such group with id = " + group.getId());
         }
         groupService.save(group);
         return new Status(true, StatusPattern.SUCCESS, null);

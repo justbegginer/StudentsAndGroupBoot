@@ -1,11 +1,8 @@
-package org.student.site.StudentsAndGroupBoot.controllers;
+package org.student.site.StudentsAndGroupBoot.rest.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.student.site.StudentsAndGroupBoot.Utils;
 import org.student.site.StudentsAndGroupBoot.dto.StudentUserDto;
-import org.student.site.StudentsAndGroupBoot.exceptions.IncorrectDataException;
 import org.student.site.StudentsAndGroupBoot.exceptions.NotFoundException;
 import org.student.site.StudentsAndGroupBoot.models.Status;
 import org.student.site.StudentsAndGroupBoot.models.StatusPattern;
@@ -15,9 +12,7 @@ import org.student.site.StudentsAndGroupBoot.services.impl.StudentServiceImpl;
 import org.student.site.StudentsAndGroupBoot.services.impl.UserServiceImpl;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/rest/students")
@@ -71,11 +66,8 @@ public class StudentRestController {
         return new Status(true, StatusPattern.SUCCESS, null);
     }
 
-    @PatchMapping("{id}")
-    public Status updateGroup(@RequestBody @Valid Student student, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(bindingResult));
-        }
+    @PatchMapping
+    public Status updateGroup(@RequestBody Student student) {
         if (studentService.findById(student.getId()).isEmpty()) {
             throw new NotFoundException("Student with id = " + student.getId() + " doesn't exist");
         }

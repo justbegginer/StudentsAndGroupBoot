@@ -1,4 +1,4 @@
-package org.student.site.StudentsAndGroupBoot.controllers;
+package org.student.site.StudentsAndGroupBoot.rest.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +12,7 @@ import org.student.site.StudentsAndGroupBoot.services.impl.UserServiceImpl;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/rest/users")
@@ -42,13 +43,16 @@ public class UserRestController {
     public Status changePassword(@RequestBody PasswordsPair passwordsPair,
                                  @PathVariable("type") String type,
                                  @PathVariable("id") Integer id){
+
+        Optional<User> user = userService.findTopByRoleAndUserId(type, id);
+        if (user.isEmpty()){
+            throw new NotFoundException("User not found");
+        }
         if (!Objects.equals(userService.findTopByRoleAndUserId(type, id).get().getPassword(), passwordsPair.getOldPassword())) {
             throw new IncorrectDataException("Old password incorrect");
         }
-        User user = userService.findTopByRoleAndUserId(type, id).get();
-        user.setPassword(passwordsPair.getNewPassword());
-        userService.save(user);
+        user.get().setPassword(passwordsPair.getNewPassword());
+        userService.save(user.get());
         return new Status(true, StatusPattern.SUCCESS, null);
     }
-
 }
