@@ -105,7 +105,7 @@ public class TutorController {
     @Transactional
     public String deleteTutorFromDB(@PathVariable("id") int id) {
         tutorService.delete(tutorService.findById(id).get());
-        userService.delete(userService.findTopByRoleAndUserId("tutor", id));
+        userService.delete(userService.findTopByRoleAndUserId("tutor", id).get());
         return "redirect:/tutors";
     }
 

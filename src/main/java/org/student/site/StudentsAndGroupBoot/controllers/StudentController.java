@@ -80,7 +80,7 @@ public class StudentController {
     @Transactional
     public String deleteStudentFromDB(@PathVariable("id") int id) {
         studentService.delete(studentService.findById(id).get());
-        userService.delete(userService.findTopByRoleAndUserId("student", id));
+        userService.delete(userService.findTopByRoleAndUserId("student", id).get());
         return "redirect:/students";
     }
 

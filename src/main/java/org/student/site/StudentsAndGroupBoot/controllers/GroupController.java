@@ -113,7 +113,7 @@ public class GroupController {
     @Transactional
     public String deleteGroupFromDB(@PathVariable("id") int id) {
         groupService.delete(groupService.findById(id).get());
-        userService.delete(userService.findTopByRoleAndUserId("group", id));
+        userService.delete(userService.findTopByRoleAndUserId("group", id).get());
         return "redirect:/groups";
     }
 

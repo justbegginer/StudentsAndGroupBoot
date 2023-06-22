@@ -35,10 +35,10 @@ public class UserController {
     public String changePassword(@ModelAttribute("oldPassword") User passwords,
                                  @PathVariable("type") String type,
                                  @PathVariable("id") int id) {
-        if (!Objects.equals(userService.findTopByRoleAndUserId(type, id).getPassword(), passwords.getPassword().split(",")[0])) {
+        if (!Objects.equals(userService.findTopByRoleAndUserId(type, id).get().getPassword(), passwords.getPassword().split(",")[0])) {
             return "redirect:/users/" + type + "/" + id;
         }
-        User user = userService.findTopByRoleAndUserId(type, id);
+        User user = userService.findTopByRoleAndUserId(type, id).get();
         user.setPassword(passwords.getPassword().split(",")[1]);
         userService.save(user);
         return "redirect:/" + type + "/" + id;
