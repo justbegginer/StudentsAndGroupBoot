@@ -2,6 +2,7 @@ package org.student.site.StudentsAndGroupBoot.rest.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.student.site.StudentsAndGroupBoot.dto.Email;
 import org.student.site.StudentsAndGroupBoot.dto.PasswordsPair;
 import org.student.site.StudentsAndGroupBoot.exceptions.IncorrectDataException;
 import org.student.site.StudentsAndGroupBoot.exceptions.NotFoundException;
@@ -53,6 +54,18 @@ public class UserRestController {
         }
         user.get().setPassword(passwordsPair.getNewPassword());
         userService.save(user.get());
+        return new Status(true, StatusPattern.SUCCESS, null);
+    }
+
+    @PatchMapping("/changeEmail/{id}")
+    public Status changeEmail(@PathVariable("id") Integer id,
+                              @RequestBody Email newEmail){
+        Optional<User> optionalBeforeChange = userService.findById(id);
+        if (optionalBeforeChange.isEmpty()){
+            throw new NotFoundException("User with email = " + id + " not found");
+        }
+        optionalBeforeChange.get().setEmail(newEmail.getEmail());
+        userService.save(optionalBeforeChange.get());
         return new Status(true, StatusPattern.SUCCESS, null);
     }
 }
