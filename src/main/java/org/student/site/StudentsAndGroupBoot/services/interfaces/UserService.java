@@ -16,5 +16,5 @@ public interface UserService {
 
     void delete(User user);
 
-    User findTopByRoleAndUserId(String role, Integer userId);
+    Optional<User> findTopByRoleAndUserId(String role, Integer userId);
 }

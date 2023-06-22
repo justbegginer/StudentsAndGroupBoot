@@ -5,11 +5,12 @@ import org.springframework.stereotype.Repository;
 import org.student.site.StudentsAndGroupBoot.models.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepo extends JpaRepository<User, Integer> {
 
     List<User> findAllByRole(String role);
 
-    User findTopByRoleAndUserId(String role, Integer userId);
+    Optional<User> findTopByRoleAndUserId(String role, Integer userId);
 }

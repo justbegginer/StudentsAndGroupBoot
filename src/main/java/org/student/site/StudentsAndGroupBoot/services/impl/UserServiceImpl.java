@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findTopByRoleAndUserId(String role, Integer userId) {
+    public Optional<User> findTopByRoleAndUserId(String role, Integer userId) {
         return userRepo.findTopByRoleAndUserId(role, userId);
     }
 }
