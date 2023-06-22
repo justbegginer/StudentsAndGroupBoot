@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.student.site.StudentsAndGroupBoot.Utils;
+import org.student.site.StudentsAndGroupBoot.dto.TutorUserDto;
+import org.student.site.StudentsAndGroupBoot.exceptions.IncorrectDataException;
+import org.student.site.StudentsAndGroupBoot.exceptions.NotFoundException;
 import org.student.site.StudentsAndGroupBoot.models.*;
 import org.student.site.StudentsAndGroupBoot.services.impl.TutorServiceImpl;
 import org.student.site.StudentsAndGroupBoot.services.impl.UserServiceImpl;
@@ -23,13 +26,16 @@ public class TutorRestController {
     private final UserServiceImpl userService;
 
     public TutorRestController(@Autowired TutorServiceImpl tutorService,
-                           @Autowired UserServiceImpl userService) {
+                               @Autowired UserServiceImpl userService) {
         this.tutorService = tutorService;
         this.userService = userService;
     }
 
     @GetMapping
     public List<Tutor> getAllTutors() {
+        if (tutorService.findAll().isEmpty()) {
+            throw new NotFoundException("There is no one tutors");
+        }
         return tutorService.findAll();
     }
 
@@ -37,22 +43,16 @@ public class TutorRestController {
     public Tutor getTutorById(@PathVariable("id") int id) {
         Optional<Tutor> optionalTutor = tutorService.findById(id);
         if (optionalTutor.isEmpty()) {
-            // TODO error 404
+            throw new NotFoundException("Tutor with id = " + id + " not found");
         }
         return optionalTutor.get();
     }
 
     @PostMapping()
     @Transactional
-    public Status addNewTutorToDB(@RequestBody Map<String, Map<String, String>> request) {
-        Tutor tutor = new Tutor();
-        tutor.setName(request.get("tutor").get("name"));
-        tutor.setSurname(request.get("tutor").get("surname"));
-        tutor.setQualification(request.get("tutor").get("qualification"));
-        tutorService.save(tutor);
-        User user = new User();
-        user.setEmail(request.get("user").get("email"));
-        user.setPassword(request.get("user").get("password"));
+    public Status addNewTutorToDB(@RequestBody TutorUserDto tutorUserDto) {
+        tutorService.save(tutorUserDto.getTutor());
+        User user = tutorUserDto.getUser();
         user.setRole("tutor");
         user.setUserId(tutorService.findTopByOrderByIdDesc().getId());
         user.setLoginBasedOnEmail();
@@ -64,23 +64,21 @@ public class TutorRestController {
     @Transactional
     public Status deleteTutorFromDB(@PathVariable("id") int id) {
         Optional<Tutor> optionalTutor = tutorService.findById(id);
-        if (optionalTutor.isEmpty()){
-            return new Status(false, StatusPattern.NOT_FOUND,
-                    "Tutor with id " + id + " does not exist");
+        if (optionalTutor.isEmpty()) {
+            throw new NotFoundException("Tutor with id " + id + " does not exist");
         }
         tutorService.delete(optionalTutor.get());
-        userService.delete(userService.findTopByRoleAndUserId("tutor", id));
+        userService.delete(userService.findTopByRoleAndUserId("tutor", id).get());
         return new Status(true, StatusPattern.SUCCESS, null);
     }
 
     @PatchMapping("{id}")
     public Status updateGroup(@RequestBody @Valid Tutor tutor, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
-            return Utils.getErrorStatusFromBindingResult(bindingResult);
+        if (bindingResult.hasErrors()) {
+            throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(bindingResult));
         }
-        if (tutorService.findById(tutor.getId()).isEmpty()){
-            return new Status(false, StatusPattern.NOT_FOUND,
-                    "Tutor with id = " + tutor.getId() + " doesn't exist'");
+        if (tutorService.findById(tutor.getId()).isEmpty()) {
+            throw new NotFoundException("Tutor with id = " + tutor.getId() + " doesn't exist'");
         }
         tutorService.save(tutor);
         return new Status(true, StatusPattern.SUCCESS, null);

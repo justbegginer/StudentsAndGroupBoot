@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.student.site.StudentsAndGroupBoot.Utils;
+import org.student.site.StudentsAndGroupBoot.dto.GroupUserDto;
+import org.student.site.StudentsAndGroupBoot.exceptions.IncorrectDataException;
+import org.student.site.StudentsAndGroupBoot.exceptions.NotFoundException;
 import org.student.site.StudentsAndGroupBoot.models.*;
 import org.student.site.StudentsAndGroupBoot.services.impl.GroupServiceImpl;
 import org.student.site.StudentsAndGroupBoot.services.impl.StudentServiceImpl;
@@ -13,7 +16,6 @@ import org.student.site.StudentsAndGroupBoot.services.impl.UserServiceImpl;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -29,9 +31,9 @@ public class GroupRestController {
     private final GroupServiceImpl groupService;
 
     public GroupRestController(@Autowired UserServiceImpl userService,
-                           @Autowired StudentServiceImpl studentService,
-                           @Autowired TutorServiceImpl tutorService,
-                           @Autowired GroupServiceImpl groupService) {
+                               @Autowired StudentServiceImpl studentService,
+                               @Autowired TutorServiceImpl tutorService,
+                               @Autowired GroupServiceImpl groupService) {
         this.userService = userService;
         this.studentService = studentService;
         this.tutorService = tutorService;
@@ -40,25 +42,26 @@ public class GroupRestController {
 
     @GetMapping
     public List<Group> getAllGroups() {
+        if (groupService.findAll().isEmpty()) {
+            throw new NotFoundException("There is no one group");
+        }
         return groupService.findAll();
     }
 
     @GetMapping("/{id}")
     public Group getGroupById(@PathVariable("id") int id) {
+        if (groupService.findById(id).isEmpty()) {
+            throw new NotFoundException("Group with id = " + id + " not found");
+        }
         return groupService.findById(id).get();
     }
 
     @PostMapping()
     @Transactional
-    public Status addNewGroupToDB(@RequestBody Map<String, Map<String,String>> map) {
-        Group group = new Group();
-        group.setTutorId(Integer.parseInt(map.get("group").get("tutorId")));
-        groupService.save(group);
-        User user = new User();
-        user.setEmail(map.get("user").get("email"));
-        user.setPassword(map.get("user").get("password"));
-        user.setRole("group");
-        user.setUserId(groupService.findTopByOrderByIdDesc().getId());
+    public Status addNewGroupToDB(@RequestBody GroupUserDto groupUserDto) {
+        groupService.save(groupUserDto.getGroup());
+        User user = groupUserDto.getUser();
+        user.setUserId(groupUserDto.getUser().getId());
         user.setLoginBasedOnEmail();
         userService.save(user);
         return new Status(true, StatusPattern.SUCCESS, null);
@@ -70,18 +73,18 @@ public class GroupRestController {
         Optional<Group> group = groupService.findById(id);
         if (group.isPresent()) {
             groupService.delete(group.get());
-            userService.delete(userService.findTopByRoleAndUserId("group", id));
-            return new Status(true, StatusPattern.SUCCESS, null);
+            userService.delete(userService.findTopByRoleAndUserId("group", id).get());
         } else {
-            return new Status(false, StatusPattern.NOT_FOUND, "There is no such group with id = " + id);
+            throw new NotFoundException("There is no such group with id = " + id);
         }
+        return new Status(true, StatusPattern.SUCCESS, null);
     }
 
     @PatchMapping
     public Status updateGroup(@RequestBody @Valid Group group,
-                              BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
-            return Utils.getErrorStatusFromBindingResult(bindingResult);
+                            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(bindingResult));
         }
         groupService.save(group);
         return new Status(true, StatusPattern.SUCCESS, null);
@@ -90,12 +93,12 @@ public class GroupRestController {
 
     @PostMapping("/addStudent/{id}")
     public Status addStudentToGroup(@PathVariable("id") int id,
-                                    @RequestBody @Valid Student student, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
-            return Utils.getErrorStatusFromBindingResult(bindingResult);
+                                  @RequestBody @Valid Student student, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(bindingResult));
         }
         if (groupService.findById(id).isEmpty()) {
-            return new Status(false, StatusPattern.NOT_FOUND, "There is no student with id = " + id);
+            throw new NotFoundException("There is no student with id = " + id);
         }
         student.setGroupNumber(id);
         studentService.save(student);
@@ -104,10 +107,10 @@ public class GroupRestController {
 
     @PatchMapping("/removeStudent/{id}/{studentId}")
     public Status removeStudentFromGroup(@PathVariable("id") int id,
-                                         @PathVariable("studentId") int studentId) {
+                                       @PathVariable("studentId") int studentId) {
         Optional<Student> student = studentService.findById(studentId);
         if (student.isEmpty()) {
-            return new Status(false, StatusPattern.NOT_FOUND, "There is no student with id = " + id);
+            throw new NotFoundException("There is no student with id = " + id);
         }
         student.get().setGroupNumber(null);
         studentService.save(student.get());
@@ -116,12 +119,12 @@ public class GroupRestController {
 
     @PatchMapping("/addStudent/{groupId}/{studentId}")
     public Status linkStudentToGroup(@PathVariable("groupId") int groupId,
-                                     @PathVariable("studentId") int studentId) {
+                                   @PathVariable("studentId") int studentId) {
         if (studentService.findById(studentId).isEmpty()) {
-            return new Status(false, StatusPattern.NOT_FOUND, "There is no student with id = " + studentId);
+            throw new NotFoundException("There is no student with id = " + studentId);
         }
         if (groupService.findById(groupId).isEmpty()) {
-            return new Status(false, StatusPattern.NOT_FOUND, "There is no group with id = " + groupId);
+            throw new NotFoundException("There is no group with id = " + groupId);
         }
         Student student = studentService.findById(studentId).get();
         student.setGroupNumber(groupId);
@@ -133,15 +136,15 @@ public class GroupRestController {
     @PostMapping("/addTutor/{id}")
     @Transactional
     public Status addTutorToGroup(@PathVariable("id") int id,
-                                  @RequestBody @Valid Tutor tutor, BindingResult bindingResult) {
+                                @RequestBody @Valid Tutor tutor, BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors()){
-            return Utils.getErrorStatusFromBindingResult(bindingResult);
+        if (bindingResult.hasErrors()) {
+            throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(bindingResult));
         }
         tutor.setId(0); // TODO why
         Optional<Group> group = groupService.findById(id);
         if (group.isEmpty()) {
-            return new Status(false, StatusPattern.NOT_FOUND, "There is no group with id = " + id);
+            throw new IncorrectDataException("There is no group with id = " + id);
         }
         group.get().setTutorId(tutor.getId());
         groupService.save(group.get());
@@ -155,10 +158,10 @@ public class GroupRestController {
 
         Optional<Group> group = groupService.findById(groupId);
         if (group.isEmpty()) {
-            return new Status(false, StatusPattern.NOT_FOUND, "There is no group with id = " + groupId);
+            throw new NotFoundException("There is no group with id = " + groupId);
         }
         if (tutorService.findById(tutorId).isEmpty()) {
-            return new Status(false, StatusPattern.NOT_FOUND, "There is no tutor with id = " + tutorId);
+            throw new NotFoundException("There is no tutor with id = " + tutorId);
         }
         group.get().setTutorId(tutorId);
         groupService.save(group.get());

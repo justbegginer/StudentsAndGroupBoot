@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.student.site.StudentsAndGroupBoot.Utils;
+import org.student.site.StudentsAndGroupBoot.dto.StudentUserDto;
+import org.student.site.StudentsAndGroupBoot.exceptions.IncorrectDataException;
+import org.student.site.StudentsAndGroupBoot.exceptions.NotFoundException;
 import org.student.site.StudentsAndGroupBoot.models.Status;
 import org.student.site.StudentsAndGroupBoot.models.StatusPattern;
 import org.student.site.StudentsAndGroupBoot.models.Student;
@@ -31,34 +34,25 @@ public class StudentRestController {
 
     @GetMapping
     public List<Student> getAllStudents() {
+        if (studentService.findAll().isEmpty()){
+            throw new NotFoundException("There is no one student");
+        }
         return studentService.findAll();
     }
 
     @GetMapping("/{id}")
     public Student getStudentById(@PathVariable("id") int id) {
-        // TODO make redirect to error 404
+        if(studentService.findById(id).isEmpty()){
+            throw new NotFoundException("There is no student with id = " + id);
+        }
         return studentService.findById(id).get();
     }
 
     @PostMapping()
     @Transactional()
-    public Status addNewStudentToDB(@RequestBody Map<String, Map<String, String>> request) {
-        Student student = new Student();
-        student.setName(request.get("student").get("name"));
-        student.setSurname(request.get("student").get("surname"));
-        int groupId = 0;
-        try{
-            groupId = Integer.parseInt(request.get("student").get("groupNumber"));
-        }
-        catch (NumberFormatException e){
-            return new Status(false, StatusPattern.INVALID,
-                    "Group id = '"+request.get("student").get("groupNumber")+"' not valid");
-        }
-        student.setGroupNumber(groupId);
-        studentService.save(student);
-        User user = new User();
-        user.setEmail(request.get("user").get("email"));
-        user.setPassword(request.get("user").get("password"));
+    public Status addNewStudentToDB(@RequestBody StudentUserDto studentUserDto) {
+        studentService.save(studentUserDto.getStudent());
+        User user = studentUserDto.getUser();
         user.setRole("student");
         user.setUserId(user.getId());
         user.setLoginBasedOnEmail();
@@ -70,20 +64,20 @@ public class StudentRestController {
     @Transactional
     public Status deleteStudentFromDB(@PathVariable("id") int id) {
         if (studentService.findById(id).isEmpty()){
-            return new Status(false, StatusPattern.NOT_FOUND, null);
+            throw new NotFoundException("Student with id = " + id + " doesn't exist");
         }
         studentService.delete(studentService.findById(id).get());
-        userService.delete(userService.findTopByRoleAndUserId("student", id));
+        userService.delete(userService.findTopByRoleAndUserId("student", id).get());
         return new Status(true, StatusPattern.SUCCESS, null);
     }
 
     @PatchMapping("{id}")
     public Status updateGroup(@RequestBody @Valid Student student, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return Utils.getErrorStatusFromBindingResult(bindingResult);
+            throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(bindingResult));
         }
         if (studentService.findById(student.getId()).isEmpty()){
-            return new Status(false, StatusPattern.NOT_FOUND, null);
+            throw new NotFoundException("Student with id = " + student.getId() + " doesn't exist");
         }
         studentService.save(student);
         return new Status(true, StatusPattern.SUCCESS, null);
