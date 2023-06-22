@@ -54,7 +54,7 @@ public class StudentRestController {
         studentService.save(studentUserDto.getStudent());
         User user = studentUserDto.getUser();
         user.setRole("student");
-        user.setUserId(user.getId());
+        user.setUserId(studentService.findTopByOrderByIdDesc().getId());
         user.setLoginBasedOnEmail();
         userService.save(user);
         return new Status(true, StatusPattern.SUCCESS, null);
