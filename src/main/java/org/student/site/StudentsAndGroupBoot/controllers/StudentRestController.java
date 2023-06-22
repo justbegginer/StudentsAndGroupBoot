@@ -27,14 +27,14 @@ public class StudentRestController {
     private final UserServiceImpl userService;
 
     public StudentRestController(@Autowired StudentServiceImpl studentService,
-                             @Autowired UserServiceImpl userService) {
+                                 @Autowired UserServiceImpl userService) {
         this.studentService = studentService;
         this.userService = userService;
     }
 
     @GetMapping
     public List<Student> getAllStudents() {
-        if (studentService.findAll().isEmpty()){
+        if (studentService.findAll().isEmpty()) {
             throw new NotFoundException("There is no one student");
         }
         return studentService.findAll();
@@ -42,7 +42,7 @@ public class StudentRestController {
 
     @GetMapping("/{id}")
     public Student getStudentById(@PathVariable("id") int id) {
-        if(studentService.findById(id).isEmpty()){
+        if (studentService.findById(id).isEmpty()) {
             throw new NotFoundException("There is no student with id = " + id);
         }
         return studentService.findById(id).get();
@@ -63,7 +63,7 @@ public class StudentRestController {
     @DeleteMapping("{id}")
     @Transactional
     public Status deleteStudentFromDB(@PathVariable("id") int id) {
-        if (studentService.findById(id).isEmpty()){
+        if (studentService.findById(id).isEmpty()) {
             throw new NotFoundException("Student with id = " + id + " doesn't exist");
         }
         studentService.delete(studentService.findById(id).get());
@@ -76,7 +76,7 @@ public class StudentRestController {
         if (bindingResult.hasErrors()) {
             throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(bindingResult));
         }
-        if (studentService.findById(student.getId()).isEmpty()){
+        if (studentService.findById(student.getId()).isEmpty()) {
             throw new NotFoundException("Student with id = " + student.getId() + " doesn't exist");
         }
         studentService.save(student);
