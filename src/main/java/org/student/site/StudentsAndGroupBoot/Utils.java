@@ -7,7 +7,7 @@ import org.student.site.StudentsAndGroupBoot.models.StatusPattern;
 
 public class Utils {
 
-    public static Status getErrorStatusFromBindingResult(BindingResult bindingResult) {
+    public static String getErrorStatusFromBindingResult(BindingResult bindingResult) {
         StringBuilder errorMessage = new StringBuilder("Errors: ");
         for (ObjectError suppressedField : bindingResult.getAllErrors()) {
             errorMessage
@@ -15,7 +15,6 @@ public class Utils {
                     .append(",");
         }
         errorMessage.deleteCharAt(errorMessage.length() -1);
-        return new Status(false, StatusPattern.INVALID,errorMessage.toString());
-
+        return errorMessage.toString();
     }
 }
