@@ -1,6 +1,7 @@
 package org.student.site.StudentsAndGroupBoot.services.cache.updaters;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Component;
 import org.student.site.StudentsAndGroupBoot.models.Tutor;
@@ -15,7 +16,7 @@ public class TutorCacheUpdate implements CacheUpdater<Tutor>{
     public TutorCacheUpdate(@Autowired TutorRepo tutorRepo){
         this.tutorRepo = tutorRepo;
     }
-    @CachePut(cacheNames = "allTutors")
+    @CacheEvict(cacheNames = "allTutors")
     @Override
     public List<Tutor> update(){
         return tutorRepo.findAll();
