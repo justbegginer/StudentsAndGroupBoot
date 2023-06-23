@@ -3,7 +3,6 @@ package org.student.site.StudentsAndGroupBoot.services.cache.updaters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Component;
-import org.student.site.StudentsAndGroupBoot.models.Student;
 import org.student.site.StudentsAndGroupBoot.models.Tutor;
 import org.student.site.StudentsAndGroupBoot.repo.TutorRepo;
 
