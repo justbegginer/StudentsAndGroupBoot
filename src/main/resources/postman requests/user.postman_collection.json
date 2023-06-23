@@ -80,6 +80,37 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "change email",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"usernameusername@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/rest/users/changeEmail/79",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"rest",
+								"users",
+								"changeEmail",
+								"79"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -143,6 +174,97 @@
 								"users",
 								"student",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change email(not found)",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"usernameusername@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/rest/users/changeEmail/1000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"rest",
+								"users",
+								"changeEmail",
+								"1000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change email(incorrect data)",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"usernameusername@gmail\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/rest/users/changeEmail/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"rest",
+								"users",
+								"changeEmail",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add user with group(incorrect data)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"group\":{\r\n        \"tutorId\": 1\r\n    },\r\n    \"user\":{\r\n        \"email\": \"user@gmail.r\",\r\n        \"password\": \"user100user\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/rest/groups",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"rest",
+								"groups"
 							]
 						}
 					},
