@@ -20,19 +20,15 @@ import java.util.List;
 @RequestMapping("/groups")
 public class GroupController {
 
-    private final UserServiceImpl userService;
-
     private final StudentServiceImpl studentService;
 
     private final TutorServiceImpl tutorService;
 
     private final GroupServiceImpl groupService;
 
-    public GroupController(@Autowired UserServiceImpl userService,
-                           @Autowired StudentServiceImpl studentService,
+    public GroupController(@Autowired StudentServiceImpl studentService,
                            @Autowired TutorServiceImpl tutorService,
                            @Autowired GroupServiceImpl groupService) {
-        this.userService = userService;
         this.studentService = studentService;
         this.tutorService = tutorService;
         this.groupService = groupService;
@@ -91,10 +87,7 @@ public class GroupController {
         if (bindingResult.hasErrors()) {
             return "group/add";
         }
-        groupService.save(group);
-        user.setRole("group");
-        user.setUserId(groupService.findTopByOrderByIdDesc().getId());
-        userService.save(user);
+        groupService.save(group,user);
         return "redirect:/groups";
     }
 
@@ -111,8 +104,7 @@ public class GroupController {
     @DeleteMapping("{id}")
     @Transactional
     public String deleteGroupFromDB(@PathVariable("id") int id) {
-        groupService.delete(groupService.findById(id).get());
-        userService.delete(userService.findTopByRoleAndUserId("group", id).get());
+        groupService.delete(id);
         return "redirect:/groups";
     }
 
@@ -132,7 +124,7 @@ public class GroupController {
         if (bindingResult.hasErrors()) {
             return "group/update";
         }
-        groupService.save(group);
+        groupService.update(group);
         model.addAttribute("groups", groupService.findAll());
         return "group/all";
     }
@@ -149,7 +141,7 @@ public class GroupController {
     public String addStudentToGroup(@PathVariable("id") int id,
                                     @ModelAttribute("student") @Valid Student student) {//TODO FIX bug report
         student.setGroupNumber(id);
-        studentService.save(student);
+        studentService.update(student);
         return "redirect:/groups/" + id + "?fullInfo=true";
     }
 
@@ -165,7 +157,7 @@ public class GroupController {
                                          @PathVariable("studentId") int studentId) {
         Student student = studentService.findById(studentId).get();
         student.setGroupNumber(100); // TODO FIX number
-        studentService.save(student);
+        studentService.update(student);
         return "redirect:/groups/" + id + "?fullInfo=true";
     }
 
@@ -174,7 +166,7 @@ public class GroupController {
                                      @PathVariable("studentId") int studentId) {
         Student student = studentService.findById(studentId).get();
         student.setGroupNumber(groupId);
-        studentService.save(student);
+        studentService.update(student);
         return "redirect:/groups/" + groupId + "?fullInfo=true";
     }
 
@@ -193,8 +185,8 @@ public class GroupController {
         tutor.setId(0);
         Group group = groupService.findById(id).get();
         group.setTutorId(tutor.getId());
-        groupService.save(group);
-        tutorService.save(tutor);
+        groupService.update(group);
+        tutorService.update(tutor);
         return "redirect:/groups/" + id + "?fullInfo=true";
     }
 
@@ -203,7 +195,7 @@ public class GroupController {
                                    @PathVariable("studentId") int tutorId) {
         Group group = groupService.findById(groupId).get();
         group.setTutorId(tutorId);
-        groupService.save(group);
+        groupService.update(group);
         return "redirect:/groups/" + groupId + "?fullInfo=true";
     }
 

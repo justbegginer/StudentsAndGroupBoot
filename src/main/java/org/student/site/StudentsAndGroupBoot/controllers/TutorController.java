@@ -11,7 +11,6 @@ import org.student.site.StudentsAndGroupBoot.models.User;
 import org.student.site.StudentsAndGroupBoot.services.impl.GroupServiceImpl;
 import org.student.site.StudentsAndGroupBoot.services.impl.StudentServiceImpl;
 import org.student.site.StudentsAndGroupBoot.services.impl.TutorServiceImpl;
-import org.student.site.StudentsAndGroupBoot.services.impl.UserServiceImpl;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -28,16 +27,12 @@ public class TutorController {
 
     private final GroupServiceImpl groupService;
 
-    private final UserServiceImpl userService;
-
     public TutorController(@Autowired TutorServiceImpl tutorService,
                            @Autowired StudentServiceImpl studentService,
-                           @Autowired GroupServiceImpl groupService,
-                           @Autowired UserServiceImpl userService) {
+                           @Autowired GroupServiceImpl groupService) {
         this.tutorService = tutorService;
         this.studentService = studentService;
         this.groupService = groupService;
-        this.userService = userService;
     }
 
     @GetMapping
@@ -83,10 +78,7 @@ public class TutorController {
         if (bindingResult.hasErrors()) {
             return "tutor/add";
         }
-        tutorService.save(tutor);
-        user.setRole("tutor");
-        user.setUserId(tutorService.findTopByOrderByIdDesc().getId());
-        userService.save(user);
+        tutorService.save(tutor, user);
         return "redirect:/tutors";
     }
 
@@ -103,8 +95,7 @@ public class TutorController {
     @DeleteMapping("{id}")
     @Transactional
     public String deleteTutorFromDB(@PathVariable("id") int id) {
-        tutorService.delete(tutorService.findById(id).get());
-        userService.delete(userService.findTopByRoleAndUserId("tutor", id).get());
+        tutorService.delete(id);
         return "redirect:/tutors";
     }
 
@@ -124,7 +115,7 @@ public class TutorController {
         if (bindingResult.hasErrors()) {
             return "tutor/update";
         }
-        tutorService.save(tutor);
+        tutorService.update(tutor);
         model.addAttribute("tutors", tutorService.findAll());
         return "tutor/all";
     }

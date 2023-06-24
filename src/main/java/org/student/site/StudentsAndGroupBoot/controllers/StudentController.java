@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import org.student.site.StudentsAndGroupBoot.models.Student;
 import org.student.site.StudentsAndGroupBoot.models.User;
 import org.student.site.StudentsAndGroupBoot.services.impl.StudentServiceImpl;
-import org.student.site.StudentsAndGroupBoot.services.impl.UserServiceImpl;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -19,12 +18,8 @@ import javax.validation.Valid;
 public class StudentController {
     private final StudentServiceImpl studentService;
 
-    private final UserServiceImpl userService;
-
-    public StudentController(@Autowired StudentServiceImpl studentService,
-                             @Autowired UserServiceImpl userService) {
+    public StudentController(@Autowired StudentServiceImpl studentService) {
         this.studentService = studentService;
-        this.userService = userService;
     }
 
     @GetMapping
@@ -58,10 +53,7 @@ public class StudentController {
         if (bindingResult.hasErrors()) {
             return "student/add";
         }
-        studentService.save(student);
-        user.setRole("student");
-        user.setUserId(studentService.findTopByOrderByIdDesc().getId());
-        userService.save(user);
+        studentService.save(student, user);
         return "redirect:/students";
     }
 
@@ -78,8 +70,7 @@ public class StudentController {
     @DeleteMapping("{id}")
     @Transactional
     public String deleteStudentFromDB(@PathVariable("id") int id) {
-        studentService.delete(studentService.findById(id).get());
-        userService.delete(userService.findTopByRoleAndUserId("student", id).get());
+        studentService.delete(id);
         return "redirect:/students";
     }
 
@@ -99,7 +90,7 @@ public class StudentController {
         if (bindingResult.hasErrors()) {
             return "student/update";
         }
-        studentService.save(student);
+        studentService.update(student);
         model.addAttribute("students", studentService.findAll());
         return "student/all";
     }
