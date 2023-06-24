@@ -6,7 +6,6 @@ import org.student.site.StudentsAndGroupBoot.dto.TutorUserDto;
 import org.student.site.StudentsAndGroupBoot.exceptions.NotFoundException;
 import org.student.site.StudentsAndGroupBoot.models.*;
 import org.student.site.StudentsAndGroupBoot.services.impl.TutorServiceImpl;
-import org.student.site.StudentsAndGroupBoot.services.impl.UserServiceImpl;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -18,12 +17,8 @@ public class TutorRestController {
 
     private final TutorServiceImpl tutorService;
 
-    private final UserServiceImpl userService;
-
-    public TutorRestController(@Autowired TutorServiceImpl tutorService,
-                               @Autowired UserServiceImpl userService) {
+    public TutorRestController(@Autowired TutorServiceImpl tutorService) {
         this.tutorService = tutorService;
-        this.userService = userService;
     }
 
     @GetMapping
@@ -44,34 +39,20 @@ public class TutorRestController {
     }
 
     @PostMapping()
-    @Transactional
     public Status addNewTutorToDB(@RequestBody TutorUserDto tutorUserDto) {
-        tutorService.save(tutorUserDto.getTutor());
-        User user = tutorUserDto.getUser();
-        user.setRole("tutor");
-        user.setUserId(tutorService.findTopByOrderByIdDesc().getId());
-        userService.save(user);
+        tutorService.save(tutorUserDto.getTutor(), tutorUserDto.getUser());
         return new Status(true, StatusPattern.SUCCESS, null);
     }
 
     @DeleteMapping("{id}")
-    @Transactional
     public Status deleteTutorFromDB(@PathVariable("id") int id) {
-        Optional<Tutor> optionalTutor = tutorService.findById(id);
-        if (optionalTutor.isEmpty()) {
-            throw new NotFoundException("Tutor with id " + id + " does not exist");
-        }
-        tutorService.delete(optionalTutor.get());
-        userService.delete(userService.findTopByRoleAndUserId("tutor", id).get());
+        tutorService.delete(id);
         return new Status(true, StatusPattern.SUCCESS, null);
     }
 
     @PatchMapping
     public Status updateGroup(@RequestBody Tutor tutor) {
-        if (tutorService.findById(tutor.getId()).isEmpty()) {
-            throw new NotFoundException("Tutor with id = " + tutor.getId() + " doesn't exist'");
-        }
-        tutorService.save(tutor);
+        tutorService.update(tutor);
         return new Status(true, StatusPattern.SUCCESS, null);
     }
 }
