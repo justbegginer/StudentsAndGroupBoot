@@ -1,18 +1,27 @@
 package org.student.site.StudentsAndGroupBoot.services.interfaces;
 
 import org.student.site.StudentsAndGroupBoot.models.Student;
+import org.student.site.StudentsAndGroupBoot.models.User;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface StudentService {
+public interface StudentService extends Service<Student> {
+
+    @Override
     Optional<Student> findById(Integer id);
 
+    @Override
     List<Student> findAll();
 
-    void save(Student student);
+    @Override
+    void save(Student student, User user);
 
-    void delete(Student student);
+    @Override
+    void delete(Integer id);
+
+    @Override
+    void update(Student student);
 
     List<Student> findStudentByName(String searchWord);
 
