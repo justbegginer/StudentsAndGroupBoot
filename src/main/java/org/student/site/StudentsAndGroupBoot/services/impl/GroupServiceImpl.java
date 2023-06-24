@@ -6,11 +6,14 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.student.site.StudentsAndGroupBoot.Utils;
 import org.student.site.StudentsAndGroupBoot.exceptions.IncorrectDataException;
+import org.student.site.StudentsAndGroupBoot.exceptions.NotFoundException;
 import org.student.site.StudentsAndGroupBoot.models.Group;
+import org.student.site.StudentsAndGroupBoot.models.User;
 import org.student.site.StudentsAndGroupBoot.services.cache.updaters.GroupCacheUpdate;
 import org.student.site.StudentsAndGroupBoot.repo.GroupRepo;
 import org.student.site.StudentsAndGroupBoot.services.interfaces.GroupService;
 
+import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.List;
@@ -23,15 +26,19 @@ public class GroupServiceImpl implements GroupService {
 
     private final GroupRepo groupRepo;
 
+    private UserServiceImpl userService;
+
     private final GroupCacheUpdate groupCacheUpdate;
 
     private final Validator validator;
 
     @Autowired
     public GroupServiceImpl(GroupRepo groupRepo,
+                            UserServiceImpl userService,
                             GroupCacheUpdate groupCacheUpdate,
                             Validator validator) {
         this.groupRepo = groupRepo;
+        this.userService = userService;
         this.groupCacheUpdate = groupCacheUpdate;
         this.validator = validator;
     }
@@ -48,18 +55,42 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public void save(Group group) {
+    @Transactional
+    public void save(Group group, User user) {
         Set<ConstraintViolation<Group>> violationSet = validator.validate(group);
         if (!violationSet.isEmpty()) {
             throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(violationSet));
         }
         groupRepo.save(group);
+        user.setRole("group");
+        user.setUserId(groupRepo.findTopByOrderByIdDesc().getId());
+        userService.save(user);
         groupCacheUpdate.update();
     }
 
     @Override
-    public void delete(Group group) {
-        groupRepo.delete(group);
+    @Transactional
+    public void delete(Integer id) {
+        Optional<Group> optionalGroup = groupRepo.findById(id);
+        if (optionalGroup.isEmpty()){
+            throw new NotFoundException("There is no such group with id = " + id);
+        }
+        groupRepo.delete(optionalGroup.get());
+        userService.delete(
+                userService.findTopByRoleAndUserId("group", optionalGroup.get().getId()).get());
+        groupCacheUpdate.update();
+    }
+
+    @Override
+    public void update(Group group) {
+        Set<ConstraintViolation<Group>> violationSet = validator.validate(group);
+        if (!violationSet.isEmpty()) {
+            throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(violationSet));
+        }
+        if (groupRepo.findById(group.getId()).isEmpty()){
+            throw new NotFoundException("There is no such group with id = " + group.getId());
+        }
+        groupRepo.save(group);
         groupCacheUpdate.update();
     }
 

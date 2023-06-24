@@ -6,11 +6,14 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.student.site.StudentsAndGroupBoot.Utils;
 import org.student.site.StudentsAndGroupBoot.exceptions.IncorrectDataException;
+import org.student.site.StudentsAndGroupBoot.exceptions.NotFoundException;
 import org.student.site.StudentsAndGroupBoot.models.Student;
+import org.student.site.StudentsAndGroupBoot.models.User;
 import org.student.site.StudentsAndGroupBoot.repo.StudentRepo;
 import org.student.site.StudentsAndGroupBoot.services.cache.updaters.StudentCacheUpdate;
 import org.student.site.StudentsAndGroupBoot.services.interfaces.StudentService;
 
+import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.List;
@@ -23,15 +26,19 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepo studentRepo;
 
+    private final UserServiceImpl userService;
+
     private final StudentCacheUpdate studentCacheUpdate;
 
     private final Validator validator;
 
     @Autowired
     public StudentServiceImpl(StudentRepo studentRepo,
+                              UserServiceImpl userService,
                               StudentCacheUpdate studentCacheUpdate,
                               Validator validator) {
         this.studentRepo = studentRepo;
+        this.userService = userService;
         this.studentCacheUpdate= studentCacheUpdate;
         this.validator = validator;
     }
@@ -48,18 +55,43 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void save(Student student) {
+    @Transactional
+    public void save(Student student, User user) {
         Set<ConstraintViolation<Student>> violationSet = validator.validate(student);
         if (!violationSet.isEmpty()){
             throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(violationSet));
         }
         studentRepo.save(student);
+        user.setRole("student");
+        user.setUserId(studentRepo.findTopByOrderByIdDesc().getId());
+        userService.save(user);
         studentCacheUpdate.update();
     }
 
     @Override
-    public void delete(Student student) {
-        studentRepo.delete(student);
+    @Transactional
+    public void delete(Integer id) {
+        Optional<Student> optionalStudent = studentRepo.findById(id);
+        if (optionalStudent.isEmpty()) {
+            throw new NotFoundException("Student with id = " + id + " doesn't exist");
+        }
+        studentRepo.delete(optionalStudent.get());
+        userService.delete(
+                userService.findTopByRoleAndUserId("student", optionalStudent.get().getId()).get());
+        studentCacheUpdate.update();
+    }
+
+    @Override
+    public void update(Student student) {
+        if (studentRepo.findById(student.getId()).isEmpty()) {
+            throw new NotFoundException("Student with id = " + student.getId() + " doesn't exist");
+        }
+        Set<ConstraintViolation<Student>> violationSet = validator.validate(student);
+        if (!violationSet.isEmpty()){
+            throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(violationSet));
+        }
+        System.out.println("student changed");
+        studentRepo.save(student);
         studentCacheUpdate.update();
     }
 
