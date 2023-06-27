@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface Service<T> {
 
+    boolean isExist(Integer id);
+
     Optional<T> findById(Integer id);
 
     List<T> findAll();
-
-    void save(T value, User user);
 
     void delete(Integer id);
 
