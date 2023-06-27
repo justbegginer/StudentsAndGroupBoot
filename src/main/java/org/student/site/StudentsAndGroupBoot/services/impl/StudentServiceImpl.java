@@ -49,6 +49,11 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public boolean isExist(Integer id) {
+        return studentRepo.existsById(id);
+    }
+
+    @Override
     @Cacheable
     public List<Student> findAll() {
         return studentRepo.findAll();
@@ -67,26 +72,18 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public void delete(Integer id) {
-        Optional<Student> optionalStudent = studentRepo.findById(id);
-        if (optionalStudent.isEmpty()) {
-            throw new NotFoundException("Student with id = " + id + " doesn't exist");
-        }
-        studentRepo.delete(optionalStudent.get());
+        Student student = studentRepo.findById(id).get();
+        studentRepo.delete(student);
         userService.delete(
-                userService.findTopByRoleAndUserId("student", optionalStudent.get().getId()).get());
+                userService.findTopByRoleAndUserId("student", student.getId()).get().getId());
         studentCacheUpdate.update();
     }
 
     @Override
     public void update(Student student) {
-        if (studentRepo.findById(student.getId()).isEmpty()) {
+        if (!isExist(student.getId())) {
             throw new NotFoundException("Student with id = " + student.getId() + " doesn't exist");
         }
-        Set<ConstraintViolation<Student>> violationSet = validator.validate(student);
-        if (!violationSet.isEmpty()){
-            throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(violationSet));
-        }
-        System.out.println("student changed");
         studentRepo.save(student);
         studentCacheUpdate.update();
     }

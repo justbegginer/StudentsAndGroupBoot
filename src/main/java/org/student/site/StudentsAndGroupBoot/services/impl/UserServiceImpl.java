@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.student.site.StudentsAndGroupBoot.Utils;
 import org.student.site.StudentsAndGroupBoot.exceptions.IncorrectDataException;
+import org.student.site.StudentsAndGroupBoot.exceptions.NotFoundException;
 import org.student.site.StudentsAndGroupBoot.models.User;
 import org.student.site.StudentsAndGroupBoot.repo.UserRepo;
 import org.student.site.StudentsAndGroupBoot.services.interfaces.UserService;
@@ -29,6 +30,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean isExist(Integer id) {
+        return userRepo.existsById(id);
+    }
+
+    @Override
     public List<User> findAll() {
         return userRepo.findAll();
     }
@@ -43,14 +49,22 @@ public class UserServiceImpl implements UserService {
         return userRepo.findAllByRole(role);
     }
 
+
     @Override
-    public void save(User user) {
+    public void save(User user){
+        userRepo.save(user);
+    }
+    @Override
+    public void update(User user) {
+        if(isExist(user.getId())){
+            throw new NotFoundException("User with id " + user.getId() + " doesn't exists");
+        }
         userRepo.save(user);
     }
 
     @Override
-    public void delete(User user) {
-        userRepo.delete(user);
+    public void delete(Integer id) {
+        userRepo.delete(userRepo.findById(id).get());
     }
 
     @Override

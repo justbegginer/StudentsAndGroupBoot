@@ -45,6 +45,11 @@ public class TutorServiceImpl implements TutorService {
     }
 
     @Override
+    public boolean isExist(Integer id) {
+        return tutorRepo.existsById(id);
+    }
+
+    @Override
     public Optional<Tutor> findById(Integer id) {
         return tutorRepo.findById(id);
     }
@@ -68,24 +73,17 @@ public class TutorServiceImpl implements TutorService {
     @Override
     @Transactional
     public void delete(Integer id) {
-        Optional<Tutor> optionalTutor = tutorRepo.findById(id);
-        if (optionalTutor.isEmpty()) {
-            throw new NotFoundException("Tutor with id = " + id + " doesn't exist'");
-        }
-        tutorRepo.delete(optionalTutor.get());
+        Tutor tutor = tutorRepo.findById(id).get();
+        tutorRepo.delete(tutor);
         userService.delete(
-                userService.findTopByRoleAndUserId("tutor", optionalTutor.get().getId()).get());
+                userService.findTopByRoleAndUserId("tutor", tutor.getId()).get().getId());
         tutorCacheUpdate.update();
     }
 
     @Override
     public void update(Tutor tutor) {
-        if (tutorRepo.findById(tutor.getId()).isEmpty()) {
+        if (!isExist(tutor.getId())) {
             throw new NotFoundException("Tutor with id = " + tutor.getId() + " doesn't exist'");
-        }
-        Set<ConstraintViolation<Tutor>> violationSet = validator.validate(tutor);
-        if (!violationSet.isEmpty()) {
-            throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(violationSet));
         }
         tutorRepo.save(tutor);
         tutorCacheUpdate.update();

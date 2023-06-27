@@ -44,6 +44,11 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public boolean isExist(Integer id) {
+        return groupRepo.existsById(id);
+    }
+
+    @Override
     public Optional<Group> findById(Integer id) {
         return groupRepo.findById(id);
     }
@@ -67,23 +72,16 @@ public class GroupServiceImpl implements GroupService {
     @Override
     @Transactional
     public void delete(Integer id) {
-        Optional<Group> optionalGroup = groupRepo.findById(id);
-        if (optionalGroup.isEmpty()){
-            throw new NotFoundException("There is no such group with id = " + id);
-        }
-        groupRepo.delete(optionalGroup.get());
+        Group group = groupRepo.findById(id).get();
+        groupRepo.delete(group);
         userService.delete(
-                userService.findTopByRoleAndUserId("group", optionalGroup.get().getId()).get());
+                userService.findTopByRoleAndUserId("group", group.getId()).get().getId());
         groupCacheUpdate.update();
     }
 
     @Override
     public void update(Group group) {
-        Set<ConstraintViolation<Group>> violationSet = validator.validate(group);
-        if (!violationSet.isEmpty()) {
-            throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(violationSet));
-        }
-        if (groupRepo.findById(group.getId()).isEmpty()){
+        if (!isExist(group.getId())){
             throw new NotFoundException("There is no such group with id = " + group.getId());
         }
         groupRepo.save(group);
