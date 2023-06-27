@@ -9,12 +9,14 @@ import java.util.Optional;
 public interface TutorService extends Service<Tutor> {
 
     @Override
+    boolean isExist(Integer id);
+
+    @Override
     Optional<Tutor> findById(Integer id);
 
     @Override
     List<Tutor> findAll();
 
-    @Override
     void save(Tutor tutor, User user);
 
     @Override
