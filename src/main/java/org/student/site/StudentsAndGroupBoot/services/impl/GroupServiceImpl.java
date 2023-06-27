@@ -57,10 +57,6 @@ public class GroupServiceImpl implements GroupService {
     @Override
     @Transactional
     public void save(Group group, User user) {
-        Set<ConstraintViolation<Group>> violationSet = validator.validate(group);
-        if (!violationSet.isEmpty()) {
-            throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(violationSet));
-        }
         groupRepo.save(group);
         user.setRole("group");
         user.setUserId(groupRepo.findTopByOrderByIdDesc().getId());

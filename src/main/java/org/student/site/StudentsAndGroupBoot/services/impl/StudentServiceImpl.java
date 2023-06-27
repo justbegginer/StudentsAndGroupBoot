@@ -57,10 +57,6 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public void save(Student student, User user) {
-        Set<ConstraintViolation<Student>> violationSet = validator.validate(student);
-        if (!violationSet.isEmpty()){
-            throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(violationSet));
-        }
         studentRepo.save(student);
         user.setRole("student");
         user.setUserId(studentRepo.findTopByOrderByIdDesc().getId());

@@ -58,10 +58,6 @@ public class TutorServiceImpl implements TutorService {
     @Override
     @Transactional
     public void save(Tutor tutor, User user) {
-        Set<ConstraintViolation<Tutor>> violationSet = validator.validate(tutor);
-        if (!violationSet.isEmpty()) {
-            throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(violationSet));
-        }
         tutorRepo.save(tutor);
         user.setRole("tutor");
         user.setUserId(tutor.getId());

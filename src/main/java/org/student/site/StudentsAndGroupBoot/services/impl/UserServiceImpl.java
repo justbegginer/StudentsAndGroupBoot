@@ -45,10 +45,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(User user) {
-        Set<ConstraintViolation<User>> violationSet = validator.validate(user);
-        if (!violationSet.isEmpty()) {
-            throw new IncorrectDataException(Utils.getErrorStatusFromBindingResult(violationSet));
-        }
         userRepo.save(user);
     }
 
