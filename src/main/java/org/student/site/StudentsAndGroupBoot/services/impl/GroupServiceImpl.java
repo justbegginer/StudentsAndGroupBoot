@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.student.site.StudentsAndGroupBoot.Utils;
-import org.student.site.StudentsAndGroupBoot.exceptions.IncorrectDataException;
 import org.student.site.StudentsAndGroupBoot.exceptions.NotFoundException;
 import org.student.site.StudentsAndGroupBoot.models.Group;
 import org.student.site.StudentsAndGroupBoot.models.User;
@@ -14,11 +12,8 @@ import org.student.site.StudentsAndGroupBoot.repo.GroupRepo;
 import org.student.site.StudentsAndGroupBoot.services.interfaces.GroupService;
 
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @CacheConfig(cacheNames = {"allGroups"})
@@ -26,21 +21,21 @@ public class GroupServiceImpl implements GroupService {
 
     private final GroupRepo groupRepo;
 
-    private UserServiceImpl userService;
+    private final TutorServiceImpl tutorService;
+
+    private final UserServiceImpl userService;
 
     private final GroupCacheUpdate groupCacheUpdate;
 
-    private final Validator validator;
-
     @Autowired
     public GroupServiceImpl(GroupRepo groupRepo,
+                            TutorServiceImpl tutorService,
                             UserServiceImpl userService,
-                            GroupCacheUpdate groupCacheUpdate,
-                            Validator validator) {
+                            GroupCacheUpdate groupCacheUpdate) {
         this.groupRepo = groupRepo;
+        this.tutorService = tutorService;
         this.userService = userService;
         this.groupCacheUpdate = groupCacheUpdate;
-        this.validator = validator;
     }
 
     @Override
@@ -62,6 +57,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     @Transactional
     public void save(Group group, User user) {
+        tutorService.findById(group.getTutorId()); // throws exception if this tutor doesn't exist
         groupRepo.save(group);
         user.setRole("group");
         user.setUserId(groupRepo.findTopByOrderByIdDesc().getId());
@@ -81,6 +77,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public void update(Group group) {
+        tutorService.findById(group.getId()); // throws exception if this tutor doesn't exist
         if (!isExist(group.getId())){
             throw new NotFoundException("There is no such group with id = " + group.getId());
         }

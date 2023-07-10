@@ -4,22 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.student.site.StudentsAndGroupBoot.Utils;
-import org.student.site.StudentsAndGroupBoot.exceptions.IncorrectDataException;
 import org.student.site.StudentsAndGroupBoot.exceptions.NotFoundException;
 import org.student.site.StudentsAndGroupBoot.models.Tutor;
 import org.student.site.StudentsAndGroupBoot.models.User;
 import org.student.site.StudentsAndGroupBoot.repo.TutorRepo;
-import org.student.site.StudentsAndGroupBoot.repo.UserRepo;
 import org.student.site.StudentsAndGroupBoot.services.cache.updaters.TutorCacheUpdate;
 import org.student.site.StudentsAndGroupBoot.services.interfaces.TutorService;
 
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @CacheConfig(cacheNames = {"allTutors"})
@@ -31,17 +25,14 @@ public class TutorServiceImpl implements TutorService {
 
     private final TutorCacheUpdate tutorCacheUpdate;
 
-    private final Validator validator;
 
     @Autowired
     public TutorServiceImpl(TutorRepo tutorRepo,
                             UserServiceImpl userService,
-                            TutorCacheUpdate tutorCacheUpdate,
-                            Validator validator) {
+                            TutorCacheUpdate tutorCacheUpdate) {
         this.tutorRepo = tutorRepo;
         this.userService = userService;
         this.tutorCacheUpdate = tutorCacheUpdate;
-        this.validator = validator;
     }
 
     @Override

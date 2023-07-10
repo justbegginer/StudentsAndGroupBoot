@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.student.site.StudentsAndGroupBoot.Utils;
-import org.student.site.StudentsAndGroupBoot.exceptions.IncorrectDataException;
 import org.student.site.StudentsAndGroupBoot.exceptions.NotFoundException;
 import org.student.site.StudentsAndGroupBoot.models.Student;
 import org.student.site.StudentsAndGroupBoot.models.User;
@@ -14,11 +12,8 @@ import org.student.site.StudentsAndGroupBoot.services.cache.updaters.StudentCach
 import org.student.site.StudentsAndGroupBoot.services.interfaces.StudentService;
 
 import javax.transaction.Transactional;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @CacheConfig(cacheNames = {"allStudents"})
@@ -26,21 +21,21 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepo studentRepo;
 
+    private final GroupServiceImpl groupService;
+
     private final UserServiceImpl userService;
 
     private final StudentCacheUpdate studentCacheUpdate;
 
-    private final Validator validator;
-
     @Autowired
     public StudentServiceImpl(StudentRepo studentRepo,
+                              GroupServiceImpl groupService,
                               UserServiceImpl userService,
-                              StudentCacheUpdate studentCacheUpdate,
-                              Validator validator) {
+                              StudentCacheUpdate studentCacheUpdate) {
         this.studentRepo = studentRepo;
+        this.groupService = groupService;
         this.userService = userService;
         this.studentCacheUpdate= studentCacheUpdate;
-        this.validator = validator;
     }
 
     @Override
@@ -62,6 +57,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     @Transactional
     public void save(Student student, User user) {
+        groupService.findById(student.getGroupNumber()); // throws exception if this tutor doesn't exist
         studentRepo.save(student);
         user.setRole("student");
         user.setUserId(studentRepo.findTopByOrderByIdDesc().getId());
@@ -81,6 +77,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void update(Student student) {
+        groupService.findById(student.getGroupNumber()); // throws exception if this tutor doesn't exist
         if (!isExist(student.getId())) {
             throw new NotFoundException("Student with id = " + student.getId() + " doesn't exist");
         }
