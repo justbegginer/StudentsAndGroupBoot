@@ -31,11 +31,7 @@ public class TutorRestController {
 
     @GetMapping("/{id}")
     public Tutor getTutorById(@PathVariable("id") int id) {
-        Optional<Tutor> optionalTutor = tutorService.findById(id);
-        if (optionalTutor.isEmpty()) {
-            throw new NotFoundException("Tutor with id = " + id + " not found");
-        }
-        return optionalTutor.get();
+        return tutorService.findById(id).get();
     }
 
     @PostMapping()

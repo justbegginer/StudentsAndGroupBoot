@@ -31,9 +31,6 @@ public class GroupRestController {
 
     @GetMapping("/{id}")
     public Group getGroupById(@PathVariable("id") int id) {
-        if (groupService.findById(id).isEmpty()) {
-            throw new NotFoundException("Group with id = " + id + " not found");
-        }
         return groupService.findById(id).get();
     }
 

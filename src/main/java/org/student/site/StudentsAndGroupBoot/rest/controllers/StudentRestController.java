@@ -32,9 +32,6 @@ public class StudentRestController {
 
     @GetMapping("/{id}")
     public Student getStudentById(@PathVariable("id") int id) {
-        if (studentService.findById(id).isEmpty()) {
-            throw new NotFoundException("There is no student with id = " + id);
-        }
         return studentService.findById(id).get();
     }
 

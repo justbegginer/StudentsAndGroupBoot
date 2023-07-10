@@ -35,9 +35,6 @@ public class UserRestController {
 
     @GetMapping("/{id}")
     public User getUserById(@PathVariable("id") Integer id) {
-        if (userService.findById(id).isEmpty()){
-            throw new NotFoundException("There is no user with id " + id);
-        }
         return userService.findById(id).get();
     }
     @PatchMapping("/{type}/{id}")
@@ -53,7 +50,7 @@ public class UserRestController {
             throw new IncorrectDataException("Old password incorrect");
         }
         user.get().setPassword(passwordsPair.getNewPassword());
-        userService.save(user.get());
+        userService.update(user.get());
         return new Status(true, StatusPattern.SUCCESS, null);
     }
 
@@ -65,7 +62,7 @@ public class UserRestController {
             throw new NotFoundException("User with email = " + id + " not found");
         }
         optionalBeforeChange.get().setEmail(newEmail.getEmail());
-        userService.save(optionalBeforeChange.get());
+        userService.update(optionalBeforeChange.get());
         return new Status(true, StatusPattern.SUCCESS, null);
     }
 }
